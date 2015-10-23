@@ -20,7 +20,7 @@ title = "_index"
 
 <div class="row">
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/resources">Resources</a></h3>
+      <h3><a href="#">Resources</a></h3>
       <p>Rx is a big world, in this section you can find a list of useful resources to better understand it.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
