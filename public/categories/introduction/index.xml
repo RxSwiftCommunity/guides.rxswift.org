@@ -1,0 +1,1242 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Introduction on RxSwift</title>
+    <link>http://localhost:1313/categories/introduction/</link>
+    <description>Recent content in Introduction on RxSwift</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 23 Oct 2015 17:38:08 +0200</lastBuildDate>
+    <atom:link href="http://localhost:1313/categories/introduction/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Getting Started</title>
+      <link>http://localhost:1313/getting-started/</link>
+      <pubDate>Fri, 23 Oct 2015 17:38:08 +0200</pubDate>
+      
+      <guid>http://localhost:1313/getting-started/</guid>
+      <description>
+
+&lt;p&gt;To get started with RxSwift and RxCocoa the process is very simple, Rx doesn&amp;rsquo;t contain any external dependencies.&lt;/p&gt;
+
+&lt;p&gt;These are currently supported options:&lt;/p&gt;
+
+&lt;h3 id=&#34;manual:b6885e1f85551f51a4707c402f8200a3&#34;&gt;Manual&lt;/h3&gt;
+
+&lt;p&gt;Open Rx.xcworkspace, choose &lt;code&gt;RxExample&lt;/code&gt; and hit run. This method will build everything and run sample app&lt;/p&gt;
+
+&lt;h3 id=&#34;cocoapods-https-guides-cocoapods-org-using-using-cocoapods-html:b6885e1f85551f51a4707c402f8200a3&#34;&gt;&lt;a href=&#34;https://guides.cocoapods.org/using/using-cocoapods.html&#34;&gt;CocoaPods&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;IMPORTANT! For tvOS support CocoaPods &lt;code&gt;0.39&lt;/code&gt; is required.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# Podfile
+use_frameworks!
+
+pod &#39;RxSwift&#39;, &#39;~&amp;gt; 2.0.0-beta&#39;
+pod &#39;RxCocoa&#39;, &#39;~&amp;gt; 2.0.0-beta&#39;
+pod &#39;RxBlocking&#39;, &#39;~&amp;gt; 2.0.0-beta&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;type in &lt;code&gt;Podfile&lt;/code&gt; directory&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ pod install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;carthage-https-github-com-carthage-carthage:b6885e1f85551f51a4707c402f8200a3&#34;&gt;&lt;a href=&#34;https://github.com/Carthage/Carthage&#34;&gt;Carthage&lt;/a&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;For Xcode 7.0&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Add this to &lt;code&gt;Cartfile&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git &amp;quot;git@github.com:ReactiveX/RxSwift.git&amp;quot; &amp;quot;2.0.0-beta.1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;$ carthage update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;For Xcode 7.1 and tvOS support&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Add this to &lt;code&gt;Cartfile&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;git &amp;quot;git@github.com:ReactiveX/RxSwift.git&amp;quot; &amp;quot;master-7.1&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code&gt;$ carthage update
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;manually-using-git-submodules:b6885e1f85551f51a4707c402f8200a3&#34;&gt;Manually using git submodules&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Add RxSwift as a submodule&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;$ git submodule add git@github.com:ReactiveX/RxSwift.git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Drag &lt;code&gt;Rx.xcodeproj&lt;/code&gt; into Project Navigator&lt;/li&gt;
+&lt;li&gt;Go to &lt;code&gt;Project &amp;gt; Targets &amp;gt; Build Phases &amp;gt; Link Binary With Libraries&lt;/code&gt;, click &lt;code&gt;+&lt;/code&gt; and select &lt;code&gt;RxSwift-[Platform]&lt;/code&gt; and &lt;code&gt;RxCocoa-[Platform]&lt;/code&gt; targets&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;ios-7:b6885e1f85551f51a4707c402f8200a3&#34;&gt;iOS 7&lt;/h3&gt;
+
+&lt;p&gt;iOS 7 is little tricky, but it can be done. The main problem is that iOS 7 doesn&amp;rsquo;t support dynamic frameworks.&lt;/p&gt;
+
+&lt;p&gt;These are the steps to include RxSwift/RxCocoa projects in an iOS7 project&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;RxSwift/RxCocoa projects have no external dependencies so just manually &lt;strong&gt;including all of the &lt;code&gt;.swift&lt;/code&gt;, &lt;code&gt;.m&lt;/code&gt;, &lt;code&gt;.h&lt;/code&gt; files&lt;/strong&gt; in build target should import all of the necessary source code.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can either do that by copying the files manually or using git submodules.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;git submodule add git@github.com:ReactiveX/RxSwift.git&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;After you&amp;rsquo;ve included files from &lt;code&gt;RxSwift&lt;/code&gt; and &lt;code&gt;RxCocoa&lt;/code&gt; directories, you&amp;rsquo;ll need to remove files that are platform specific.&lt;/p&gt;
+
+&lt;p&gt;If you are compiling for &lt;code&gt;iOS&lt;/code&gt;, please &lt;strong&gt;remove references&lt;/strong&gt; to OSX specific files located in &lt;strong&gt;&lt;code&gt;RxCocoa/OSX&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you are compiling for &lt;code&gt;OSX&lt;/code&gt;, please &lt;strong&gt;remove references&lt;/strong&gt; to iOS specific files located in &lt;strong&gt;&lt;code&gt;RxCocoa/iOS&lt;/code&gt;&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Add &lt;strong&gt;&lt;code&gt;RX_NO_MODULE&lt;/code&gt;&lt;/strong&gt; as a custom Swift preprocessor flag&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Go to your target&amp;rsquo;s &lt;code&gt;Build Settings &amp;gt; Swift Compiler - Custom Flags&lt;/code&gt; and add &lt;code&gt;-D RX_NO_MODULE&lt;/code&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Include &lt;strong&gt;&lt;code&gt;RxCocoa.h&lt;/code&gt;&lt;/strong&gt; in your bridging header&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If you already have a bridging header, adding &lt;code&gt;#import &amp;quot;RxCocoa.h&amp;quot;&lt;/code&gt; should be sufficient.&lt;/p&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t have a bridging header, you can go to your target&amp;rsquo;s &lt;code&gt;Build Settings &amp;gt; Swift Compiler - Code Generation &amp;gt; Objective-C Bridging Header&lt;/code&gt; and point it to &lt;code&gt;[path to RxCocoa.h parent directory]/RxCocoa.h&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Introduction</title>
+      <link>http://localhost:1313/intro/</link>
+      <pubDate>Fri, 23 Oct 2015 16:12:42 +0200</pubDate>
+      
+      <guid>http://localhost:1313/intro/</guid>
+      <description>
+
+&lt;p&gt;This project tries to be consistent with &lt;a href=&#34;http://reactivex.io/&#34;&gt;ReactiveX.io&lt;/a&gt;. The general cross platform documentation and tutorials should also be valid in case of &lt;code&gt;RxSwift&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h1 id=&#34;observables-aka-sequences:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Observables aka Sequences&lt;/h1&gt;
+
+&lt;h2 id=&#34;basics:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Basics&lt;/h2&gt;
+
+&lt;p&gt;&lt;a href=&#34;MathBehindRx.md&#34;&gt;Equivalence&lt;/a&gt; of observer pattern(&lt;code&gt;Observable&amp;lt;Element&amp;gt;&lt;/code&gt;) and sequences (&lt;code&gt;Generator&lt;/code&gt;s) is one of the most important things to understand about Rx.&lt;/p&gt;
+
+&lt;p&gt;Observer pattern is needed because you want to model asynchronous behavior and
+that equivalence enables implementation of high level sequence operations as operators on &lt;code&gt;Observable&lt;/code&gt;s.&lt;/p&gt;
+
+&lt;p&gt;Sequences are a simple, familiar concept that is &lt;strong&gt;easy to visualize&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;People are creatures with huge visual cortexes. When you can visualize something easily, it&amp;rsquo;s a lot easier to reason about.&lt;/p&gt;
+
+&lt;p&gt;In that way you can lift a lot of the cognitive load from trying to simulate event state machines inside every Rx operator to high level operations over sequences.&lt;/p&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t use Rx and you model async systems, that probably means that your code is full of those state machines and transient states that you need to simulate instead of abstracting them away.&lt;/p&gt;
+
+&lt;p&gt;Lists/sequences are probably one of the first concepts mathematicians/programmers learn.&lt;/p&gt;
+
+&lt;p&gt;Here is a sequence of numbers&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;--1--2--3--4--5--6--| // it terminates normally
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is another one with characters&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;--a--b--a--a--a---d---X // it terminates with error
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Some sequences are finite, and some are infinite, like sequence of button taps&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;---tap-tap-------tap---&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;These diagrams are called marble diagrams.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://rxmarbles.com/&#34;&gt;http://rxmarbles.com/&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;If we were to specify sequence grammar as regular expression it would look something like this&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Next* (Error | Completed)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This describes the following:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;sequences can have 0 or more elements&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;once an &lt;code&gt;Error&lt;/code&gt; or &lt;code&gt;Completed&lt;/code&gt; event is received, the sequence can&amp;rsquo;t produce any other element&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Sequences in Rx are described by a push interface (aka callback).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;enum Event&amp;lt;Element&amp;gt;  {
+    case Next(Element)      // next element of a sequence
+    case Error(ErrorType)   // sequence failed with error
+    case Completed          // sequence terminated successfully
+}
+
+class Observable&amp;lt;Element&amp;gt; {
+    func subscribe(observer: Observer&amp;lt;Element&amp;gt;) -&amp;gt; Disposable
+}
+
+protocol ObserverType {
+    func on(event: Event&amp;lt;Element&amp;gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;When sequence sends &lt;code&gt;Complete&lt;/code&gt; or &lt;code&gt;Error&lt;/code&gt; event all internal resources that compute sequence elements will be freed.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;To cancel production of sequence elements and free resources immediatelly, call &lt;code&gt;dispose&lt;/code&gt; on returned subscription.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If a sequence terminates in finite time, not calling &lt;code&gt;dispose&lt;/code&gt; or not using &lt;code&gt;addDisposableTo(disposeBag)&lt;/code&gt; won&amp;rsquo;t cause any permanent resource leaks, but those resources will be used until sequence completes in some way (finishes producing elements or error happens).&lt;/p&gt;
+
+&lt;p&gt;If a sequence doesn&amp;rsquo;t terminate in some way, resources will be allocated permanently unless &lt;code&gt;dispose&lt;/code&gt; is being called manually, automatically inside of a &lt;code&gt;disposeBag&lt;/code&gt;, &lt;code&gt;scopedDispose&lt;/code&gt;, &lt;code&gt;takeUntil&lt;/code&gt; or some other way.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Using dispose bags, scoped dispose or &lt;code&gt;takeUntil&lt;/code&gt; operator are all robust ways of making sure resources are cleaned up and we recommend using them in production even though sequence will terminate in finite time.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In case you are curious why &lt;code&gt;ErrorType&lt;/code&gt; isn&amp;rsquo;t generic, you can find explanation &lt;a href=&#34;DesignRationale.md#why-error-type-isnt-generic&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;disposing:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Disposing&lt;/h2&gt;
+
+&lt;p&gt;There is one additional way an observed sequence can terminate. When you are done with a sequence and want to release all of the resources that were allocated to compute upcoming elements, calling dispose on a subscription will clean this up for you.&lt;/p&gt;
+
+&lt;p&gt;Here is an example with &lt;code&gt;interval&lt;/code&gt; operator.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let subscription = interval(0.3, scheduler)
+    .subscribe { (e: Event&amp;lt;Int64&amp;gt;) in
+        println(e)
+    }
+
+NSThread.sleepForTimeInterval(2)
+
+subscription.dispose()
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will print:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;0
+1
+2
+3
+4
+5
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;One thing to note here is that you usually don&amp;rsquo;t want to manually call &lt;code&gt;dispose&lt;/code&gt; and this is only educational example. Calling dispose manually is usually bad code smell, and there are better ways to dispose subscriptions. You can either use &lt;code&gt;DisposeBag&lt;/code&gt;, &lt;code&gt;ScopedDisposable&lt;/code&gt;, &lt;code&gt;takeUntil&lt;/code&gt; operator or some other mechanism.&lt;/p&gt;
+
+&lt;p&gt;So can this code print something after &lt;code&gt;dispose&lt;/code&gt; call executed? The answer is, it depends.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;If the &lt;code&gt;scheduler&lt;/code&gt; is &lt;strong&gt;serial scheduler&lt;/strong&gt; (&lt;code&gt;MainScheduler&lt;/code&gt; is serial scheduler) and &lt;code&gt;dispose&lt;/code&gt; is called on &lt;strong&gt;on the same serial scheduler&lt;/strong&gt;, then the answer is &lt;strong&gt;no&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;otherwise &lt;strong&gt;yes&lt;/strong&gt;.&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;You can find out more about schedulers &lt;a href=&#34;Schedulers.md&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;You simply have two processes happening in parallel.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;one is producing elements&lt;/li&gt;
+&lt;li&gt;other is disposing subscription&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;When you think about it, the question &lt;code&gt;can something be printed after&lt;/code&gt; doesn&amp;rsquo;t even make sense in case those processes are on different schedulers.&lt;/p&gt;
+
+&lt;p&gt;A few more examples just to be sure (&lt;code&gt;observeOn&lt;/code&gt; is explained &lt;a href=&#34;Schedulers.md&#34;&gt;here&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;In case you have something like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let subscription = interval(0.3, scheduler)
+            .observeOn(MainScheduler.sharedInstance)
+            .subscribe { (e: Event&amp;lt;Int64&amp;gt;) in
+                println(e)
+            }
+
+// ....
+
+subscription.dispose() // called from main thread
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;After &lt;code&gt;dispose&lt;/code&gt; call returns, nothing will be printed. That is a guarantee.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Also in this case:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let subscription = interval(0.3, scheduler)
+            .observeOn(serialScheduler)
+            .subscribe { (e: Event&amp;lt;Int64&amp;gt;) in
+                println(e)
+            }
+
+// ...
+
+subscription.dispose() // executing on same `serialScheduler`
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;After &lt;code&gt;dispose&lt;/code&gt; call returns, nothing will be printed. That is a guarantee.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;dispose-bags:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Dispose Bags&lt;/h3&gt;
+
+&lt;p&gt;Dispose bags are used to return ARC like behavior to RX.&lt;/p&gt;
+
+&lt;p&gt;When &lt;code&gt;DisposeBag&lt;/code&gt; is deallocated, it will call &lt;code&gt;dispose&lt;/code&gt; on each of the added disposables.&lt;/p&gt;
+
+&lt;p&gt;It doesn&amp;rsquo;t have a &lt;code&gt;dispose&lt;/code&gt; method and it doesn&amp;rsquo;t allow calling explicit dispose on purpose. If immediate cleanup is needed just create a new bag.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;  self.disposeBag = DisposeBag()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That should clear references to old one and cause disposal of resources.&lt;/p&gt;
+
+&lt;p&gt;If that explicit manual disposal is still wanted, use &lt;code&gt;CompositeDisposable&lt;/code&gt;. &lt;strong&gt;It has the wanted behavior but once that &lt;code&gt;dispose&lt;/code&gt; method is called, it will immediately dispose any newly added disposable.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;scoped-dispose:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Scoped Dispose&lt;/h3&gt;
+
+&lt;p&gt;In case disposal is wanted immediately after leaving scope of execution, there is &lt;code&gt;scopedDispose()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let autoDispose = sequence
+    .subscribe {
+        print($0)
+    }
+    .scopedDispose()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will dispose the subscription when execution leaves current scope.&lt;/p&gt;
+
+&lt;h3 id=&#34;take-until:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Take until&lt;/h3&gt;
+
+&lt;p&gt;Additional way to automatically dispose subscription on dealloc is to use &lt;code&gt;takeUntil&lt;/code&gt; operator.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;sequence
+    .takeUntil(self.rx_deallocated)
+    .subscribe {
+        print($0)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;implicit-observable-guarantees:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Implicit &lt;code&gt;Observable&lt;/code&gt; guarantees&lt;/h2&gt;
+
+&lt;p&gt;There is also a couple of additional guarantees that all sequence producers (&lt;code&gt;Observable&lt;/code&gt;s) must honor.&lt;/p&gt;
+
+&lt;p&gt;It doesn&amp;rsquo;t matter on which thread they produce elements, but if they generate one element and send it to the observer &lt;code&gt;observer.on(.Next(nextElement))&lt;/code&gt;, they can&amp;rsquo;t send next element until &lt;code&gt;observer.on&lt;/code&gt; method has finished execution.&lt;/p&gt;
+
+&lt;p&gt;Producers also cannot send terminating &lt;code&gt;.Completed&lt;/code&gt; or &lt;code&gt;.Error&lt;/code&gt; in case &lt;code&gt;.Next&lt;/code&gt; event hasn&amp;rsquo;t finished.&lt;/p&gt;
+
+&lt;p&gt;In short, consider this example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;someObservable
+  .subscribe { (e: Event&amp;lt;Element&amp;gt;) in
+      println(&amp;quot;Event processing started&amp;quot;)
+      // processing
+      println(&amp;quot;Event processing ended&amp;quot;)
+  }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;this will always print:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Event processing started
+Event processing ended
+Event processing started
+Event processing ended
+Event processing started
+Event processing ended
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;it can never print:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Event processing started
+Event processing started
+Event processing ended
+Event processing ended
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;creating-your-own-observable-aka-observable-sequence:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Creating your own &lt;code&gt;Observable&lt;/code&gt; (aka observable sequence)&lt;/h2&gt;
+
+&lt;p&gt;There is one crucial thing to understand about observables.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;When an observable is created, it doesn&amp;rsquo;t perform any work simply because it has been created.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It is true that &lt;code&gt;Observable&lt;/code&gt; can generate elements in many ways. Some of them cause side effects and some of them tap into existing running processes like tapping into mouse events, etc.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;But if you just call a method that returns an &lt;code&gt;Observable&lt;/code&gt;, no sequence generation is performed, and there are no side effects. &lt;code&gt;Observable&lt;/code&gt; is just a definition how the sequence is generated and what parameters are used for element generation. Sequence generation starts when &lt;code&gt;subscribe&lt;/code&gt; method is called.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;E.g. Let&amp;rsquo;s say you have a method with similar prototype:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func searchWikipedia(searchTerm: String) -&amp;gt; Observable&amp;lt;Results&amp;gt; {}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let searchForMe = searchWikipedia(&amp;quot;me&amp;quot;)
+
+// no requests are performed, no work is being done, no URL requests were fired
+
+let cancel = searchForMe
+  // sequence generation starts now, URL requests are fired
+  .subscribeNext { results in
+      println(results)
+  }
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;There are a lot of ways how you can create your own &lt;code&gt;Observable&lt;/code&gt; sequence. Probably the easiest way is using &lt;code&gt;create&lt;/code&gt; function.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s create a function which creates a sequence that returns one element upon subscription. That function is called &amp;lsquo;just&amp;rsquo;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This is the actual implementation&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func myJust&amp;lt;E&amp;gt;(element: E) -&amp;gt; Observable&amp;lt;E&amp;gt; {
+    return create { observer in
+        observer.on(.Next(element))
+        obsever.on(.Completed)
+        return NopDisposable.instance
+    }
+}
+
+myJust(0)
+    .subscribeNext { n in
+      print(n)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;this will print:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;0
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Not bad. So what is the &lt;code&gt;create&lt;/code&gt; function?&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s just a convenience method that enables you to easily implement &lt;code&gt;subscribe&lt;/code&gt; method using Swift lambda function. Like &lt;code&gt;subscribe&lt;/code&gt; method it takes one argument, &lt;code&gt;observer&lt;/code&gt;, and returns disposable.&lt;/p&gt;
+
+&lt;p&gt;So what is the &lt;code&gt;gg&lt;/code&gt; function?&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s just a convenient way of calling &lt;code&gt;observer.on(.Next(RxBox(element)))&lt;/code&gt;. The same is valid for &lt;code&gt;sendCompleted(observer)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Sequence implemented this way is actually synchronous. It will generate elements and terminate before &lt;code&gt;subscribe&lt;/code&gt; call returns disposable representing subscription. Because of that it doesn&amp;rsquo;t really matter what disposable it returns, process of generating elements can&amp;rsquo;t be interrupted.&lt;/p&gt;
+
+&lt;p&gt;When generating synchronous sequences, the usual disposable to return is singleton instance of &lt;code&gt;NopDisposable&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Lets now create an observable that returns elements from an array.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This is the actual implementation&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func myFrom&amp;lt;E&amp;gt;(sequence: [E]) -&amp;gt; Observable&amp;lt;E&amp;gt; {
+    return create { observer in
+        for element in sequence {
+            observer.on(.Next(element))
+        }
+
+        observer.on(.Completed)
+        return NopDisposable.instance
+    }
+}
+
+let stringCounter = myFrom([&amp;quot;first&amp;quot;, &amp;quot;second&amp;quot;])
+
+println(&amp;quot;Started ----&amp;quot;)
+
+// first time
+stringCounter
+    .subscribeNext { n in
+        println(n)
+    }
+
+println(&amp;quot;----&amp;quot;)
+
+// again
+stringCounter
+    .subscribeNext { n in
+        println(n)
+    }
+
+println(&amp;quot;Ended ----&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will print:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Started ----
+first
+second
+----
+first
+second
+Ended ----
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;creating-an-observable-that-performs-work:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Creating an &lt;code&gt;Observable&lt;/code&gt; that performs work&lt;/h2&gt;
+
+&lt;p&gt;Ok, now something more interesting. Let&amp;rsquo;s create that &lt;code&gt;interval&lt;/code&gt; operator that was used in previous examples.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;This is equivalent of actual implementation for dispatch queue schedulers&lt;/em&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func myInterval(interval: NSTimeInterval) -&amp;gt; Observable&amp;lt;Int&amp;gt; {
+    return create { observer in
+        println(&amp;quot;Subscribed&amp;quot;)
+        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+        let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
+
+        var next = 0
+
+        dispatch_source_set_timer(timer, 0, UInt64(interval * Double(NSEC_PER_SEC)), 0)
+        let cancel = AnonymousDisposable {
+            println(&amp;quot;Disposed&amp;quot;)
+            dispatch_source_cancel(timer)
+        }
+        dispatch_source_set_event_handler(timer, {
+            if cancel.disposed {
+                return
+            }
+            observer.on(.Next(next++))
+        })
+        dispatch_resume(timer)
+
+        return cancel
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let counter = myInterval(0.1)
+
+println(&amp;quot;Started ----&amp;quot;)
+
+let subscription = counter
+    .subscribeNext { n in
+       println(n)
+    }
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription.dispose()
+
+println(&amp;quot;Ended ----&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will print&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Started ----
+Subscribed
+0
+1
+2
+3
+4
+Disposed
+Ended ----
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What if you would write&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let counter = myInterval(0.1)
+
+println(&amp;quot;Started ----&amp;quot;)
+
+let subscription1 = counter
+    .subscribeNext { n in
+       println(&amp;quot;First \(n)&amp;quot;)
+    }
+let subscription2 = counter
+    .subscribeNext { n in
+       println(&amp;quot;Second \(n)&amp;quot;)
+    }
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription1.dispose()
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription2.dispose()
+
+println(&amp;quot;Ended ----&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;this would print:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Started ----
+Subscribed
+Subscribed
+First 0
+Second 0
+First 1
+Second 1
+First 2
+Second 2
+First 3
+Second 3
+First 4
+Second 4
+Disposed
+Second 5
+Second 6
+Second 7
+Second 8
+Second 9
+Disposed
+Ended ----
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Every subscriber upon subscription usually generates it&amp;rsquo;s own separate sequence of elements. Operators are stateless by default. There is vastly more stateless operators then stateful ones.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;sharing-subscription-and-sharereplay-operator:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Sharing subscription and &lt;code&gt;shareReplay&lt;/code&gt; operator&lt;/h2&gt;
+
+&lt;p&gt;But what if you want that multiple observers share events (elements) from only one subscription?&lt;/p&gt;
+
+&lt;p&gt;There are two things that need to be defined.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;How to handle past elements that have been received before the new subscriber was interested in observing them (replay latest only, replay all, replay last n)&lt;/li&gt;
+&lt;li&gt;How to decide when to fire that shared subscription (refCount, manual or some other algorithm)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The usual choice is a combination of &lt;code&gt;replay(1).refCount()&lt;/code&gt; aka &lt;code&gt;shareReplay()&lt;/code&gt;.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let counter = myInterval(0.1)
+    .shareReplay(1)
+
+println(&amp;quot;Started ----&amp;quot;)
+
+let subscription1 = counter
+    .subscribeNext { n in
+       println(&amp;quot;First \(n)&amp;quot;)
+    }
+let subscription2 = counter
+    .subscribeNext { n in
+       println(&amp;quot;Second \(n)&amp;quot;)
+    }
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription1.dispose()
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription2.dispose()
+
+println(&amp;quot;Ended ----&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;this will print&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Started ----
+Subscribed
+First 0
+Second 0
+First 1
+Second 1
+First 2
+Second 2
+First 3
+Second 3
+First 4
+Second 4
+First 5
+Second 5
+Second 6
+Second 7
+Second 8
+Second 9
+Disposed
+Ended ----
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Notice how now there is only one &lt;code&gt;Subscribed&lt;/code&gt; and &lt;code&gt;Disposed&lt;/code&gt; event.&lt;/p&gt;
+
+&lt;p&gt;Behavior for URL observables is equivalent.&lt;/p&gt;
+
+&lt;p&gt;This is how HTTP requests are wrapped in Rx. It&amp;rsquo;s pretty much the same pattern like the &lt;code&gt;interval&lt;/code&gt; operator.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;extension NSURLSession {
+    public func rx_response(request: NSURLRequest) -&amp;gt; Observable&amp;lt;(NSData!, NSURLResponse!)&amp;gt; {
+        return create { observer in
+            let task = self.dataTaskWithRequest(request) { (data, response, error) in
+                if data == nil || response == nil {
+                    observer.on(.Error(error ?? UnknownError))
+                }
+                else {
+                    observer.on(.Next(data, response))
+                    observer.on(.Completed)
+                }
+            }
+
+            task.resume()
+
+            return AnonymousDisposable {
+                task.cancel()
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;operators:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Operators&lt;/h2&gt;
+
+&lt;p&gt;There are numerous operators implemented in RxSwift. The complete list can be found &lt;a href=&#34;API.md&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Marble diagrams for all operators can be found on &lt;a href=&#34;http://reactivex.io/&#34;&gt;ReactiveX.io&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Almost all operators are demonstrated in &lt;a href=&#34;../Rx.playground&#34;&gt;Playgrounds&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To use playgrounds please open &lt;code&gt;Rx.xcworkspace&lt;/code&gt;, build &lt;code&gt;RxSwift-OSX&lt;/code&gt; scheme and then open playgrounds in &lt;code&gt;Rx.xcworkspace&lt;/code&gt; tree view.&lt;/p&gt;
+
+&lt;p&gt;In case you need an operator, and don&amp;rsquo;t know how to find it there a [decision tree of operators]() &lt;a href=&#34;http://reactivex.io/documentation/operators.html#tree)&#34;&gt;http://reactivex.io/documentation/operators.html#tree)&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;API.md#rxswift-supported-operators&#34;&gt;Supported RxSwift operators&lt;/a&gt; are also grouped by function they perform, so that can also help.&lt;/p&gt;
+
+&lt;h3 id=&#34;custom-operators:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Custom operators&lt;/h3&gt;
+
+&lt;p&gt;There are two ways how you can create custom operators.&lt;/p&gt;
+
+&lt;h4 id=&#34;easy-way:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Easy way&lt;/h4&gt;
+
+&lt;p&gt;All of the internal code uses highly optimized versions of operators, so they aren&amp;rsquo;t the best tutorial material. That&amp;rsquo;s why it&amp;rsquo;s highly encouraged to use standard operators.&lt;/p&gt;
+
+&lt;p&gt;Fortunately there is an easier way to create operators. Creating new operators is actually all about creating observables, and previous chapter already describes how to do that.&lt;/p&gt;
+
+&lt;p&gt;Lets see how an unoptimized map operator can be implemented.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;func myMap&amp;lt;E, R&amp;gt;(transform: E -&amp;gt; R)(source: Observable&amp;lt;E&amp;gt;) -&amp;gt; Observable&amp;lt;R&amp;gt; {
+    return create { observer in
+
+        let subscription = source.subscribe { e in
+                switch e {
+                case .Next(let value):
+                    let result = transform(value)
+                    observer.on(.Next(result))
+                case .Error(let error):
+                    observer.on(.Error(error))
+                case .Completed:
+                    observer.on(.Completed)
+                }
+            }
+
+        return subscription
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;So now you can use your own map:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let subscription = myInterval(0.1)
+    .myMap { e in
+        return &amp;quot;This is simply \(e)&amp;quot;
+    }
+    .subscribeNext { n in
+        println(n)
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and this will print&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Subscribed
+This is simply 0
+This is simply 1
+This is simply 2
+This is simply 3
+This is simply 4
+This is simply 5
+This is simply 6
+This is simply 7
+This is simply 8
+...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;harder-more-performant-way:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Harder, more performant way&lt;/h4&gt;
+
+&lt;p&gt;You can perform the same optimizations like we have made and create more performant operators. That usually isn&amp;rsquo;t necessary, but it of course can be done.&lt;/p&gt;
+
+&lt;p&gt;Disclaimer: when taking this approach you are also taking a lot more responsibility when creating operators. You will need to make sure that sequence grammar is correct and be responsible of disposing subscriptions.&lt;/p&gt;
+
+&lt;p&gt;There are plenty of examples in RxSwift project how to do this. I would suggest talking a look at &lt;code&gt;map&lt;/code&gt; or &lt;code&gt;filter&lt;/code&gt; first.&lt;/p&gt;
+
+&lt;p&gt;Creating your own custom operators is tricky because you have to manually handle all of the chaos of error handling, asynchronous execution and disposal, but it&amp;rsquo;s not rocket science either.&lt;/p&gt;
+
+&lt;p&gt;Every operator in Rx is just a factory for an observable. Returned observable usually contains information about source &lt;code&gt;Observable&lt;/code&gt; and parameters that are needed to transform it.&lt;/p&gt;
+
+&lt;p&gt;In RxSwift code, almost all optimized &lt;code&gt;Observable&lt;/code&gt;s have a common parent called &lt;code&gt;Producer&lt;/code&gt;. Returned observable serves as a proxy between subscribers and source observable. It usually performs these things:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;on new subscription creates a sink that performs transformations&lt;/li&gt;
+&lt;li&gt;registers that sink as observer to source observable&lt;/li&gt;
+&lt;li&gt;on received events proxies transformed events to original observer&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;life-happens:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Life happens&lt;/h3&gt;
+
+&lt;p&gt;So what if it&amp;rsquo;s just too hard to solve some cases with custom operators? You can exit the Rx monad, perform actions in imperative world, and then tunnel results to Rx again using &lt;code&gt;Subject&lt;/code&gt;s.&lt;/p&gt;
+
+&lt;p&gt;This isn&amp;rsquo;t something that should be practiced often, and is a bad code smell, but you can do it.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;  let magicBeings: Observable&amp;lt;MagicBeing&amp;gt; = summonFromMiddleEarth()
+
+  magicBeings
+    .subscribeNext { being in     // exit the Rx monad  
+        self.doSomeStateMagic(being)
+    }
+    .addDisposableTo(disposeBag)
+
+  //
+  //  Mess
+  //
+  let kitten = globalParty(   // calculate something in messy world
+    being,
+    UIApplication.delegate.dataSomething.attendees
+  )
+  kittens.on(.Next(kitten))   // send result back to rx
+  //
+  // Another mess
+  //
+
+  let kittens = Variable(firstKitten) // again back in Rx monad
+
+  kittens
+    .map { kitten in
+      return kitten.purr()
+    }
+    // ....
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Every time you do this, somebody will probably write this code somewhere&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;  kittens
+    .subscribeNext { kitten in
+      // so something with kitten
+    }
+    .addDisposableTo(disposeBag)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;so please try not to do this.&lt;/p&gt;
+
+&lt;h2 id=&#34;playgrounds:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Playgrounds&lt;/h2&gt;
+
+&lt;p&gt;If you are unsure how exactly some of the operators work, &lt;a href=&#34;../Rx.playground&#34;&gt;playgrounds&lt;/a&gt; contain almost all of the operators already prepared with small examples that illustrate their behavior.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;To use playgrounds please open Rx.xcworkspace, build RxSwift-OSX scheme and then open playgrounds in Rx.xcworkspace tree view.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;To view the results of the examples in the playgrounds, please open the &lt;code&gt;Assistant Editor&lt;/code&gt;. You can open &lt;code&gt;Assistant Editor&lt;/code&gt; by clicking on &lt;code&gt;View &amp;gt; Assistant Editor &amp;gt; Show Assistant Editor&lt;/code&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;error-handling:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Error handling&lt;/h2&gt;
+
+&lt;p&gt;The are two error mechanisms.&lt;/p&gt;
+
+&lt;h3 id=&#34;anynchronous-error-handling-mechanism-in-observables:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Anynchronous error handling mechanism in observables&lt;/h3&gt;
+
+&lt;p&gt;Error handling is pretty straightforward. If one sequence terminates with error, then all of the dependent sequences will terminate with error. It&amp;rsquo;s usual short circuit logic.&lt;/p&gt;
+
+&lt;p&gt;You can recover from failure of observable by using &lt;code&gt;catch&lt;/code&gt; operator. There are various overloads that enable you to specify recovery in great detail.&lt;/p&gt;
+
+&lt;p&gt;There is also &lt;code&gt;retry&lt;/code&gt; operator that enables retries in case of errored sequence.&lt;/p&gt;
+
+&lt;h3 id=&#34;synchronous-error-handling:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Synchronous error handling&lt;/h3&gt;
+
+&lt;p&gt;Unfortunately Swift doesn&amp;rsquo;t have a concept of exceptions or some kind of built in error monad so this project introduces &lt;code&gt;RxResult&lt;/code&gt; enum.
+It is Swift port of Scala &lt;a href=&#34;http://www.scala-lang.org/api/2.10.2/index.html#scala.util.Try&#34;&gt;&lt;code&gt;Try&lt;/code&gt;&lt;/a&gt; type. It is also similar to Haskell &lt;a href=&#34;https://hackage.haskell.org/package/category-extras-0.52.0/docs/Control-Monad-Either.html&#34;&gt;&lt;code&gt;Either&lt;/code&gt;&lt;/a&gt; monad.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;This will be replaced in Swift 2.0 with try/throws&lt;/strong&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;public enum RxResult&amp;lt;ResultType&amp;gt; {
+    case Success(ResultType)
+    case Error(ErrorType)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To enable writing more readable code, a few &lt;code&gt;Result&lt;/code&gt; operators are introduced&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;result1.flatMap { okValue in        // success handling block
+    // executed on success
+    return ?
+}.recoverWith { error in            // error handling block
+    //  executed on error
+    return ?
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;debugging-compile-errors:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Debugging Compile Errors&lt;/h2&gt;
+
+&lt;p&gt;When writing elegant RxSwift/RxCocoa code, you are probably relying heavily on compiler to deduce types of &lt;code&gt;Observable&lt;/code&gt;s. This is one of the reasons why Swift is awesome, but it can also be frustrating sometimes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;images = word
+    .filter { $0.rangeOfString(&amp;quot;important&amp;quot;) != nil }
+    .flatMap { word in
+        return self.api.loadFlickrFeed(&amp;quot;karate&amp;quot;)
+            .catchError { error in
+                return just(JSON(1))
+            }
+      }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If compiler reports that there is an error somewhere in this expression, I would suggest first annotating return types.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;images = word
+    .filter { s -&amp;gt; Bool in s.rangeOfString(&amp;quot;important&amp;quot;) != nil }
+    .flatMap { word -&amp;gt; Observable&amp;lt;JSON&amp;gt; in
+        return self.api.loadFlickrFeed(&amp;quot;karate&amp;quot;)
+            .catchError { error -&amp;gt; Observable&amp;lt;JSON&amp;gt; in
+                return just(JSON(1))
+            }
+      }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If that doesn&amp;rsquo;t work, you can continue adding more type annotations until you&amp;rsquo;ve localized the error.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;images = word
+    .filter { (s: String) -&amp;gt; Bool in s.rangeOfString(&amp;quot;important&amp;quot;) != nil }
+    .flatMap { (word: String) -&amp;gt; Observable&amp;lt;JSON&amp;gt; in
+        return self.api.loadFlickrFeed(&amp;quot;karate&amp;quot;)
+            .catchError { (error: NSError) -&amp;gt; Observable&amp;lt;JSON&amp;gt; in
+                return just(JSON(1))
+            }
+      }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;I would suggest first annotating return types and arguments of closures.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Usually after you have fixed the error, you can remove the type annotations to clean up your code again.&lt;/p&gt;
+
+&lt;h2 id=&#34;debugging:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Debugging&lt;/h2&gt;
+
+&lt;p&gt;Using debugger alone is useful, but you can also use &lt;code&gt;debug&lt;/code&gt;. &lt;code&gt;debug&lt;/code&gt; operator will print out all events to standard output and you can add also label those events.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;debug&lt;/code&gt; acts like a probe. Here is an example of using it:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let subscription = myInterval(0.1)
+    .debug(&amp;quot;my probe&amp;quot;)
+    .map { e in
+        return &amp;quot;This is simply \(e)&amp;quot;
+    }
+    .subscribeNext { n in
+        println(n)
+    }
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription.dispose()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;will print&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[my probe] subscribed
+Subscribed
+[my probe] -&amp;gt; Event Next(Box(0))
+This is simply 0
+[my probe] -&amp;gt; Event Next(Box(1))
+This is simply 1
+[my probe] -&amp;gt; Event Next(Box(2))
+This is simply 2
+[my probe] -&amp;gt; Event Next(Box(3))
+This is simply 3
+[my probe] -&amp;gt; Event Next(Box(4))
+This is simply 4
+[my probe] dispose
+Disposed
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;You can also use &lt;code&gt;subscribe&lt;/code&gt; instead of &lt;code&gt;subscribeNext&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;NSURLSession.sharedSession().rx_JSON(request)
+   .map { json in
+       return parse()
+   }
+   .subscribe { n in      // this subscribes on all events including error and completed
+       println(n)
+   }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;debugging-memory-leaks:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Debugging memory leaks&lt;/h2&gt;
+
+&lt;p&gt;In debug mode Rx tracks all allocated resources in a global variable &lt;code&gt;resourceCount&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Printing &lt;code&gt;Rx.resourceCount&lt;/code&gt; after pushing a view controller onto navigation stack, using it, and then popping back is usually the best way to detect and debug resource leaks.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;As a sanity check, you can just do a &lt;code&gt;println&lt;/code&gt; in your view controller &lt;code&gt;deinit&lt;/code&gt; method.&lt;/p&gt;
+
+&lt;p&gt;The code would look something like this.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;class ViewController: UIViewController {
+#if TRACE_RESOURCES
+    private let startResourceCount = RxSwift.resourceCount
+#endif
+
+    override func viewDidLoad() {
+      super.viewDidLoad()
+#if TRACE_RESOURCES
+        println(&amp;quot;Number of start resources = \(resourceCount)&amp;quot;)
+#endif
+    }
+
+    deinit {
+#if TRACE_RESOURCES
+        println(&amp;quot;View controller disposed with \(resourceCount) resources&amp;quot;)
+
+        var numberOfResourcesThatShouldRemain = startResourceCount
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC)))
+        dispatch_after(time, dispatch_get_main_queue(), { () -&amp;gt; Void in
+            println(&amp;quot;Resource count after dealloc \(RxSwift.resourceCount), difference \(RxSwift.resourceCount - numberOfResourcesThatShouldRemain)&amp;quot;)
+        })
+#endif
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The reason why you should use a small delay is because sometimes it takes a small amount of time for scheduled entities to release their memory.&lt;/p&gt;
+
+&lt;h2 id=&#34;variables:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Variables&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;Variable&lt;/code&gt;s represent some observable state. &lt;code&gt;Variable&lt;/code&gt; without containing value can&amp;rsquo;t exist because initializer requires initial value.&lt;/p&gt;
+
+&lt;p&gt;Variable wraps a &lt;a href=&#34;http://reactivex.io/documentation/subject.html&#34;&gt;&lt;code&gt;Subject&lt;/code&gt;&lt;/a&gt;. More specifically it is a &lt;code&gt;BehaviorSubject&lt;/code&gt;.  Unlike &lt;code&gt;BehaviorSubject&lt;/code&gt;, it only exposes &lt;code&gt;value&lt;/code&gt; interface, so variable can never terminate or fail.&lt;/p&gt;
+
+&lt;p&gt;It will also broadcast it&amp;rsquo;s current value immediately on subscription.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let variable = Variable(0)
+
+println(&amp;quot;Before first subscription ---&amp;quot;)
+
+variable
+    .subscribeNext { n in
+        println(&amp;quot;First \(n)&amp;quot;)
+    }
+
+println(&amp;quot;Before send 1&amp;quot;)
+
+variable.value = 1
+
+println(&amp;quot;Before second subscription ---&amp;quot;)
+
+variable
+    .subscribeNext { n in
+        println(&amp;quot;Second \(n)&amp;quot;)
+    }
+
+variable.value = 2
+
+println(&amp;quot;End ---&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;will print&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Before first subscription ---
+First 0
+Before send 1
+First 1
+Before second subscription ---
+Second 1
+First 2
+Second 2
+End ---
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;kvo:34c4da6d4768d05e50db99357a299b5c&#34;&gt;KVO&lt;/h2&gt;
+
+&lt;p&gt;KVO is an Objective-C mechanism. That means that it wasn&amp;rsquo;t built with type safety in mind. This project tries to solve some of the problems.&lt;/p&gt;
+
+&lt;p&gt;There are two built in ways this library supports KVO.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;// KVO
+extension NSObject {
+    public func rx_observe&amp;lt;Element&amp;gt;(keyPath: String, retainSelf: Bool = true) -&amp;gt; Observable&amp;lt;Element?&amp;gt; {}
+}
+
+#if !DISABLE_SWIZZLING
+// KVO
+extension NSObject {
+    public func rx_observeWeakly&amp;lt;Element&amp;gt;(keyPath: String) -&amp;gt; Observable&amp;lt;Element?&amp;gt; {}
+}
+#endif
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;If Swift compiler doesn&amp;rsquo;t have a way to deduce observed type (return Observable type), it will report error about function not existing.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here are some ways you can give him hints about observed type:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;view.rx_observe(&amp;quot;frame&amp;quot;) as Observable&amp;lt;CGRect?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;view.rx_observe(&amp;quot;frame&amp;quot;)
+    .map { (rect: CGRect?) in
+        //
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;rx-observe:34c4da6d4768d05e50db99357a299b5c&#34;&gt;&lt;code&gt;rx_observe&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;rx_observe&lt;/code&gt; is more performant because it&amp;rsquo;s just a simple wrapper around KVO mechanism, but it has more limited usage scenarios&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;it can be used to observe paths starting from &lt;code&gt;self&lt;/code&gt; or from ancestors in ownership graph (&lt;code&gt;retainSelf = false&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;it can be used to observe paths starting from descendants in ownership graph (&lt;code&gt;retainSelf = true&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;the paths have to consist only of &lt;code&gt;strong&lt;/code&gt; properties, otherwise you are risking crashing the system by not unregistering KVO observer before dealloc.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;E.g.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;self.rx_observe(&amp;quot;view.frame&amp;quot;, retainSelf = false) as Observable&amp;lt;CGRect?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;rx-observeweakly:34c4da6d4768d05e50db99357a299b5c&#34;&gt;&lt;code&gt;rx_observeWeakly&lt;/code&gt;&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;rx_observeWeakly&lt;/code&gt; has somewhat worse performance because it has to handle object deallocation in case of weak references.&lt;/p&gt;
+
+&lt;p&gt;It can be used in all cases where &lt;code&gt;rx_observe&lt;/code&gt; can be used and additionally&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;because it won&amp;rsquo;t retain observed target, it can be used to observe arbitrary object graph whose ownership relation is unknown&lt;/li&gt;
+&lt;li&gt;it can be used to observe &lt;code&gt;weak&lt;/code&gt; properties&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;E.g.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;someSuspiciousViewController.rx_observeWeakly(&amp;quot;behavingOk&amp;quot;) as Observable&amp;lt;Bool?&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;observing-structs:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Observing structs&lt;/h3&gt;
+
+&lt;p&gt;KVO is an Objective-C mechanism so it relies heavily on &lt;code&gt;NSValue&lt;/code&gt;. RxCocoa has additional specializations for &lt;code&gt;CGRect&lt;/code&gt;, &lt;code&gt;CGSize&lt;/code&gt; and &lt;code&gt;CGPoint&lt;/code&gt; that make it convenient to observe those types.&lt;/p&gt;
+
+&lt;p&gt;When observing some other structures it is necessary to extract those structures from &lt;code&gt;NSValue&lt;/code&gt; manually, or creating your own observable sequence specializations.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;../RxCocoa/Common/Observables/NSObject+Rx+CoreGraphics.swift&#34;&gt;Here&lt;/a&gt; are examples how to correctly extract structures from &lt;code&gt;NSValue&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;ui-layer-tips:34c4da6d4768d05e50db99357a299b5c&#34;&gt;UI layer tips&lt;/h2&gt;
+
+&lt;p&gt;There are certain things that your &lt;code&gt;Observable&lt;/code&gt;s need to satisfy in the UI layer when binding to UIKit controls.&lt;/p&gt;
+
+&lt;h3 id=&#34;threading:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Threading&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;Observable&lt;/code&gt;s need to send values on &lt;code&gt;MainScheduler&lt;/code&gt;(UIThread). That&amp;rsquo;s just a normal UIKit/Cocoa requirement.&lt;/p&gt;
+
+&lt;p&gt;It is usually a good idea for you APIs to return results on &lt;code&gt;MainScheduler&lt;/code&gt;. In case you try to bind something to UI from background thread, in &lt;strong&gt;Debug&lt;/strong&gt; build RxCocoa will usually throw an exception to inform you of that.&lt;/p&gt;
+
+&lt;p&gt;To fix this you need to add &lt;code&gt;observeOn(MainScheduler.sharedInstance)&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NSURLSession extensions don&amp;rsquo;t return result on &lt;code&gt;MainScheduler&lt;/code&gt; by default.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;errors:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Errors&lt;/h3&gt;
+
+&lt;p&gt;You can&amp;rsquo;t bind failure to UIKit controls because that is undefined behavior.&lt;/p&gt;
+
+&lt;p&gt;If you don&amp;rsquo;t know if &lt;code&gt;Observable&lt;/code&gt; can fail, you can ensure it can&amp;rsquo;t fail using &lt;code&gt;catchErrorJustReturn(valueThatIsReturnedWhenErrorHappens)&lt;/code&gt;, &lt;strong&gt;but after an error happens the underlying sequence will still complete&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;If the wanted behavior is for underlying sequence to continue producing elements, some version of &lt;code&gt;retry&lt;/code&gt; operator is needed.&lt;/p&gt;
+
+&lt;h3 id=&#34;sharing-subscription:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Sharing subscription&lt;/h3&gt;
+
+&lt;p&gt;You usually want to share subscription in the UI layer. You don&amp;rsquo;t want to make separate HTTP calls to bind the same data to multiple UI elements.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s say you have something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let searchResults = searchText
+    .throttle(0.3, $.mainScheduler)
+    .distinctUntilChanged
+    .map { query in
+        API.getSearchResults(query)
+            .retry(3)
+            .startWith([]) // clears results on new search term
+            .catchErrorJustReturn([])
+    }
+    .switchLatest()
+    .shareReplay(1)              // &amp;lt;- notice the `shareReplay` operator
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;What you usually want is to share search results once calculated. That is what &lt;code&gt;shareReplay&lt;/code&gt; means.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;It is usually a good rule of thumb in the UI layer to add &lt;code&gt;shareReplay&lt;/code&gt; at the end of transformation chain because you really want to share calculated results. You don&amp;rsquo;t want to fire separate HTTP connections when binding &lt;code&gt;searchResults&lt;/code&gt; to multiple UI elements.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;making-http-requests:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Making HTTP requests&lt;/h2&gt;
+
+&lt;p&gt;Making http requests is one of the first things people try.&lt;/p&gt;
+
+&lt;p&gt;You first need to build &lt;code&gt;NSURLRequest&lt;/code&gt; object that represents the work that needs to be done.&lt;/p&gt;
+
+&lt;p&gt;Request determines is it a GET request, or a POST request, what is the request body, query parameters &amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;This is how you can create a simple GET request&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let request = NSURLRequest(URL: NSURL(string: &amp;quot;http://en.wikipedia.org/w/api.php?action=parse&amp;amp;page=Pizza&amp;amp;format=json&amp;quot;)!)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;If you want to just execute that request outside of composition with other observables, this is what needs to be done.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;let responseJSON = NSURLSession.sharedSession().rx_JSON(request)
+
+// no requests will be performed up to this point
+// `responseJSON` is just a description how to fetch the response
+
+let cancelRequest = responseJSON
+    // this will fire the request
+    .subscribeNext { json in
+        println(json)
+    }
+
+NSThread.sleepForTimeInterval(3)
+
+// if you want to cancel request after 3 seconds have passed just call
+cancelRequest.dispose()
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;NSURLSession extensions don&amp;rsquo;t return result on &lt;code&gt;MainScheduler&lt;/code&gt; by default.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In case you want a more low level access to response, you can use:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;NSURLSession.sharedSession().rx_response(myNSURLRequest)
+    .debug(&amp;quot;my request&amp;quot;) // this will print out information to console
+    .flatMap { (data: NSData!, response: NSURLResponse!) -&amp;gt; Observable&amp;lt;String&amp;gt; in
+        if let response = response as? NSHTTPURLResponse {
+            if 200 ..&amp;lt; 300 ~= response.statusCode {
+                return just(transform(data))
+            }
+            else {
+                return failWith(yourNSError)
+            }
+        }
+        else {
+            rxFatalError(&amp;quot;response = nil&amp;quot;)
+            return failWith(yourNSError)
+        }
+    }
+    .subscribe { event in
+        println(event) // if error happened, this will also print out error to console
+    }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;logging-http-traffic:34c4da6d4768d05e50db99357a299b5c&#34;&gt;Logging HTTP traffic&lt;/h3&gt;
+
+&lt;p&gt;In debug mode RxCocoa will log all HTTP request to console by default. In case you want to change that behavior, please set &lt;code&gt;Logging.URLRequests&lt;/code&gt; filter.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-swift&#34;&gt;// read your own configuration
+public struct Logging {
+    public typealias LogURLRequest = (NSURLRequest) -&amp;gt; Bool
+
+    public static var URLRequests: LogURLRequest =  { _ in
+    #if DEBUG
+        return true
+    #else
+        return false
+    #endif
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&#34;rxdatasourcestarterkit:34c4da6d4768d05e50db99357a299b5c&#34;&gt;RxDataSourceStarterKit&lt;/h2&gt;
+
+&lt;p&gt;&amp;hellip; is a set of classes that implement fully functional reactive data sources for &lt;code&gt;UITableView&lt;/code&gt;s and &lt;code&gt;UICollectionView&lt;/code&gt;s.&lt;/p&gt;
+
+&lt;p&gt;Source code, more information and rationale why these classes are separated into their directory can be found &lt;a href=&#34;../RxDataSourceStarterKit&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Using them should come down to just importing all of the files into your project.&lt;/p&gt;
+
+&lt;p&gt;Fully functional demonstration how to use them is included in the &lt;a href=&#34;../RxExample&#34;&gt;RxExample&lt;/a&gt; project.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,17 @@
+name = "RxSwift Docs"
+license = "MIT"
+licenselink = "-"
+description = "The theme powering guides.rxswift.org"
+homepage = "http://guides.rxswift.org"
+tags = ["document", "bootstrap"]
+features = ["document", ""]
+min_version = 0.1
+
+[author]
+  name = "Junior B."
+  homepage = "https://github.com/bontoJR"
+
+[original]
+  name = "Bootie Docs"
+  homepage = "https://github.com/key-amb/hugo-theme-bootie-docs"
+  repo = "git@github.com:key-amb/hugo-theme-bootie-docs.git"
