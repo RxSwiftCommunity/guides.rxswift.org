@@ -312,7 +312,7 @@ It's just a convenience method that enables you to easily implement `subscribe` 
 
 So what is the `gg` function?
 
-It's just a convenient way of calling `observer.on(.Next(RxBox(element)))`. The same is valid for `sendCompleted(observer)`.
+It's just a convenient way of calling `observer.on(.Next(element))`. The same is valid for `sendCompleted(observer)`.
 
 Sequence implemented this way is actually synchronous. It will generate elements and terminate before `subscribe` call returns disposable representing subscription. Because of that it doesn't really matter what disposable it returns, process of generating elements can't be interrupted.
 
