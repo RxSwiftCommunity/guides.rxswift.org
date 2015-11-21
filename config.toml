@@ -1,6 +1,7 @@
 baseurl = "http://guides.rxswift.org"
 languageCode = "en-us"
 title = "RxSwift"
+theme = "rx-swift"
 
 [params]
     mainMenu = ["intro", "examples"]

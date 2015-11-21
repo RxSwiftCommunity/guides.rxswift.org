@@ -14,7 +14,7 @@ $ brew install hugo
 After that clone the repo and run:
 
 ```sh
-$ hugo server -t rx-swift --watch
+$ hugo server --watch
 ```
 
 This command will run a server and watch for changes, the website is then available at `http://127.0.0.1:1313/`.
