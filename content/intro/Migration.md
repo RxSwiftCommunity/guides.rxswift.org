@@ -27,4 +27,4 @@ viewModel.rows
             .addDisposableTo(disposeBag)
 ```
 
-If you have any more doubts how to write some concept in RxSwift 2.0 version, check out [Example app](../RxExample) or playgrounds.
+If you have any more doubts how to write some concept in RxSwift 2.0 version, check out [Example app](https://github.com/ReactiveX/RxSwift/tree/master/RxExample) or [playgrounds](https://github.com/ReactiveX/RxSwift/tree/master/Rx.playground).
