@@ -23,7 +23,7 @@ Despues desde su directorio ejecuta:
 $ hugo server --watch
 ```
 
-Este comando ejecutara el servidor y detectara cambios en sus archivos, el sitio web estara acesible en `http://127.0.0.1:1313/`.
+Este comando ejecutara el servidor y detectara cambios en sus archivos, el sitio web estara accesible en `http://127.0.0.1:1313/`.
 
 ### Contribuir
 
