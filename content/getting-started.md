@@ -11,11 +11,11 @@ Estas son las opciones soportadas actualmente:
 
 ### Manual
 
-Abrir Rx.xcworkspace, elejir el equema `RxExample` y ejecutar. Este método construirá todo y ejecutará la aplicación de ejemplo
+Abrir Rx.xcworkspace, elejir el esquema `RxExample` y ejecutar. Este método construirá todo y ejecutará la aplicación de ejemplo
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
-**¡IMPORTANTE! Para el apoyo de CocoaPods a TVOS se requiere la versión `0.39` o posterior.**
+**¡IMPORTANTE! Para el apoyo de CocoaPods a tvOS se requiere la versión `0.39` o posterior.**
 
 ```
 # Podfile
@@ -26,7 +26,7 @@ pod 'RxCocoa', '~> 2.0.0-beta.3'
 pod 'RxBlocking', '~> 2.0.0-beta.3'
 ```
 
-En el directorio del `Podfile` escribir:
+En el directorio del `Podfile` escribe:
 
 ```
 $ pod install
@@ -34,39 +34,25 @@ $ pod install
 
 ### [Carthage](https://github.com/Carthage/Carthage)
 
-**Para Xcode 7.0**
+**Para Xcode 7.1 o posterior**
 
-Agregar esto a `Cartfile`
-
-```
-git "git@github.com:ReactiveX/RxSwift.git" "2.0.0-beta.3"
-```
-
-En el directorio del `Cartfile` escribir:
+Agrega esto al `Cartfile`
 
 ```
-$ carthage update
+github "ReactiveX/RxSwift" "2.0.0-beta.3"
 ```
 
-**Para Xcode 7.1 y soporte tvOS**
-
-Add this to `Cartfile`
-
-```
-git "git@github.com:ReactiveX/RxSwift.git" "master-7.1"
-```
-
-En el directorio del `Cartfile` escribir:
+En el directorio del `Cartfile` escribe:
 
 ```
 $ carthage update
 ```
 
-### Manually using git submodules
+### Utilizando manualmente submódulos de git
 
 * Añadir RxSwift como un submódulo Git
 
-En el directorio de su proyecto escribir:
+En el directorio de su proyecto escribe:
 
 ```
 $ git submodule add git@github.com:ReactiveX/RxSwift.git
@@ -102,7 +88,5 @@ Vaya a `Build Settings > Swift Compiler - Custom Flags` del objetivo de compilac
 Incluya **`RxCocoa.h`** en la cabecera de puente (bridging header)
 
 Si usted ya tiene una cabecera de puente, añadiendole `#import "RxCocoa.h"` debería ser suficiente.
-
-If you don't have a bridging header, you can go to your target's `Build Settings > Swift Compiler - Code Generation > Objective-C Bridging Header` and point it to `[path to RxCocoa.h parent directory]/RxCocoa.h`.
 
 Si usted no tiene una cabecera de puente, se puede ir a `Build Settings > Swift Compiler - Code Generation > Objective-C Bridging Header` de tu objetivo y editar para que apunte a `[ruta de acceso a directorio padre RxCocoa.h]/RxCocoa.h`.
