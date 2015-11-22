@@ -85,10 +85,10 @@ b.next(-8)                                  // no imprime nada
 * enlazar los resultados a la etiqueta `UILabel` (resultLabel.rx_subscribeTextTo)
 
 ```swift
-let subscription/*: Disposable */ = primeTextField.rx_text          // hasta aquí el tipo es Observable<String>
-            .map { WolframAlphaIsPrime($0.toInt() ?? 0) }           // hasta aquí el tipo es Observable<Observable<Prime>>
-            .concat()                                               // hasta aquí el tipo es Observable<Prime>
-            .map { "¿el número \($0.n) es primo? \($0.isPrime)" }   // hasta aquí el tipo es Observable<String>
+let subscription/*: Disposable */ = primeTextField.rx_text          // tipo es Observable<String>
+            .map { WolframAlphaIsPrime($0.toInt() ?? 0) }           // tipo es Observable<Observable<Prime>>
+            .concat()                                               // tipo es Observable<Prime>
+            .map { "¿el número \($0.n) es primo? \($0.isPrime)" }   // tipo es Observable<String>
             .bindTo(resultLabel.rx_text)                            // devuelve Disposable que se puede utilizar para desenlazar todo
 
 // Después de que se complete la llamada al servidor 
@@ -114,7 +114,7 @@ Vamos a darle una oportunidad.
 
 ```swift
 // los valores de control de interfaz de usuario se enlazan directamente
-// usa el nombre de usuario de `usernameOutlet` como el valor fuente `sername`
+// usa el nombre de usuario de `usernameOutlet` como el valor fuente `username`
 self.usernameOutlet.rx_text
     .map { username in
 
@@ -137,7 +137,7 @@ self.usernameOutlet.rx_text
         //  * nil   - si esta pendiente de validación
         let loadingValue = (valid: nil, message: "Comprobando disponibilidad...")
 
-        // Esto se disparará una llamada servidor para comprobar si ya existe el nombre de usuario.
+        // Esto disparará una llamada servidor para comprobar si ya existe el nombre de usuario.
         // ¿Sabes una cosa? Su tipo es `Observable<ValidationResult>`
         return API.usernameAvailable(username)
           .map { available in
@@ -156,7 +156,7 @@ self.usernameOutlet.rx_text
 // Podriamos usar el operador `concat` que utilizamos en el segundo ejemplo, pero lo que
 // realmente queremos es cancelar las operaciones asincrónico pendientes si un nuevo nombre de 
 // usuario es suministrado.
-// Todo esto es lo que `switchLatest` hace
+// Eso es lo que `switchLatest` hace
     .switchLatest()
 // Ahora de alguna manera tenemos que enlazar esto a la interfaz de usuario.
 // Nuestro viejo amigo `subscribeNext` puede hacerlo
