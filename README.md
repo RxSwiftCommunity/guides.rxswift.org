@@ -1,24 +1,30 @@
-guides.rxswift.org
+es.rxswift.org
 ===
 
-This website has been built using [Hugo](http://gohugo.io).
+Este sitio web ha sido contruido con [Hugo](http://gohugo.io).
 
-## Run
+## Ejecutar
 
-First thing to do is to install Hugo, in Mac OS X is simple with brew:
+Lo primero en hacer, es instalar Hugo, en Mac OS X es simple con brew:
 
 ```sh
 $ brew install hugo
 ```
 
-After that clone the repo and run:
+Despues clona el repositorio y cambia a la rama es.rxswift.org:
 
 ```sh
-$ hugo server -t rx-swift --watch
+$ git checkout -b es.rxswift.org
 ```
 
-This command will run a server and watch for changes, the website is then available at `http://127.0.0.1:1313/`.
+Despues desde su directorio ejecuta:
 
-### Contributing
+```sh
+$ hugo server --watch
+```
 
-To contribute please create pull-requests direct on the master branch and I will be happy to check and merge them.
+Este comando ejecutara el servidor y detectara cambios en sus archivos, el sitio web estara acesible en `http://127.0.0.1:1313/`.
+
+### Contribuir
+
+Para contribuir crea un pull-requests en la rama es.rxswift.org y nosotros estaremos felices de comprobrarlo y unirlo.

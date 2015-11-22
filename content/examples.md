@@ -1,176 +1,177 @@
 +++
 date = "2015-10-23T17:38:00+02:00"
-title = "Examples"
-categories = "Examples"
-tags = ["examples", "guide"]
+title = "Ejemplos"
+categories = "Ejemplos"
+tags = ["ejemplos", "guia"]
 +++
 
-## Calculated variable
+## Variable calculada
 
-Let's first start with some imperative swift code.
-The purpose of example is to bind identifier `c` to a value calculated from `a` and `b` if some condition is satisfied.
+Primero vamos a empezar con algo de código Swift imperativo.
 
-Here is the imperative swift code that calculates the value of `c`:
+El propósito del ejemplo es de enlazar el identificador `c` con un valor calculado a partir de 'A' y 'B' si alguna condición se cumple.
+
+Aquí está el código imperativo Swift que calcula el valor de `c`:
 
 ```swift
-// this is usual imperative code
+// esto es código imperativo habitual
 var c: String
-var a = 1       // this will only assign value `1` to `a` once
-var b = 2       // this will only assign value `2` to `b` once
+var a = 1       // esto sólo asignará el valor `1` a `a` una vez
+var b = 2       // esto sólo asignará el valor `2` a `b` una vez
 
 if a + b >= 0 {
-    c = "\(a + b) is positive" // this will only assign value to `c` once
+    c = "\(a + b) es positivo" // esto sólo asignará el valor a `c` una vez
 }
 ```
 
-The value of `c` is now `3 is positive`. But if we change the value of `a` to `4`, `c` will still contain the old value.
+El valor de `c` es ahora `3 es positivo`. Pero si cambiamos el valor de 'a' a `4`, `c` aún contendrá el valor antiguo.
 
 ```swift
-a = 4           // c will still be equal "3 is positive" which is not good
-                // c should be equal to "6 is positive" because 4 + 2 = 6
+a = 4           // c seguirá siendo igual a "3 es positivo", que no es bueno
+                // c deberia ser "6 es positivo" porque 4 + 2 = 6
 ```
 
-This is not the wanted behavior.
+Y este no es el comportamiento deseado.
 
-To integrate RxSwift framework into your project just include framework in your project and write `import RxSwit`.
+### Esta es la misma lógica usando RxSwift.
 
-This is the same logic using RxSwift.
+Para integrar el marco RxSwift en su proyecto unicamente debe incluir el marco en su proyecto y escribir `import RxSwit` en cada archivo Swift que lo requiera.
 
 ```swift
 let a /*: Observable<Int>*/ = Variable(1)   // a = 1
 let b /*: Observable<Int>*/ = Variable(2)   // b = 2
 
-// This will "bind" rx variable `c` to definition
+// Esto "enlazará" la variable rx `c` a la siguiente definición
 // if a + b >= 0 {
 //      c = "\(a + b) is positive"
 // }
-let c = combineLatest(a, b) { $0 + $1 }     // combines latest values of variables `a` and `b` using `+`
-    .filter { $0 >= 0 }               // if `a + b >= 0` is true, `a + b` is passed to map operator
-    .map { "\($0) is positive" }      // maps `a + b` to "\(a + b) is positive"
 
-// Since initial values are a = 1, b = 2
-// 1 + 2 = 3 which is >= 0, `c` is intially equal to "3 is positive"
+let c = combineLatest(a, b) { $0 + $1 }     // combina los últimos valores de las variables 'a' y 'b' usando `+`
+    .filter { $0 >= 0 }                     // Si `a + b >= 0` es verdadero, `a + b` es pasado al operador map
+    .map { "\($0) es positivo" }            // mapea `a + b` a "\(a + b) es positivo"
 
-// To pull values out of rx variable `c`, subscribe to values from  `c`.
-// `subscribeNext` means subscribe to next (fresh) values of variable `c`.
-// That also includes the inital value "3 is positive".
-c.subscribeNext { print($0) }          // prints: "3 is positive"
+// Dado que los valores iniciales son a = 1, b = 2
+// 1 + 2 = 3 que es >= 0, `c` es inicialmete igual a "3 es positivo"
 
-// Now let's increase the value of `a`
-// a = 4 is in RxSwift
-a.next(4)                                   // prints: 6 is positive
-// Sum of latest values is now `4 + 2`, `6` is >= 0, map operator
-// produces "6 is positive" and that result is "assigned" to `c`.
-// Since the value of `c` changed, `{ print($0) }` will get called,
-// and "6 is positive" is printed.
+// Para extraer valores de la variable rx `c`, hay que suscribirse a los valores de `c`.
+// `subscribeNext` significa suscribirse a los valores siguientes (recientes) de la variable `c`.
+// Eso también incluye el valor inicial "3 es positivo".
+c.subscribeNext { print($0) }          // imprime: "3 es positivo"
 
-// Now let's change the value of `b`
-// b = -8 is in RxSwift
-b.next(-8)                                  // doesn't print anything
-// Sum of latest values is `4 + (-8)`, `-4` is not >= 0, map doesn't
-// get executed.
-// That means that `c` still contains "6 is positive" and that's correct.
-// Since `c` hasn't been updated, that means next value hasn't been produced,
-// and `{ print($0) }` won't be called.
+// Ahora vamos a incrementar el valor de `a`
+// a = 4 en RxSwift es:
+a.next(4)                                   // imprime: "6 es positivo"
+// La suma de los últimos valores ahora es `4 + 2`, `6` es >= 0, operador map
+// produce "6 es positivo" y este resultado es "asignado" a `c`.
+// Dado que el valor de `c` ha cambiado, `{ print($0) }` sera llamado,
+// y "6 es positivo" será impreso.
+
+// Ahora vamos a cambiar el valor de `b`
+// b = -8 en RxSwift es:
+b.next(-8)                                  // no imprime nada
+// La suma de los últimos valores es `4 + (-8)`, `-4` no es >= 0, por lo que map no sera ejecutado.
+// Esto significa que `c` todavía contiene "6 es positivo" y eso es correcto.
+// Dado que `c` no ha sido actualizado, significa que el siguiente valor no se ha producido,
+// y `{ print($0) }` no se llamara.
 
 // ...
 ```
 
-## Simple UI bindings
+## Simple enlace con la interfaz de usuario
 
-* instead of binding to variables, let's bind to text field values (rx_text)
-* next, parse that into an int and calculate if the number is prime using an async API (map)
-* if text field value is changed before async call completes, new async call will be enqueued (concat)
-* bind results to label (resultLabel.rx_subscribeTextTo)
+* en lugar enlazar a variables, vamos a elazar a los valores de un campo de texto (rx_text)
+* despues, lo covertimos en un entero `int` y calculamos si el número es primo mediante una API asíncrona (map)
+* si el valor del campo de texto se cambia antes de que finalice la llamada asíncrona, una nueva llamada asíncrona estará en cola (concat)
+* enlazar los resultados a la etiqueta `UILabel` (resultLabel.rx_subscribeTextTo)
 
 ```swift
-let subscription/*: Disposable */ = primeTextField.rx_text      // type is Observable<String>
-            .map { WolframAlphaIsPrime($0.toInt() ?? 0) }       // type is Observable<Observable<Prime>>
-            .concat()                                           // type is Observable<Prime>
-            .map { "number \($0.n) is prime? \($0.isPrime)" }   // type is Observable<String>
-            .bindTo(resultLabel.rx_text)                        // return Disposable that can be used to unbind everything
+let subscription/*: Disposable */ = primeTextField.rx_text      // hasta aquí es Observable<String>
+            .map { WolframAlphaIsPrime($0.toInt() ?? 0) }       // hasta aquí es Observable<Observable<Prime>>
+            .concat()                                           // hasta aquí es Observable<Prime>
+            .map { "¿el número \($0.n) es primo? \($0.isPrime)" }   // hasta aquí es Observable<String>
+            .bindTo(resultLabel.rx_text)                        // devuelve Disposable que se puede utilizar para desenlazar todo
 
-// This will set resultLabel.text to "number 43 is prime? true" after
-// server call completes.
+// Después de que se complete la llamada al servidor se establecerá resultLabel.text a "¿el número 43 es primo? true".
 primeTextField.text = "43"
 
 // ...
 
-// to unbind everything, just call
+// para desenlazar todo, simplemente llame a
 subscription.dispose()
 ```
 
-All of the operators used in this example are the same operators used in the first example with variables. Nothing special about it.
+Todos los operadores utilizados en este ejemplo son los mismos operadores utilizados en el primer ejemplo con variables. No hay nada especial en ello.
 
-## Autocomplete
+## Autocompletar
 
-If you are new to Rx, next example will probably be a little overwhelming, but it's here to demonstrate how RxSwift code looks like in real world examples.
+Si eres nuevo en Rx, el siguiente ejemplo será probablemente un poco abrumador, pero está aquí para demostrar cómo el código RxSwift se ve como en ejemplos del mundo real.
 
-The third example is a real world, complex UI async validation logic, with progress notifications.
-All operations are cancelled the moment `disposeBag` is deallocated.
+El tercer ejemplo es un mundo real, lógica de validación asíncrona de interfaz de usuario compleja, con notificaciones de progreso.
+Todas las operaciones se cancelaran en el momento que `disposeBag` se desasigne.
 
-Let's give it a shot.
+Vamos a darle una oportunidad.
 
 ```swift
-// bind UI control values directly
-// use username from `usernameOutlet` as username values source
+// los valores de control de interfaz de usuario se enlazan directamente
+// usa el nombre de usuario de `usernameOutlet` como el valor fuente `sername`
 self.usernameOutlet.rx_text
     .map { username in
 
-        // synchronous validation, nothing special here
+        // validación sincrónica, nada especial aquí
         if count(username) == 0 {
-            // Convenience for constructing synchronous result.
-            // In case there is mixed synchronous and asychronous code inside the same
-            // method, this will construct an async result that is resolved immediatelly.
-            return returnElement((valid: false, message: "Username can't be empty."))
+            // Conveniencia para la construcción de resultado síncronos.
+            // En caso de que haya código sincrónico y asincrónico mixto dentro del mismo 
+            // método, construirá un resultado asíncrono que se resuelve inmediatamente.
+            return just((valid: false, message: "Nombre de usuario no puede estar vacío."))
         }
 
         ...
 
-        // Every user interface probably shows some state while async operation
-        // is executing.
-        // Let's assume that we want to show "Checking availability" while waiting for result.
-        // valid parameter can be
-        //  * true  - is valid
-        //  * false - not valid
-        //  * nil   - validation pending
-        let loadingValue = (valid: nil, message: "Checking availability ...")
+        // Cada interfaz de usuario, probablemente, muestra un estado, mientras que 
+        // la operación asíncrona se está ejecutando.
+        // Supongamos que queremos mostrar "Comprobando disponibilidad" mientra esperamos el resultado.
+        // El parámetro válido puede ser:
+        //  * true  - si es valido
+        //  * false - si es invalido
+        //  * nil   - si esta pendiente de validación
+        let loadingValue = (valid: nil, message: "Comprobando disponibilidad...")
 
-        // This will fire a server call to check if the username already exists.
-        // Guess what, its type is `Observable<ValidationResult>`
+        // Esto se disparará una llamada servidor para comprobar si ya existe el nombre de usuario.
+        // ¿Sabes una cosa? Su tipo es `Observable<ValidationResult>`
         return API.usernameAvailable(username)
           .map { available in
               if available {
-                  return (true, "Username available")
+                  return (true, "Nombre de usuario disponible")
               }
               else {
-                  return (false, "Username already taken")
+                  return (false, "Este nombre de usuario ya se esta usando")
               }
           }
-          // use `loadingValue` until server responds
+          // usa `loadingValue` hasta que el servidor responda
           .startWith(loadingValue)
     }
-// Since we now have `Observable<Observable<ValidationResult>>`
-// we somehow need to return to normal `Observable` world.
-// We could use `concat` operator from second example, but we really
-// want to cancel pending asynchronous operation if new username is
-// provided.
-// That's what `switchLatest` does
+// Puesto que ahora tenemos `Observable<Observable<ValidationResult>>`
+// que de alguna manera tenemos que volver a la normalidad del mundo `Observable`.
+// Podriamos usar el operador `concat` que utilizamos en el segundo ejemplo, pero lo que
+// realmente queremos es cancelar las operaciones asincrónico pendientes si un nuevo nombre de 
+// usuario es suministrado.
+// Todo esto es lo que `switchLatest` hace
     .switchLatest()
-// Now we need to bind that to the user interface somehow.
-// Good old `subscribeNext` can do that
-// That's the end of `Observable` chain.
-// This will produce a `Disposable` object that can unbind everything and cancel
-// pending async operations.
+// Ahora de alguna manera tenemos que enlazar esto a la interfaz de usuario.
+// Nuestro viejo amigo `subscribeNext` puede hacerlo
+// Este es el final de la cadena `Observable`.
+// Esto producira un objeto `Disposable` (desechable) que puede desenlazar todo y cancelar
+// las operaciones asincrónicas pendientes.
     .subscribeNext { valid in
         errorLabel.textColor = validationColor(valid)
         errorLabel.text = valid.message
     }
-// Why would we do it manually, that's tedious,
-// let's dispose everything automagically on view controller dealloc.
+// ¿Por qué deberíamos hacer esto de forma manual?, es tedioso,
+// vamos a desechar todo automágicamente cuando el controlador de vista se desasigne.
     .addDisposableTo(disposeBag)
 ```
 
-Can't get any simpler than this. There are [more examples](../RxExample) in the repository, so feel free to check them out.
+No se puede obtener nada más sencillo que esto. Hay [más ejemplos](https://github.com/ReactiveX/RxSwift/tree/master/RxExample) en el repositorio, así que siéntete libre de echarle un vistazo.
 
-They include examples on how to use it in the context of MVVM pattern or without it.
+Incluyen ejemplos de cómo usarlo en el contexto del patrón MVVM o sin él.
+

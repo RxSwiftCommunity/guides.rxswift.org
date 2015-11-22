@@ -1,8 +1,8 @@
 +++
 date = "2015-10-23T17:36:22+02:00"
-title = "About"
+title = "Acerca de"
 
 +++
 
-Work in progress...
+Trabajo en progreso...
 

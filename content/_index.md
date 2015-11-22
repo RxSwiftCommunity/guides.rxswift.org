@@ -5,31 +5,31 @@ title = "_index"
 
 <div class="row">
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/getting-started">Getting Started</a></h3>
-      <p>Are you new to Rx? Do you want to try RxSwift? This is the section where you can find all what you need to do to include RxSwift in a project.</p>
+      <h3><a href="/getting-started">Empezando</a></h3>
+      <p>¿Eres nuevo en Rx? ¿Quieres probar RxSwiftRxSwift? Esta es la sección donde puedes encontrar todo lo que necesitas hacer para incluir RxSwift en un proyecto.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/intro">Introduction</a></h3>
-      <p>Here you can find some more info about Rx and RxSwft.</p>
+      <h3><a href="/intro">Introducción</a></h3>
+      <p>Aqui puedes encontrar algo más de información sobre Rx y RxSwft.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/examples">Examples</a></h3>
-      <p>Time to get hands dirty, check out the examples explained in details and start playing with RxSwift.</p>
+      <h3><a href="/examples">Ejemplos</a></h3>
+      <p>La hora de ensuciarse las manos, analiza los ejemplos explicandos en detalle y comienza a jugar con RxSwift.</p>
     </div>
 </div>
 
 <div class="row">
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="#">Resources</a></h3>
-      <p>Rx is a big world, in this section you can find a list of useful resources to better understand it.</p>
+      <h3><a href="#">Recursos</a></h3>
+      <p>Rx es un mundo muy grande, en esta sección podras encontrar una lista de recursos utiles para entender mejor esto.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="https://github.com/ReactiveX/RxSwift/blob/master/CONTRIBUTING.md">Contributing</a></h3>
-      <p>Do you want to contribute? Just follow the link and get on board.</p>
+      <h3><a href="https://github.com/ReactiveX/RxSwift/blob/master/CONTRIBUTING.md">Contribuir</a></h3>
+      <p>¿Te gustaría contribuir? Sólo tienes que seguir el enlace y subir a bordo.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/about">About</a></h3>
-      <p>Who we are, if you might want to know it.</p>
+      <h3><a href="/about">Acerca de</a></h3>
+      <p>Quiénes somos, es posible que desee conocerlo.</p>
     </div>
 </div>
 

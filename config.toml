@@ -1,10 +1,11 @@
-baseurl = "http://guides.rxswift.org"
+baseurl = "http://es.rxswift.org"
 languageCode = "en-us"
 title = "RxSwift"
+theme = "rx-swift"
 
 [params]
-    mainMenu = ["intro", "examples"]
-    description = "Powerful - Asynchronous - Event Driven"
+    mainMenu = [["intro", "introducción"], ["examples", "ejemplos"]]
+    description = "Potente - Asincrono - Dirigido por eventos"
     analytics = "UA-48560610-8"
     noCategoryLink = true
 
