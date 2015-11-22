@@ -10,7 +10,7 @@ Este proyecto trata de ser coherente con [ReactiveX.io](http://reactivex.io/). D
 # Observables tambien conocidos como secuencias
 
 ## Basics
-Es [equivalence](MathBehindRx.md) al patrón observados pattern (`Observable<Elemento>`) y secuencias (`Generator`s) es una de las cosas más importantes de comprender sobre Rx.
+Es [equivalence](MathBehindRx) al patrón observados pattern (`Observable<Elemento>`) y secuencias (`Generator`s) es una de las cosas más importantes de comprender sobre Rx.
 
 Se necesita el patrón Observer porque se quiere modelar el comportamiento asíncrono y 
 que la equivalencia permita la ejecución de operaciones de secuencias de alto nivel como 
@@ -87,7 +87,7 @@ Si una secuencia no termina de alguna manera, los recursos se asignarán de form
 
 **Usar dispose bags, scoped dispose o el operador `takeUntil` son maneras robustas de asegurarse de que los recursos estan limpios y recomendamos su uso en la producción a pesar de que la secuencia terminará en un tiempo finito**
 
-En caso de que usted es curioso por qué `ErrorType` no es genérico, se puede encontrar una explicación [aquí](DesignRationale.md#why-error-type-isnt-generic).
+En caso de que usted es curioso por qué `ErrorType` no es genérico, se puede encontrar una explicación [aquí](DesignRationale#why-error-type-isnt-generic).
 
 ## Desechando
 
@@ -126,7 +126,7 @@ Entonces, ¿puede el código imprimir algo después de que la llamada a `dispose
 
 * de lo contrario **sí**.
 
-Se puede encontrar más información sobre los schedulers [aquí](Schedulers.md).
+Se puede encontrar más información sobre los schedulers [aquí](Schedulers).
 
 Usted simplemente tiene dos procesos que suceden en paralelo.
 
@@ -135,7 +135,7 @@ Usted simplemente tiene dos procesos que suceden en paralelo.
 
 Cuando se piensa en ello, la pregunta `puede algo ser impreso despues` ni siquiera tiene sentido en el caso de que esos procesos se encuentran en diferentes planificadores.
 
-Algunos ejemplos más para estar seguro (`observeOn` se explica [aquí](Schedulers.md)).
+Algunos ejemplos más para estar seguro (`observeOn` se explica [aquí](Schedulers)).
 
 En caso de que tenga algo como:
 
@@ -213,6 +213,7 @@ sequence
     }
 ```
 
+<a name="implicit-observable-guarantees" ></a>
 ## Garantías implicitas en los `Observable`
 
 También hay un par de garantías adicionales que todos los productores de secuencia (`Observable`s) deben cumplir.
@@ -580,7 +581,7 @@ extension NSURLSession {
 
 ## Los operadores
 
-Hay numerosos operadores implantados en RxSwift. La lista completa se puede encontrar [aquí](API.md).
+Hay numerosos operadores implantados en RxSwift. La lista completa se puede encontrar [aquí](API).
 
 Diagramas Marble para todos los operadores se pueden encontrar en [ReactiveX.io](http://reactivex.io/)
 
@@ -590,7 +591,7 @@ Para utilizar los Playgrounds por favor abra `Rx.xcworkspace`, contruya el esque
 
 En caso de que necesite un operador, y no sepa cómo encontrarlo en [árbol de decisión de los operadores](http://reactivex.io/documentation/operators.html#tree) (en inglés).
 
-[Los operadores soportados por RxSwift](API.md#rxswift-supported-operators) también se agrupan por la función que realizan, por lo que también puede ayudar.
+[Los operadores soportados por RxSwift](API#rxswift-supported-operators) también se agrupan por la función que realizan, por lo que también puede ayudar.
 
 ### Operadores a medida
 

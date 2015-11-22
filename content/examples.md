@@ -80,18 +80,19 @@ b.next(-8)                                  // no imprime nada
 ## Simple enlace con la interfaz de usuario
 
 * en lugar enlazar a variables, vamos a elazar a los valores de un campo de texto (rx_text)
-* despues, lo covertimos en un entero `int` y calculamos si el número es primo mediante una API asíncrona (map)
+* despues, lo convertimos en un entero `int` y calculamos si el número es primo mediante una API asíncrona (map)
 * si el valor del campo de texto se cambia antes de que finalice la llamada asíncrona, una nueva llamada asíncrona estará en cola (concat)
 * enlazar los resultados a la etiqueta `UILabel` (resultLabel.rx_subscribeTextTo)
 
 ```swift
-let subscription/*: Disposable */ = primeTextField.rx_text      // hasta aquí es Observable<String>
-            .map { WolframAlphaIsPrime($0.toInt() ?? 0) }       // hasta aquí es Observable<Observable<Prime>>
-            .concat()                                           // hasta aquí es Observable<Prime>
-            .map { "¿el número \($0.n) es primo? \($0.isPrime)" }   // hasta aquí es Observable<String>
-            .bindTo(resultLabel.rx_text)                        // devuelve Disposable que se puede utilizar para desenlazar todo
+let subscription/*: Disposable */ = primeTextField.rx_text          // hasta aquí el tipo es Observable<String>
+            .map { WolframAlphaIsPrime($0.toInt() ?? 0) }           // hasta aquí el tipo es Observable<Observable<Prime>>
+            .concat()                                               // hasta aquí el tipo es Observable<Prime>
+            .map { "¿el número \($0.n) es primo? \($0.isPrime)" }   // hasta aquí el tipo es Observable<String>
+            .bindTo(resultLabel.rx_text)                            // devuelve Disposable que se puede utilizar para desenlazar todo
 
-// Después de que se complete la llamada al servidor se establecerá resultLabel.text a "¿el número 43 es primo? true".
+// Después de que se complete la llamada al servidor 
+// se establecerá resultLabel.text a "¿el número 43 es primo? true".
 primeTextField.text = "43"
 
 // ...
