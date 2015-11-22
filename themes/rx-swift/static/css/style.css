@@ -326,7 +326,7 @@ footer .powered a {
  * Goodies 
  */
  
-#TableOfContents li {
+#TableOfContents ul li li {
 	background: url(../img/bullet.png) no-repeat 0px 5px;
 	padding-left: 10px;
 	margin-top: 3px;
