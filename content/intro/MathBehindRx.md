@@ -1,7 +1,7 @@
 +++
 date = "2015-10-23T16:12:42+02:00"
 title = "Las matemáticas detrás de Rx"
-categories = "introduction"
+categories = "introducción"
 tags = ["guide", "documentation"]
 +++
 

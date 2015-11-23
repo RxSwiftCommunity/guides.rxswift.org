@@ -1,131 +1,130 @@
 +++
 date = "2015-10-23T16:12:42+02:00"
-title = "Warnings"
-categories = "introduction"
+title = "Advertencias"
+categories = "introducción"
 tags = ["observables", "guide", "operators", "API", "documentation"]
 +++
 
-Warnings
-========
+### <a name="unused-disposable"></a>Despachable no usado (unused-disposable)
 
-### <a name="unused-disposable"></a>Unused disposable (unused-disposable)
+Lo siguiente es valido para toda la familia de funciones `subscribe*`, `bind*` y `drive*` que devuelven un `Disposable` (desechable).
 
-The same is valid for `subscribe*`, `bind*` and `drive*` family of functions that return `Disposable`.
-
-Warning is probably presented in a context similar to this one:
+La advertencia probablemente se presente en un contexto similar a este:
 
 ```Swift
 let xs: Observable<E> ....
 
 xs
-  .filter { ... }
-  .map { ... }
-  .switchLatest()
-  .subscribe(onNext: {
-    ...
-  }, onError: {
-    ...
-  })  
+    .filter { ... }
+    .map { ... }
+    .switchLatest()
+    .subscribe(onNext: {
+        ...
+    }, 
+    onError: {
+        ...
+    })  
 ```
 
-`subscribe` function returns a subscription `Disposable` that can be used to cancel computation and free resources.
+La funcion `subscribe` devuelve una suscripción `Disposable` (desechable) que se puede utilizar para cancelar el cálculo y liberar recursos.
 
-Preferred way of terminating these fluent calls is by using `.addDisposableTo(disposeBag)` or in some equivalent way.
+Forma preferida de poner fin al flujo de llamadas, es mediante el uso de `.addDisposableTo(disposeBag)` o de manera equivalente
 
 ```Swift
 let xs: Observable<E> ....
 let disposeBag = DisposeBag()
 
 xs
-  .filter { ... }
-  .map { ... }
-  .switchLatest()
-  .subscribe(onNext: {
-    ...
-  }, onError: {
-    ...
-  })
-  .addDisposableTo(disposeBag) // <--- note `addDisposableTo`
+    .filter { ... }
+    .map { ... }
+    .switchLatest()
+    .subscribe(onNext: {
+        ...
+    }, 
+    onError: {
+        ...
+    })
+    .addDisposableTo(disposeBag) // <--- observe `addDisposableTo`
 ```
 
-When `disposeBag` gets deallocated, subscription will be automatically disposed.
+Cuando se deasigna `disposeBag`, todas las suscripciónes seran automaticamente desechadas.
 
-In case `xs` terminates in a predictable way with `Completed` or `Error` message, not handling subscription `Disposable` won't leak any resources, but it's still preferred way because in that way element computation is terminated at predictable moment.
+En el caso de `xs` termine de una manera predecible con `Completed` o `Error`, aunque no se controlando la suscripción `Disposable` no se pierde ningún recurso, pero sigue siendo la manera preferido porque de esta forma los cálculos del elemento se terminarán en un momento predecible.
 
-That will also make your code robust and future proof because resources will be properly disposed even if `xs` implementation changes.
+Esto también hará que su código robusto y resistente al paso del tiempo ya que los recursos serán desechados correctamente aunque `xs` cambie de implementación.
 
-Another way to make sure subscriptions and resources are tied with the lifetime of some object is by using `takeUntil` operator.
+Otra forma de asegurarse de que las suscripciones y los recursos están vinculados con la vida útil de un objeto es el uso de operador `takeUntil`.
 
 ```Swift
 let xs: Observable<E> ....
 let someObject: NSObject  ...
 
 _ = xs
-  .filter { ... }
-  .map { ... }
-  .switchLatest()
-  .takeUntil(someObject.rx_dellocated) // <-- note the `takeUntil` operator
-  .subscribe(onNext: {
-    ...
-  }, onError: {
-    ...
-  })
+    .filter { ... }
+    .map { ... }
+    .switchLatest()
+    .takeUntil(someObject.rx_dellocated) // <-- observe el operador `takeUntil` 
+    .subscribe(onNext: {
+      ...
+    }, onError: {
+      ...
+    })
 ```
 
-If ignoring the subscription `Disposable` is desired behavior, this is how to silence the compiler warning.
+Si lo que desesa es ignorar la suscripción `Disposable`, así es como se silencia la advertencia del compilador.
 
 ```Swift
 let xs: Observable<E> ....
 let disposeBag = DisposeBag()
 
-_ = xs // <-- note the underscore
-  .filter { ... }
-  .map { ... }
-  .switchLatest()
-  .subscribe(onNext: {
-    ...
-  }, onError: {
-    ...
-  })
+_ = xs // <-- observe el guión bajo
+    .filter { ... }
+    .map { ... }
+    .switchLatest()
+    .subscribe(onNext: {
+      ...
+    }, onError: {
+      ...
+    })
 ```
 
 ### <a name="unused-observable"></a>Unused observable sequence (unused-observable)
 
-Warning is probably presented in a context similar to this one:
+Probablemente aparecerá una advertencia en un contexto similar a este:
 
 ```Swift
 let xs: Observable<E> ....
 
 xs
-  .filter { ... }
-  .map { ... }
+    .filter { ... }
+    .map { ... }
 ```
 
-This code defines observable sequence that is filtered and mapped `xs` sequence but then ignores the result.
+Este código define secuencia observable que se filtra y se asigna a la secuencia `xs` pero ignora el resultado.
 
-Since this code just defines an observable sequence and then ignores it, it doesn't actually do nothing and it's pretty much useless.
+Dado que este código sólo define una secuencia observable y luego lo ignora, en realidad no hacen nada y es bastante inútil.
 
-Your intention was probably to either store the observable sequence definition and use it later ...
+Su intención era, probablemente, almacenar la definición de secuencia observable y usarla más tarde ...
 
 ```Swift
 let xs: Observable<E> ....
 
-let ys = xs // <--- names definition as `ys`
-  .filter { ... }
-  .map { ... }
+let ys = xs // <--- nombra la definición como `ys`
+    .filter { ... }
+    .map { ... }
 ```
 
-... or start computation based on that definition  
+... o iniciar un cálculo basadose en esa definición 
 
 ```Swift
 let xs: Observable<E> ....
 let disposeBag = DisposeBag()
 
 xs
-  .filter { ... }
-  .map { ... }
-  .subscribeNext { nextElement in       // <-- note the `subscribe*` method
-    ... probably print or something
-  }
-  .addDisposableTo(disposeBag)
+    .filter { ... }
+    .map { ... }
+    .subscribeNext { nextElement in       // <-- note the `subscribe*` method
+      ... probably print or something
+    }
+    .addDisposableTo(disposeBag)
 ```

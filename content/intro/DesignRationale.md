@@ -1,7 +1,7 @@
 +++
 date = "2015-10-23T16:12:42+02:00"
 title = "Justificación de diseño"
-categories = "introduction"
+categories = "introducción"
 tags = ["error type", "Design", "Event", "guide", "API", "documentation"]
 +++
 

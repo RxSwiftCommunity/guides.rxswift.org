@@ -1,14 +1,11 @@
 +++
 date = "2015-10-23T16:12:42+02:00"
-title = "Units"
-categories = "introduction"
+title = "Unidades (Units)"
+categories = "introducción"
 tags = ["observables", "guide", "API", "documentation"]
 +++
 
-Units
-=====
-
-Este documento tratará de describir lo que son las unidades, y porque son un concepto útil, cómo usarlos y cómo crearlos.
+Este documento tratará de describir lo que son las unidades (Units), y porque son un concepto útil, cómo usarlos y cómo crearlos.
 
 * [¿Por qué?](#por-qué)
 * [Justificación de diseño](#design-rationale)

@@ -1,7 +1,7 @@
 +++
 date = "2015-10-23T16:12:42+02:00"
 title = "Migración de la versión RxSwift 1.9 a 2.0"
-categories = "introduction"
+categories = "introducción"
 tags = ["observables", "observers", "guide", "API", "documentation"]
 +++
 

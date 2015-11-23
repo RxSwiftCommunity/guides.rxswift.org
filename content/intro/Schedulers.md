@@ -1,7 +1,7 @@
 +++
 date = "2015-10-23T16:12:42+02:00"
 title = "Planificadores (Schedulers)"
-categories = "introduction"
+categories = "introducción"
 tags = ["Schedulers", "guide", "operators", "threads", "documentation"]
 +++
 

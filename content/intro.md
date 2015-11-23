@@ -45,7 +45,7 @@ Algunas secuencias son finitas, y otras son infinitas, como la secuencia de toqu
 ---tap-tap-------tap--->
 ```
 
-Estos diagramas se llaman diagramas mármol.
+Estos diagramas se llaman diagramas de canicas (en Marble Diagrams).
 
 [http://rxmarbles.com/](http://rxmarbles.com/)
 
