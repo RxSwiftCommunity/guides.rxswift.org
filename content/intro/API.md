@@ -29,7 +29,7 @@ Los operadores no tienen estado de forma predeterminada.
  * [`repeatElement`](http://reactivex.io/documentation/operators/repeat.html)
  * [`timer`](http://reactivex.io/documentation/operators/timer.html)
 
-#### Trnsformar Observables
+#### Transformar Observables
   * [`buffer`](http://reactivex.io/documentation/operators/buffer.html)
   * [`flatMap`](http://reactivex.io/documentation/operators/flatmap.html)
   * [`flatMapFirst`](http://reactivex.io/documentation/operators/flatmap.html)
@@ -86,7 +86,7 @@ Los operadores no tienen estado de forma predeterminada.
   * [`reduce` / `aggregate`](http://reactivex.io/documentation/operators/reduce.html)
   * [`toArray`](http://reactivex.io/documentation/operators/to.html)
 
-#### Connectable Observable Operators
+#### Operadores connectables Observable
 
   * [`multicast`](http://reactivex.io/documentation/operators/publish.html)
   * [`publish`](http://reactivex.io/documentation/operators/publish.html)
