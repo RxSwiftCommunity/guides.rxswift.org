@@ -7,7 +7,7 @@ tags = ["error type", "Design", "Event", "guide", "API", "documentation"]
 
 ## ¿Por qué el tipo de error no es genérico?
 
-```Swift
+```swift
 enum Event<Element>  {
     case Next(Element)      // el elemento siguiente de la secuencia
     case Error(ErrorType)   // la secuencia falla y produce un error
@@ -42,7 +42,7 @@ Lo que realmente necesita es una manera genérica para demostrar rasgos de secue
 * La secuencia termina en tiempo finito (en el lado del servidor)
 * La secuencia contiene un solo elemento (si está ejecutando algún cálculo)
 * La secuencia no lleva el error a cabo, nunca se termina y los elementos se entregan en el planificador principal `MainScheduler` (IU)
-* La secuencia no lleva el error a cabo, nunca se termina y elementos están presentadas el planificador principal `MainScheduler`, y tiene compartir refcounted (IU)
+* La secuencia no lleva el error a cabo, nunca se termina y elementos están presentadas el planificador principal `MainScheduler`, y comparte cuentas de referencias (IU)
 * La secuencia no lleva el error a cabo, nunca se termina y los elementos se entregan en planificador fondo específico (motor de audio)
 
 Lo que realmente quiero es el compilador fuerze al sistema general de rasgos para las secuencias observables, y un conjunto de operadores invariantes para esas propiedades deseadas.
