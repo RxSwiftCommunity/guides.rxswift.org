@@ -10,7 +10,7 @@ Este proyecto trata de ser coherente con [ReactiveX.io](http://reactivex.io/). D
 # Observables tambien conocidos como secuencias
 
 ## Basics
-Es [equivalence](MathBehindRx) al patrón observados pattern (`Observable<Elemento>`) y secuencias (`Generator`s) es una de las cosas más importantes de comprender sobre Rx.
+Es [equivalence](MathBehindRx) al patrón observados (`Observable<Elemento>`) y secuencias (`Generator`s) es una de las cosas más importantes de comprender sobre Rx.
 
 Se necesita el patrón Observer porque se quiere modelar el comportamiento asíncrono y 
 que la equivalencia permita la ejecución de operaciones de secuencias de alto nivel como 
