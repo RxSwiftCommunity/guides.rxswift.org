@@ -1,19 +1,18 @@
-guides.rxswift.org
-===
+# cn.rxswift.org
 
 This website has been built using [Hugo](http://gohugo.io).
 
 ## Run
 
-First thing to do is to install Hugo, in Mac OS X is simple with brew:
+First thing to do is to install Hugo, in Mac OS X is simple with brew:ß
 
-```sh
+``` sh
 $ brew install hugo
 ```
 
 After that clone the repo and run:
 
-```sh
+``` sh
 $ hugo server --watch
 ```
 
