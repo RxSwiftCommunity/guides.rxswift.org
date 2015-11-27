@@ -10,6 +10,12 @@ First thing to do is to install Hugo, in Mac OS X is simple with brew:ß
 $ brew install hugo
 ```
 
+Then checkout to `cn.rxswift.org` branch
+
+``` sh
+$ git checkout cn.rxswift.org
+```
+
 After that clone the repo and run:
 
 ``` sh
