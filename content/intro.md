@@ -370,3 +370,126 @@ Ended ----
 
 
 
+
+
+
+
+
+## Operators 操作符
+
+There are numerous operators implemented in RxSwift. The complete list can be found [here](API).
+RxSwift中定义并实现了多种多样的操作符。完整的操作符列表可以在这里查看[here](API).
+
+Marble diagrams for all operators can be found on [ReactiveX.io](http://reactivex.io/)
+为了消除一些歧义我们使用Marble diagrams去区分所有的操作符。这个图表可以在这里查看到[ReactiveX.io](http://reactivex.io/)
+
+Almost all operators are demonstrated in [Playgrounds](https://github.com/ReactiveX/RxSwift/tree/master/Rx.playground).
+绝大多数的操作符展示和事例可以在这个playground查看到。[Playgrounds](https://github.com/ReactiveX/RxSwift/tree/master/Rx.playground).
+
+To use playgrounds please open `Rx.xcworkspace`, build `RxSwift-OSX` scheme and then open playgrounds in `Rx.xcworkspace` tree view.
+如果您想使用playgrounds, 首先您需要请先打开 `Rx.xcworkspace`, 然后build `RxSwift-OSX` scheme，之后在项目树中打开playgrounds. 之后你就看可以正常使用playgrounds了.
+
+In case you need an operator, and don't know how to find it there a [decision tree of operators]() http://reactivex.io/documentation/operators.html#tree).
+如果当你需要一个操作符但是不知道如何找到它, 您可以查阅以下资料[decision tree of operators]() http://reactivex.io/documentation/operators.html#tree).
+
+[Supported RxSwift operators](API#rxswift-supported-operators) are also grouped by function they perform, so that can also help.
+[Supported RxSwift operators](API#rxswift-supported-operators) 这些操作符同样也以功能进行了分组, 所以它也对你的开发有所帮助.
+
+### Custom operators 自定义操作符
+
+There are two ways how you can create custom operators.
+这里我们有两种方式让你创建自己想要的操作符.
+
+#### Easy way 第一种: 简单的方式
+
+All of the internal code uses highly optimized versions of operators, so they aren't the best tutorial material. That's why it's highly encouraged to use standard operators.
+所有的内部代码都是使用高度优化的操作符进行编写的，所以这些代码不是最好的参考材料. 那也是为什么我们鼓励使用普通的操作符。
+
+Fortunately there is an easier way to create operators. Creating new operators is actually all about creating observables, and previous chapter already describes how to do that.
+庆幸的是这里有一种简单的方式去创建自定义操作符. 事实上, 创建一个新的操作符完全在创建各式各样的observables。至于如何创建observables, 我们已经在前一章节提及到.
+
+Lets see how an unoptimized map operator can be implemented.
+让我们先来看看一个未被优化的map操作符是怎杨实现的.
+
+```swift
+func myMap<E, R>(transform: E -> R)(source: Observable<E>) -> Observable<R> {
+    return create { observer in
+
+        let subscription = source.subscribe { e in
+                switch e {
+                case .Next(let value):
+                    let result = transform(value)
+                    observer.on(.Next(result))
+                case .Error(let error):
+                    observer.on(.Error(error))
+                case .Completed:
+                    observer.on(.Completed)
+                }
+            }
+
+        return subscription
+    }
+}
+```
+
+So now you can use your own map:
+所以现在你能够使用你自己的map操作符了:
+
+```swift
+let subscription = myInterval(0.1)
+    .myMap { e in
+        return "This is simply \(e)"
+    }
+    .subscribeNext { n in
+        print(n)
+    }
+```
+
+and this will print
+之后它将打印出如下结果
+
+```
+Subscribed
+This is simply 0
+This is simply 1
+This is simply 2
+This is simply 3
+This is simply 4
+This is simply 5
+This is simply 6
+This is simply 7
+This is simply 8
+...
+```
+
+#### Harder, more performant way 第二种: 创建更加困难, 但是性能更好的方法
+
+You can perform the same optimizations like we have made and create more performant operators. That usually isn't necessary, but it of course can be done.
+你能够使用跟我们一样的方式进行优化进而创建更多有效率的操作符. 通常情况下, 虽然这个不是必要的, 但是它能达到我们想要的优化目的. 
+
+Disclaimer: when taking this approach you are also taking a lot more responsibility when creating operators. You will need to make sure that sequence grammar is correct and be responsible of disposing subscriptions.
+免责声明: 当你采用这种方式进行创建自定义操作符，你需要为你所创建的操作符负更多的责任.并且 你还将需要保证你的序列语法是正确的并且为撤销订阅负责.
+
+
+There are plenty of examples in RxSwift project how to do this. I would suggest talking a look at `map` or `filter` first.
+在RxSwift项目中有很多这方面的例子去创建自定义操作符. 在这里, 我推荐你们可以先查看和学习 `map` 或者 `filter`操作符.
+
+Creating your own custom operators is tricky because you have to manually handle all of the chaos of error handling, asynchronous execution and disposal, but it's not rocket science either.
+由于你需要人工的进行处理自定义操作符所带来的各式各样的麻烦, 比如如何处理错误, 异步执行和销毁问题.所以创建自定义操作符是很困难的, 虽说困难但是这也不会像火箭工程学那么困难.
+
+Every operator in Rx is just a factory for an observable. Returned observable usually contains information about source `Observable` and parameters that are needed to transform it.
+Rx中的每一个操作符仅仅是一个observable工厂. 被返回的observable通常包涵了可以改变其自己的source `Observable` 和参数.(这句有出路)
+
+
+In RxSwift code, almost all optimized `Observable`s have a common parent called `Producer`. Returned observable serves as a proxy between subscribers and source observable. It usually performs these things:
+在Rxswift的代码中, 绝大多数的已优化的 `Observable`s 都有一个公共的父类 `Producer`. 被返回的observable作为订阅者(subscribers)和source observable之间的代理, 它通常需要完成如下几件事情:
+
+
+* on new subscription creates a sink that performs transformations
+* 在新的subscription上创建一个sink来进行transformations
+
+* registers that sink as observer to source observable
+* 把这个sink作为一个观察者(observer)注册到source observable
+
+* on received events proxies transformed events to original observer
+* 在收到事件的代理上传输事件给原始的observer
