@@ -89,7 +89,7 @@ protocol ObserverType {
 
 **使用`disposeBag`，`scopedDispose`,`takeUntil`操作都是确保资源被释放的有效地方式。尽管序列在最后也会被终止，我们也推荐使用它们。**
 
-也许你会好奇为什么`ErrorType`不是泛型，你可以在[这里](http://guides.rxswift.org/intro/DesignRationale/#why-error-type-isnt-generic)找到解释。
+也许你会好奇为什么`ErrorType`不是泛型，你可以在[这里](/intro/DesignRationale/#why-error-type-isnt-generic)找到解释。
 
 # 销毁
 
@@ -139,7 +139,7 @@ subscription.dispose()
 
 当你思考它的时候，这个`还会打印其他东西`的问题甚至还没确定是否在不同的调度程序上。
 
-一些例子正好来证明（`observeOn`的解释在[这里](http://guides.rxswift.org/intro/Schedulers/)）
+一些例子正好来证明（`observeOn`的解释在[这里](intro/Schedulers/)）
 
 假设你有一些代码
 
@@ -266,11 +266,12 @@ Event processing ended
 但是如果你调用了一个返回`Observable`的函数，没有任何序列会执行它，也没有任何副作用。`Observable`只是一个序列被产生的定义，并且也被当作序列中的元素。当`subscribe`函数被调用的时候序列才会执行。
 
 举一个例子：
-```Swift
+
+``` Swift
 func searchWikipedia(searchTerm: String) -> Observable<Results> {}
 ```
 
-```Swift
+``` Swift
 let searchForMe = searchWikipedia("me")
 
 // no requests are performed, no work is being done, no URL requests were fired
@@ -289,7 +290,7 @@ let cancel = searchForMe
 
 这是一个具体的实现：
 
-```
+``` 
 func myJust<E>(element: E) -> Observable<E> {
     return create { observer in
         observer.on(.Next(element))
@@ -303,9 +304,10 @@ myJust(0)
       print(n)
     }
 ```
+
 这将会输出：
 
-```
+``` 
 0
 ```
 
@@ -321,7 +323,7 @@ myJust(0)
 
 这是一个实现：
 
-```
+``` 
 func myFrom<E>(sequence: [E]) -> Observable<E> {
     return create { observer in
         for element in sequence {
@@ -356,7 +358,7 @@ print("Ended ----")
 
 将会输出
 
-```
+``` 
 Started ----
 first
 second
