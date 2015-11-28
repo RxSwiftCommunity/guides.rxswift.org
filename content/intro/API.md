@@ -10,11 +10,11 @@ API
 
 ## RxSwift supported operators
 
-In some cases there are multiple aliases for the same operator, because on different platforms / implementations, the same operation is sometimes called differently. Sometimes this is because historical reasons, sometimes because of reserved language keywords.
+在某些情况下, 同样的一个操作符有着多个别名, 有时候是因为在不同的平台或者不同的实现下, 相同的操作有时候有着不同的称呼. 有时候, 那是因为历史原因, 有时候是因为要避开编程语言的一些提前定义好的关键字.
 
-When lacking a strong community consensus, RxSwift will usually include multiple aliases.
+当缺少一个强有力的社区给予统一的意见的话, RxSwift通常将会保留这种多种别名的用法.
 
-Operators are stateless by default.
+操作符在默认情况下是无状态(stateless)的存在
 
 #### Creating Observables
 
@@ -97,7 +97,7 @@ Operators are stateless by default.
   * [`replay`](http://reactivex.io/documentation/operators/replay.html)
   * [`shareReplay`](http://reactivex.io/documentation/operators/replay.html)
 
-Creating new operators is also pretty straightforward.
+创建一个新的操作符是狠直观的.
 
 ## RxCocoa extensions
 
