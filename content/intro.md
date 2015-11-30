@@ -2,14 +2,6 @@
 
 这个项目尽量与[ReactiveX.io](http://reactivex.io/)保持一致。一个常规的关于`RxSwift`跨平台的文档跟指南。
 
-
-
-1. [Observables 又称 Sequences](#Observables 又称 Sequences)
-2. [销毁](#销毁)
-3. [隐式观察者保证（Implicit `Observable` guarantees）](# 隐式观察者保证（Implicit `Observable` guarantees）)
-4. [创建你自己的观察者`Observable`](# 创建你自己的观察者`Observable`)
-5. []()
-
 # Observables 又称 Sequences
 
 ## 基础
@@ -89,7 +81,7 @@ protocol ObserverType {
 
 **使用`disposeBag`，`scopedDispose`,`takeUntil`操作都是确保资源被释放的有效地方式。尽管序列在最后也会被终止，我们也推荐使用它们。**
 
-也许你会好奇为什么`ErrorType`不是泛型，你可以在[这里](http://guides.rxswift.org/intro/DesignRationale/#why-error-type-isnt-generic)找到解释。
+也许你会好奇为什么`ErrorType`不是泛型，你可以在[这里](/intro/DesignRationale/#why-error-type-isnt-generic)找到解释。
 
 # 销毁
 
@@ -139,7 +131,7 @@ subscription.dispose()
 
 当你思考它的时候，这个`还会打印其他东西`的问题甚至还没确定是否在不同的调度程序上。
 
-一些例子正好来证明（`observeOn`的解释在[这里](http://guides.rxswift.org/intro/Schedulers/)）
+一些例子正好来证明（`observeOn`的解释在[这里](intro/Schedulers/)）
 
 假设你有一些代码
 
@@ -266,11 +258,12 @@ Event processing ended
 但是如果你调用了一个返回`Observable`的函数，没有任何序列会执行它，也没有任何副作用。`Observable`只是一个序列被产生的定义，并且也被当作序列中的元素。当`subscribe`函数被调用的时候序列才会执行。
 
 举一个例子：
-```Swift
+
+``` Swift
 func searchWikipedia(searchTerm: String) -> Observable<Results> {}
 ```
 
-```Swift
+``` Swift
 let searchForMe = searchWikipedia("me")
 
 // no requests are performed, no work is being done, no URL requests were fired
@@ -289,7 +282,7 @@ let cancel = searchForMe
 
 这是一个具体的实现：
 
-```
+``` 
 func myJust<E>(element: E) -> Observable<E> {
     return create { observer in
         observer.on(.Next(element))
@@ -303,9 +296,10 @@ myJust(0)
       print(n)
     }
 ```
+
 这将会输出：
 
-```
+``` 
 0
 ```
 
@@ -321,7 +315,7 @@ myJust(0)
 
 这是一个实现：
 
-```
+``` 
 func myFrom<E>(sequence: [E]) -> Observable<E> {
     return create { observer in
         for element in sequence {
@@ -356,7 +350,7 @@ print("Ended ----")
 
 将会输出
 
-```
+``` 
 Started ----
 first
 second
@@ -366,7 +360,378 @@ second
 Ended ----
 ```
 
-# Creating an Observable that performs work
+# 创建一个可以执行的`Observable`
+
+
+
+现在有趣的来了，让我么你创建一个用于前一个例子的`interval`操作
+
+这种方式与调度队列（dispatch queue schedulers）实现起来是等价的。
+
+``` Swift
+func myInterval(interval: NSTimeInterval) -> Observable<Int> {
+    return create { observer in
+        print("Subscribed")
+        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+        let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
+
+        var next = 0
+
+        dispatch_source_set_timer(timer, 0, UInt64(interval * Double(NSEC_PER_SEC)), 0)
+        let cancel = AnonymousDisposable {
+            print("Disposed")
+            dispatch_source_cancel(timer)
+        }
+        dispatch_source_set_event_handler(timer, {
+            if cancel.disposed {
+                return
+            }
+            observer.on(.Next(next++))
+        })
+        dispatch_resume(timer)
+
+        return cancel
+    }
+}
+```
+
+
+
+``` Swift
+let counter = myInterval(0.1)
+
+print("Started ----")
+
+let subscription = counter
+    .subscribeNext { n in
+       print(n)
+    }
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription.dispose()
+
+print("Ended ----")
+```
+
+
+
+输出结果：
+
+``` 
+Started ----
+Subscribed
+0
+1
+2
+3
+4
+Disposed
+Ended ----
+```
+
+
+
+如果你这样写：
+
+``` Swift
+let counter = myInterval(0.1)
+
+print("Started ----")
+
+let subscription1 = counter
+    .subscribeNext { n in
+       print("First \(n)")
+    }
+let subscription2 = counter
+    .subscribeNext { n in
+       print("Second \(n)")
+    }
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription1.dispose()
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription2.dispose()
+
+print("Ended ----")
+```
+
+结果则是这样的：
+
+``` 
+Started ----
+Subscribed
+Subscribed
+First 0
+Second 0
+First 1
+Second 1
+First 2
+Second 2
+First 3
+Second 3
+First 4
+Second 4
+Disposed
+Second 5
+Second 6
+Second 7
+Second 8
+Second 9
+Disposed
+Ended ----
+```
+
+**每一个订阅了得订阅者都会有各自的用来产生元素的序列。函数默认是无状态的。无状态的函数要比有状态的多得多。**
+
+# 共享订阅和`shareReplay`函数
+
+如果你想要多个观察者从一个订阅共享事件（元素）应该怎么做呢？
+
+有两件事需要明确：
+
+- 如何处理在新的订阅者订阅之前已经接收到的元素。（重新接受最新的一个，重新接受左右，还是重新接受最新的n个）
+- 何时释放被共享的订阅（引用计数（refCount），手动释放（manual），或者是其他算法）
+
+通常的选择是结合`replay(1).refCount()`或者`shareReplay()`
+
+``` Swift
+let counter = myInterval(0.1)
+    .shareReplay(1)
+
+print("Started ----")
+
+let subscription1 = counter
+    .subscribeNext { n in
+       print("First \(n)")
+    }
+let subscription2 = counter
+    .subscribeNext { n in
+       print("Second \(n)")
+    }
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription1.dispose()
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription2.dispose()
+
+print("Ended ----")
+```
+
+输出：
+
+``` 
+Started ----
+Subscribed
+First 0
+Second 0
+First 1
+Second 1
+First 2
+Second 2
+First 3
+Second 3
+First 4
+Second 4
+First 5
+Second 5
+Second 6
+Second 7
+Second 8
+Second 9
+Disposed
+Ended ----
+```
+
+注意这里只打印了一次`Subscribed`跟`Disposed`事件。
+
+跟URL被观察者（URL observables）的行为是一样的。
+
+这是HTTP请求被封装成Rx。这跟`interval`函数非常相似。
+
+``` Swift
+extension NSURLSession {
+    public func rx_response(request: NSURLRequest) -> Observable<(NSData!, NSURLResponse!)> {
+        return create { observer in
+            let task = self.dataTaskWithRequest(request) { (data, response, error) in
+                if data == nil || response == nil {
+                    observer.on(.Error(error ?? UnknownError))
+                }
+                else {
+                    observer.on(.Next(data, response))
+                    observer.on(.Completed)
+                }
+            }
+
+            task.resume()
+
+            return AnonymousDisposable {
+                task.cancel()
+            }
+        }
+    }
+}
+```
+
+## 函数（Operators）
+
+RxSwift中定义并实现了多种多样的函数。完整的函数列表可以在这里查看[here](API).
+
+为了消除一些歧义我们使用Marble diagrams去区分所有的操作符。这个图表可以在这里查看到[ReactiveX.io](http://reactivex.io/)
+
+绝大多数的函数展示和事例可以在这个playground查看到。[Playgrounds](https://github.com/ReactiveX/RxSwift/tree/master/Rx.playground).
+
+如果您想使用playgrounds, 首先您需要请先打开 `Rx.xcworkspace`, 然后build `RxSwift-OSX` scheme，之后在项目树中打开playgrounds. 之后你就看可以正常使用playgrounds了.
+
+如果当你需要一个函数但是不知道如何找到它, 您可以查阅以下资料[decision tree of operators](http://reactivex.io/documentation/operators.html#tree).
+
+[Supported RxSwift operators](API#rxswift-supported-operators) 这些操作符同样也以功能进行了分组, 所以它也对你的开发有所帮助.
+
+### Custom operators 自定义函数
+
+这里我们有两种方式让你创建自己想要的函数.
+
+#### 第一种: 简单的方式
+
+所有的内部代码都是使用高度优化的函数进行编写的，所以这些代码不是最好的参考材料. 那也是为什么我们鼓励使用普通的函数。
+
+庆幸的是这里有一种简单的方式去创建自定义函数. 事实上, 创建一个新的函数完全在创建各式各样的observables。至于如何创建observables, 我们已经在前一章节提及到.
+
+让我们先来看看一个未被优化的map函数是怎么实现的.
+
+``` swift
+func myMap<E, R>(transform: E -> R)(source: Observable<E>) -> Observable<R> {
+    return create { observer in
+
+        let subscription = source.subscribe { e in
+                switch e {
+                case .Next(let value):
+                    let result = transform(value)
+                    observer.on(.Next(result))
+                case .Error(let error):
+                    observer.on(.Error(error))
+                case .Completed:
+                    observer.on(.Completed)
+                }
+            }
+
+        return subscription
+    }
+}
+```
+
+所以现在你能够使用你自己的map操作符了:
+
+``` swift
+let subscription = myInterval(0.1)
+    .myMap { e in
+        return "This is simply \(e)"
+    }
+    .subscribeNext { n in
+        print(n)
+    }
+```
+
+之后它将打印出如下结果
+
+``` 
+Subscribed
+This is simply 0
+This is simply 1
+This is simply 2
+This is simply 3
+This is simply 4
+This is simply 5
+This is simply 6
+This is simply 7
+This is simply 8
+...
+```
+
+#### 第二种: 创建更加困难, 但是性能更好的方法
+
+你能够使用跟我们一样的方式进行优化进而创建更多有效率的函数. 通常情况下, 虽然这个不是必要的, 但是它能达到我们想要的优化目的. 
+
+免责声明: 当你采用这种方式进行创建自定义函数，你需要为你所创建的函数负更多的责任.并且 你还将需要保证你的序列语法是正确的并且为撤销订阅负责.
+
+在RxSwift项目中有很多这方面的例子去创建自定义函数. 在这里, 我推荐你们可以先查看和学习 `map` 或者 `filterh`函数.
+
+由于你需要人工的进行处理自定义函数所带来的各式各样的麻烦, 比如如何处理错误, 异步执行和销毁问题.所以创建自定义操作符是很困难的, 虽说困难但是这也不会像火箭工程学那么困难.
+
+Every operator in Rx is just a factory for an observable. Returned observable usually contains information about source `Observable` and parameters that are needed to transform it.
+
+Rx中的每一个函数仅仅是一个observable工厂. 被返回的observable通常包涵了可以改变其自己的source `Observable` 和参数.(这句有出路)
+
+在Rxswift的代码中, 绝大多数的已优化的 `Observable`s 都有一个公共的父类 `Producer`. 被返回的observable作为订阅者(subscribers)和source observable之间的代理, 它通常需要完成如下几件事情:
+
+* on new subscription creates a sink that performs transformations
+* 在新的subscription上创建一个sink来进行transformations
+* registers that sink as observer to source observable
+* 把这个sink作为一个观察者(observer)注册到source observable
+* on received events proxies transformed events to original observer
+* 在收到事件的代理上传输事件给原始的observer
+
+## 特殊情况（Life happens）
+
+So what if it’s just too hard to solve some cases with custom operators? You can exit the Rx monad, perform actions in imperative world, and then tunnel results to Rx again using `Subject`s.
+
+如果在一些特殊情况下使用普通函数解决问题很麻烦。你可以不使用Rx单子（Rx monad），（ perform actions in imperative world），然后通过使用`Subject`s把结果返回Rx。
+
+这个不会经常用到。并且这是一种很差的代码，但是你可以使用它。
+
+``` Swift
+ let magicBeings: Observable<MagicBeing> = summonFromMiddleEarth()
+
+  magicBeings
+    .subscribeNext { being in     // exit the Rx monad  
+        self.doSomeStateMagic(being)
+    }
+    .addDisposableTo(disposeBag)
+
+  //
+  //  Mess
+  //
+  let kitten = globalParty(   // calculate something in messy world
+    being,
+    UIApplication.delegate.dataSomething.attendees
+  )
+  kittens.on(.Next(kitten))   // send result back to rx
+  //
+  // Another mess
+  //
+
+  let kittens = Variable(firstKitten) // again back in Rx monad
+
+  kittens
+    .map { kitten in
+      return kitten.purr()
+    }
+    // ....
+```
+
+每次你这样做的时候，其他人可能会在某处写上如下代码：
+
+``` Swift
+ kittens
+    .subscribeNext { kitten in
+      // so something with kitten
+    }
+    .addDisposableTo(disposeBag)
+```
+
+所以尽量别这样做。
+
+# Playgrounds
+
+
+
+
 
 
 
