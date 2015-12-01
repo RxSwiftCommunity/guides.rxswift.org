@@ -10,18 +10,18 @@ title = "_index"
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
       <h3><a href="/intro">Introducción</a></h3>
-      <p>Aqui puedes encontrar algo más de información sobre Rx y RxSwft.</p>
+      <p>Aquí puedes encontrar algo más de información sobre Rx y RxSwft.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
       <h3><a href="/examples">Ejemplos</a></h3>
-      <p>La hora de ensuciarse las manos, analiza los ejemplos explicandos en detalle y comienza a jugar con RxSwift.</p>
+      <p>La hora de ensuciarse las manos, analiza los ejemplos explicándolos en detalle y comienza a jugar con RxSwift.</p>
     </div>
 </div>
 
 <div class="row">
     <div class="col-lg-4 col-sm-4 col-xs-12">
       <h3><a href="#">Recursos</a></h3>
-      <p>Rx es un mundo muy grande, en esta sección podras encontrar una lista de recursos utiles para entenderlo mejor.</p>
+      <p>Rx es un mundo muy grande, en esta sección podrás encontrar una lista de recursos útiles para entenderlo mejor.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
       <h3><a href="https://github.com/ReactiveX/RxSwift/blob/master/CONTRIBUTING.md">Contribuir</a></h3>

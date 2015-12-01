@@ -5,7 +5,7 @@ categories = "introducción"
 tags = ["observables", "guia", "operadores", "API", "documentación"]
 +++
 
-## Los operatores soportados por RxSwift
+## Los operadores soportados por RxSwift
 
 En algunos casos hay múltiples alias para el mismo operador, porque en diferentes plataformas / implementaciones, la misma operación se denomina a veces diferente. A veces esto se debe a razones históricas, a veces por palabras clave del lenguaje reservadas.
 

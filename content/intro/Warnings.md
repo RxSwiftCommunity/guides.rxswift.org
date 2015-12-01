@@ -5,7 +5,7 @@ categories = "introducción"
 tags = ["observables", "guide", "operators", "API", "documentation"]
 +++
 
-### <a name="unused-disposable"></a>Despachable no usado (unused-disposable)
+### <a name="unused-disposable"></a>Desechable no usado (unused-disposable)
 
 Lo siguiente es valido para toda la familia de funciones `subscribe*`, `bind*` y `drive*` que devuelven un `Disposable` (desechable).
 
@@ -26,7 +26,7 @@ xs
     })  
 ```
 
-La funcion `subscribe` devuelve una suscripción `Disposable` (desechable) que se puede utilizar para cancelar el cálculo y liberar recursos.
+La función `subscribe` devuelve una suscripción `Disposable` (desechable) que se puede utilizar para cancelar el cálculo y liberar recursos.
 
 Forma preferida de poner fin al flujo de llamadas, es mediante el uso de `.addDisposableTo(disposeBag)` o de manera equivalente
 
@@ -47,7 +47,7 @@ xs
     .addDisposableTo(disposeBag) // <--- observe `addDisposableTo`
 ```
 
-Cuando se deasigna `disposeBag`, todas las suscripciónes seran automaticamente desechadas.
+Cuando se desasigna `disposeBag`, todas las suscripciones serán automáticamente desechadas.
 
 En el caso de `xs` termine de una manera predecible con `Completed` o `Error`, aunque no se controlando la suscripción `Disposable` no se pierde ningún recurso, pero sigue siendo la manera preferido porque de esta forma los cálculos del elemento se terminarán en un momento predecible.
 
@@ -71,7 +71,7 @@ _ = xs
     })
 ```
 
-Si lo que desesa es ignorar la suscripción `Disposable`, así es como se silencia la advertencia del compilador.
+Si lo que desea es ignorar la suscripción `Disposable`, así es como se silencia la advertencia del compilador.
 
 ```Swift
 let xs: Observable<E> ....
@@ -114,7 +114,7 @@ let ys = xs // <--- nombra la definición como `ys`
     .map { ... }
 ```
 
-... o iniciar un cálculo basadose en esa definición 
+... o iniciar un cálculo basandose en esa definición 
 
 ```Swift
 let xs: Observable<E> ....

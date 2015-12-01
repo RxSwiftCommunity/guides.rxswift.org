@@ -28,14 +28,14 @@ El valor de `c` es ahora `3 es positivo`. Pero si cambiamos el valor de 'a' a `4
 
 ```swift
 a = 4           // c seguirá siendo igual a "3 es positivo", que no es bueno
-                // c deberia ser "6 es positivo" porque 4 + 2 = 6
+                // c debería ser "6 es positivo" porque 4 + 2 = 6
 ```
 
 Y este no es el comportamiento deseado.
 
 ### Esta es la misma lógica usando RxSwift.
 
-Para integrar el marco RxSwift en su proyecto unicamente debe incluir el marco en su proyecto y escribir `import RxSwit` en cada archivo Swift que lo requiera.
+Para integrar el marco RxSwift en su proyecto únicamente debe incluir el marco en su proyecto y escribir `import RxSwit` en cada archivo Swift que lo requiera.
 
 ```swift
 let a /*: Observable<Int>*/ = Variable(1)   // a = 1
@@ -51,7 +51,7 @@ let c = combineLatest(a, b) { $0 + $1 }     // combina los últimos valores de l
     .map { "\($0) es positivo" }            // mapea `a + b` a "\(a + b) es positivo"
 
 // Dado que los valores iniciales son a = 1, b = 2
-// 1 + 2 = 3 que es >= 0, `c` es inicialmete igual a "3 es positivo"
+// 1 + 2 = 3 que es >= 0, `c` es inicialmente igual a "3 es positivo"
 
 // Para extraer valores de la variable rx `c`, hay que suscribirse a los valores de `c`.
 // `subscribeNext` significa suscribirse a los valores siguientes (recientes) de la variable `c`.
@@ -60,7 +60,7 @@ c.subscribeNext { print($0) }          // imprime: "3 es positivo"
 
 // Ahora vamos a incrementar el valor de `a`
 // a = 4 en RxSwift es:
-a.next(4)                                   // imprime: "6 es positivo"
+a.value = 4                                   // imprime: "6 es positivo"
 // La suma de los últimos valores ahora es `4 + 2`, `6` es >= 0, operador map
 // produce "6 es positivo" y este resultado es "asignado" a `c`.
 // Dado que el valor de `c` ha cambiado, `{ print($0) }` sera llamado,
@@ -68,7 +68,7 @@ a.next(4)                                   // imprime: "6 es positivo"
 
 // Ahora vamos a cambiar el valor de `b`
 // b = -8 en RxSwift es:
-b.next(-8)                                  // no imprime nada
+b.value = -8                                  // no imprime nada
 // La suma de los últimos valores es `4 + (-8)`, `-4` no es >= 0, por lo que map no sera ejecutado.
 // Esto significa que `c` todavía contiene "6 es positivo" y eso es correcto.
 // Dado que `c` no ha sido actualizado, significa que el siguiente valor no se ha producido,
@@ -79,10 +79,10 @@ b.next(-8)                                  // no imprime nada
 
 ## Simple enlace con la interfaz de usuario
 
-* en lugar enlazar a variables, vamos a elazar a los valores de un campo de texto (rx_text)
-* despues, lo convertimos en un entero `int` y calculamos si el número es primo mediante una API asíncrona (map)
+* en lugar enlazar a variables, vamos a enlazar a los valores de un campo de texto (rx_text)
+* después, lo convertimos en un entero `int` y calculamos si el número es primo mediante una API asíncrona (map)
 * si el valor del campo de texto se cambia antes de que finalice la llamada asíncrona, una nueva llamada asíncrona estará en cola (concat)
-* enlazar los resultados a la etiqueta `UILabel` (resultLabel.rx_subscribeTextTo)
+* enlazar los resultados a la etiqueta `UILabel` (bindTo(resultLabel.rx_text))
 
 ```swift
 let subscription/*: Disposable */ = primeTextField.rx_text          // tipo es Observable<String>
@@ -130,7 +130,7 @@ self.usernameOutlet.rx_text
 
         // Cada interfaz de usuario, probablemente, muestra un estado, mientras que 
         // la operación asíncrona se está ejecutando.
-        // Supongamos que queremos mostrar "Comprobando disponibilidad" mientra esperamos el resultado.
+        // Supongamos que queremos mostrar "Comprobando disponibilidad" mientras esperamos el resultado.
         // El parámetro válido puede ser:
         //  * true  - si es valido
         //  * false - si es invalido
@@ -153,7 +153,7 @@ self.usernameOutlet.rx_text
     }
 // Puesto que ahora tenemos `Observable<Observable<ValidationResult>>`
 // que de alguna manera tenemos que volver a la normalidad del mundo `Observable`.
-// Podriamos usar el operador `concat` que utilizamos en el segundo ejemplo, pero lo que
+// Podríamos usar el operador `concat` que utilizamos en el segundo ejemplo, pero lo que
 // realmente queremos es cancelar las operaciones asincrónico pendientes si un nuevo nombre de 
 // usuario es suministrado.
 // Eso es lo que `switchLatest` hace
@@ -161,7 +161,7 @@ self.usernameOutlet.rx_text
 // Ahora de alguna manera tenemos que enlazar esto a la interfaz de usuario.
 // Nuestro viejo amigo `subscribeNext` puede hacerlo
 // Este es el final de la cadena `Observable`.
-// Esto producira un objeto `Disposable` (desechable) que puede desenlazar todo y cancelar
+// Esto producirá un objeto `Disposable` (desechable) que puede desenlazar todo y cancelar
 // las operaciones asincrónicas pendientes.
     .subscribeNext { valid in
         errorLabel.textColor = validationColor(valid)

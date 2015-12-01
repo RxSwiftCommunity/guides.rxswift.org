@@ -12,7 +12,7 @@ tags = ["Schedulers", "guide", "operators", "threads", "documentation"]
 
 Los Planificadores nos abstraen lejos del mecanismo que realiza el trabajo.
 
-Los diferentes mecanismos para la realización de trabajos incluyen, subproceso actual, colas de despacho, colas de operación, nuevos tareas, depositos de tareas, ejecutcion de bucles...
+Los diferentes mecanismos para la realización de trabajos incluyen, subproceso actual, colas de despacho, colas de operación, nuevos tareas, depósitos de tareas, ejecución de bucles...
 
 Hay dos principales operadores que trabajan con los planificadores. `observeOn` y `subscribeOn`.
 
@@ -20,7 +20,7 @@ Si desea realizar trabajos en diferentes planificadores sólo tiene que utilizar
 
 Normalmente se usará mucho más a menudo `observeOn` que `subscribeOn`.
 
-En el caso de `observeOn` no se especifica de forma explícita, el trabajo se realizará en el subproceso/planificador que los elementos esten generando.
+En el caso de `observeOn` no se especifica de forma explícita, el trabajo se realizará en el subproceso/planificador que los elementos estén generando.
 
 Ejemplo de uso de operador `observeOn`
 
@@ -108,7 +108,7 @@ Este es el programador predeterminado para los operadores que generan elementos.
 
 Este planificador también a veces se llama `trampoline scheduler` planificador trampolín.
 
-Si se llama a `CurrentThreadScheduler.instance.schedule(state) { }` por primera vez en algun hilo, la acción programada se ejecutará inmediatamente y se creara una cola oculta en todas las acciones planificadas de forma recursiva se añadan a la cola temporalmente.
+Si se llama a `CurrentThreadScheduler.instance.schedule(state) { }` por primera vez en algún hilo, la acción programada se ejecutará inmediatamente y se creara una cola oculta en todas las acciones planificadas de forma recursiva se añadan a la cola temporalmente.
 
 Si algún campo padre en la pila de llamada ya se está ejecutando `CurrentThreadScheduler.instance.schedule(state) { }`, la acción planificada se añadirá a la cola y ejecutada cuando la accion que se esta ejecutando actualmente y todas las acciones añadidas a la cola anteriormente hayan finalizado su ejecución.
 
@@ -124,7 +124,7 @@ Este programador se utiliza generalmente para realizar un trabajo sobre la inter
 
 ## SerialDispatchQueueScheduler (Planificador Serie)
 
-Abstrae el trabajo que debe llevarse a cabo en un `dispatch_queue_t` expecifico. Se asegurará de que, aunque se le pase una cola de despachado concurrente, será transformado en uno serie.
+Abstrae el trabajo que debe llevarse a cabo en un `dispatch_queue_t` específico. Se asegurará de que, aunque se le pase una cola de despachado concurrente, será transformado en uno serie.
 
 Abstracts the work that needs to be performed on a specific `dispatch_queue_t`. It will make sure that even if concurrent dispatch queue is passed, it's transformed into a serial one.
 
@@ -136,7 +136,7 @@ Planificador principal `MainScheduler.sharedInstance` es una instancia de `Seria
 
 ## ConcurrentDispatchQueueScheduler (Concurrent scheduler)
 
-Abstrae el trabajo que debe llevarse a cabo en un `dispatch_queue_t` expecifico. Tambien se puede pasar una cola de despachado serie, ya que no debería causar problemas.
+Abstrae el trabajo que debe llevarse a cabo en un `dispatch_queue_t` específico. También se puede pasar una cola de despachado serie, ya que no debería causar problemas.
 
 Este planificador es adecuado cuando se necesita realizar algún trabajo en segundo plano.
 

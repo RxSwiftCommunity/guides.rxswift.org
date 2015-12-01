@@ -25,11 +25,11 @@ Digamos que tiene:
 
 No hay mucho que puedes hacer con ellos sin averiguar cuál será el tipo de error resultante.
 
-¿Será `E1`,` E2` o tal vez algun nuevo `E3`? Por lo que se necesita un nuevo conjunto de operadores sólo para resolver el desajuste de impedancia.
+¿Será `E1`,` E2` o tal vez algún nuevo `E3`? Por lo que se necesita un nuevo conjunto de operadores sólo para resolver el desajuste de impedancia.
 
 Esto seguro que daña las propiedades de la composición, y Rx realmente no le importa qué secuencia falla, simplemente por lo general remite el fracaso bajo la cadena observable.
 
-Existe un problema adicional que puede que en algunos casos los operadores fallarén por algún error interno, y en ese caso usted no será capaz de construir error resultante e informar fracaso.
+Existe un problema adicional que puede que en algunos casos los operadores fallen por algún error interno, y en ese caso usted no será capaz de construir error resultante e informar fracaso.
 
 Pero bueno, vamos a ignorar eso y asumir que podemos usar eso para modelar secuencias que no lleven a cabo un error. Parece que podría ser útil para este propósito?
 
@@ -45,7 +45,7 @@ Lo que realmente necesita es una manera genérica para demostrar rasgos de secue
 * La secuencia no lleva el error a cabo, nunca se termina y elementos están presentadas el planificador principal `MainScheduler`, y comparte cuentas de referencias (IU)
 * La secuencia no lleva el error a cabo, nunca se termina y los elementos se entregan en planificador fondo específico (motor de audio)
 
-Lo que realmente quiero es el compilador fuerze al sistema general de rasgos para las secuencias observables, y un conjunto de operadores invariantes para esas propiedades deseadas.
+Lo que realmente quiero es el compilador fuerce al sistema general de rasgos para las secuencias observables, y un conjunto de operadores invariables para esas propiedades deseadas.
 
 Una buena analogía sería en mi humilde opinión
 
@@ -58,7 +58,7 @@ Hay muchas maneras de cómo hacer esto en Swift, ya sea usando la composición o
 
 Un beneficio adicional de usar sistema de unidades es que se puede demostrar que el código de interfaz de usuario está ejecutando en el mismo planificador y así utilizar operadores sin bloqueo para todas las transformaciones.
 
-Desde que Rx ya no tiene bloqueos para las operaciones de secuencias individuales, y todos los bloqueos restantes se encuentran en componentes sin estado (tambien llamado IU), sería prácticamente eliminar todos los bloqueos restantes de código de Rx y crear código Rx sin bloqueo que fuerce al compilador.
+Desde que Rx ya no tiene bloqueos para las operaciones de secuencias individuales, y todos los bloqueos restantes se encuentran en componentes sin estado (también llamado IU), sería prácticamente eliminar todos los bloqueos restantes de código de Rx y crear código Rx sin bloqueo que fuerce al compilador.
 
 Así que en mi humilde opinión, realmente no hay beneficio del uso de Errores con tipo que no pueda lograrse de otras maneras mas limpias, preservando semántica composicional Rx. Y otras maneras también tienen otros beneficios enormes.
 
