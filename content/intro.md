@@ -729,9 +729,207 @@ So what if it’s just too hard to solve some cases with custom operators? You c
 
 # Playgrounds
 
+如果你不确定其中的一些函数式如何工作的，[playgrounds](https://github.com/ReactiveX/RxSwift/tree/master/Rx.playground)包含了了几乎所有的函数以及用来举例的Demo。
 
+**使用playground之前先打开Rx.xcworkspace, 编译 RxSwift-OSX scheme 并且在 Rx.xcworkspace 目录中playgroupnds。**
 
+如果想在playgrounds看到所有Demo的结果，请打开`Assistant Editor`。你可以通过`View > Assistant Editor > Show Assistant Editor`来打开`Assistant Editor`  
 
+# 错误处理
 
+有两种错误处理机制
 
+## 被观察者中的异步错误处理机制（Asynchronous error handling mechanism in observables）
+
+错误处理是很简单的。如果一个序列被一个错误终止，所有的依赖序列都会被错误终止。这是一种简单的逻辑。
+
+你可以通过`catch`函数从被观察者的错误恢复。有很多种重载可以使你恢复到合适的地方。
+
+不仅如此，还有一个`retry`函数让你重新执行(retry)出错的序列。
+
+# 调试编译错误
+
+当你写RxSwift/RxCocoa代码的时候，你可能严重的依赖编译器对``Observable`的类型推倒。这也正是一个Swift很棒的原因，但是伴随而来的也有不好的东西。
+
+``` Swift
+images = word
+    .filter { $0.rangeOfString("important") != nil }
+    .flatMap { word in
+        return self.api.loadFlickrFeed("karate")
+            .catchError { error in
+                return just(JSON(1))
+            }
+      }
+```
+
+如果编译器报告了一个错误，我会首先会假设返回类型有问题。
+
+``` Swift
+images = word
+    .filter { s -> Bool in s.rangeOfString("important") != nil }
+    .flatMap { word -> Observable<JSON> in
+        return self.api.loadFlickrFeed("karate")
+            .catchError { error -> Observable<JSON> in
+                return just(JSON(1))
+            }
+      }
+```
+
+如果这不管用，你可以继续添加更多额外的类型直到解决这个错误。
+
+``` Swift
+images = word
+    .filter { (s: String) -> Bool in s.rangeOfString("important") != nil }
+    .flatMap { (word: String) -> Observable<JSON> in
+        return self.api.loadFlickrFeed("karate")
+            .catchError { (error: NSError) -> Observable<JSON> in
+                return just(JSON(1))
+            }
+      }
+```
+
+**我首先会假设返回类型跟闭包参数**
+
+通常你解决错误之后，你可以移除这些额外的类型来再一次简化你的代码。
+
+# 调试
+
+单独使用调试工具是有效的，但是你还可以使用`debug`函数。`debug`函数会以标准输出打印出所有的事件并且你可以对事件添加标标签。
+
+`debug`用起来像一个探针一样。这里有一个例子。
+
+``` Swift
+let subscription = myInterval(0.1)
+    .debug("my probe")
+    .map { e in
+        return "This is simply \(e)"
+    }
+    .subscribeNext { n in
+        print(n)
+    }
+
+NSThread.sleepForTimeInterval(0.5)
+
+subscription.dispose()
+```
+
+输出：
+
+``` 
+[my probe] subscribed
+Subscribed
+[my probe] -> Event Next(Box(0))
+This is simply 0
+[my probe] -> Event Next(Box(1))
+This is simply 1
+[my probe] -> Event Next(Box(2))
+This is simply 2
+[my probe] -> Event Next(Box(3))
+This is simply 3
+[my probe] -> Event Next(Box(4))
+This is simply 4
+[my probe] dispose
+Disposed
+```
+
+你还可以使用`subscribe`来代替`subscribeNext`
+
+``` Swift
+NSURLSession.sharedSession().rx_JSON(request)
+   .map { json in
+       return parse()
+   }
+   .subscribe { n in      // this subscribes on all events including error and completed
+       print(n)
+   }
+```
+
+# 调试内存泄露
+
+在调试模式下Rx会用全局变量`resourceCount`来记录所有分配的资源。
+
+**在push一个view controller到导航控制器之后打印`Rx.resourceCount`，使用它， 然后pop出来是一个调试内存泄露的好办法。**
+
+一个明智的做法是在view controller的`deinit`方法中执行`print`方法。
+
+代码大概是这样的：
+
+``` Swift
+class ViewController: UIViewController {
+#if TRACE_RESOURCES
+    private let startResourceCount = RxSwift.resourceCount
+#endif
+
+    override func viewDidLoad() {
+      super.viewDidLoad()
+#if TRACE_RESOURCES
+        print("Number of start resources = \(resourceCount)")
+#endif
+    }
+
+    deinit {
+#if TRACE_RESOURCES
+        print("View controller disposed with \(resourceCount) resources")
+
+        var numberOfResourcesThatShouldRemain = startResourceCount
+        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC)))
+        dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
+            print("Resource count after dealloc \(RxSwift.resourceCount), difference \(RxSwift.resourceCount - numberOfResourcesThatShouldRemain)")
+        })
+#endif
+    }
+}
+```
+
+之所以使用一个短暂的延时是因为有时候需要等待实体（scheduld entities）花一点时间去释放他们的内存。
+
+# 变量（Variables）
+
+variables 代表了一些被观察者的状态。`Variable`如果值就不会存在因为构造器（initializer）需要一个初始值。
+
+Variable 封装了一个`Subject`。特别说明的是他是一个`BehaviorSubject`。不像`BehaviorSubject`，他仅仅暴漏了`value`接口，所以variable永远不会终止跟失败。
+
+他也是一被订阅就会广播他当前的值。
+
+``` Swift
+let variable = Variable(0)
+
+print("Before first subscription ---")
+
+variable
+    .subscribeNext { n in
+        print("First \(n)")
+    }
+
+print("Before send 1")
+
+variable.value = 1
+
+print("Before second subscription ---")
+
+variable
+    .subscribeNext { n in
+        print("Second \(n)")
+    }
+
+variable.value = 2
+
+print("End ---")
+```
+
+输出：
+
+``` 
+Before first subscription ---
+First 0
+Before send 1
+First 1
+Before second subscription ---
+Second 1
+First 2
+Second 2
+End ---
+```
+
+# KVO
 
