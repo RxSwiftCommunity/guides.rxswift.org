@@ -8,4 +8,4 @@ tags = ["observables", "observers", "guide", "API", "documentation"]
 Subjects
 ========
 
-All of behave exactly the same like described [here](http://reactivex.io/documentation/subject.html)
+所有的行为描述都于右侧链接内的内容相同[here](http://reactivex.io/documentation/subject.html)

@@ -5,21 +5,21 @@ categories = "introduction"
 tags = ["guide", "documentation"]
 +++
 
-## Duality between Observer and Iterator / Enumerator / Generator / Sequences
+## 观察者(Observer)和迭代器(Iterator) / 枚举器(Enumerator) / 生成器(Generator) / 序列(Sequences)之间的二元性
 
-There is a duality between observer and generator pattern. That's what enables transition from async callback world to synchronous world of sequence transformations.
+observer模式和generator模式之间存在二元性. 那是能够使得异步回调的世界变成sequence同步transformations世界的东西.
 
-In short, enumerator and observer pattern both describe sequences. It's pretty obvious why does enumerator defined sequence, but what about observer.
+简而言之, 枚举(enumerator)和观察者(observer)都是描述了sequences. 对于enumerator, enumerator中定义了sequence是很明显的
 
-There is also a pretty simple explanation that doesn't include a lot of math. Assume that you are observing mouse movements. Every received mouse movement is an element of a sequence of mouse movements over time.
+对于observer这里也有一个没有包涵数学概念并且很简明的解释: 假设你正在监视鼠标的运动. 每一次你收到的鼠标移动都是一个鼠标移动序列中的一员.
 
-In short, there are two basic ways elements of a sequence can be accessed.
+简而言之, 这里有两个能被使用的序列中的基本元素.
 
 * Push interface - Observer (observed elements over time make a sequence)
 * Pull interface - Iterator / Enumerator / Generator
 
-To learn more about this, these videos should help
+想要学习这方面的内容, 以下的一些视频将会对您有所帮助
 
-You can also see a more formal explanation explained in a fun way in this video:
+你也能够在这些视频中看到一些更加正式但不失风趣的解释
 
 [Expert to Expert: Brian Beckman and Erik Meijer - Inside the .NET Reactive Framework (Rx) (video)](https://www.youtube.com/watch?v=looJcaeboBY)
