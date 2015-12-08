@@ -1,4 +1,4 @@
-guides.rxswift.org
+[guides.rxswift.org](http://guides.rxswift.org)
 ===
 
 This website has been built using [Hugo](http://gohugo.io).
