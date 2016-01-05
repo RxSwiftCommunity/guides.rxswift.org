@@ -933,3 +933,214 @@ End ---
 
 # KVO
 
+KVO是一种Objective-C的机制。那意味着他不是类型安全的。这个项目尝试着去解决这个问题。
+There are two built in ways this library supports KVO.
+
+
+```
+// KVO
+extension NSObject {
+    public func rx_observe<E>(type: E.Type, _ keyPath: String, options: NSKeyValueObservingOptions, retainSelf: Bool = true) -> Observable<E?> {}
+}
+
+#if !DISABLE_SWIZZLING
+// KVO
+extension NSObject {
+    public func rx_observeWeakly<E>(type: E.Type, _ keyPath: String, options: NSKeyValueObservingOptions) -> Observable<E?> {}
+}
+#endif
+```
+如果Swift编译器无法推导出观察者类型（返回Observable类型），他将会抛出一个方法不存在的错误。
+
+举个例子如何观察`UIView`的frame
+
+WARNING: UIKit isn’t KVO compliant, but this will work.（这句实在不知道怎么翻译）
+
+```
+view
+    .rx_observe(CGRect.self, "frame")
+    .subscribeNext { frame in
+        ...
+    }
+```
+或者
+
+```
+view
+    .rx_observeWeakly(CGRect.self, "frame")
+    .subscribeNext { frame in
+        ...
+    }
+```
+
+###`rx_observe`
+`rx_observe`性能更好，因为他是对KVO机制的简单封装，但是他也有使用场景的限制。
+
+（这里不好翻译，附上原文）
+
+- 它可以被用作监听从他自身或者从持有它的对象开始的路径（it can be used to observe paths starting from `self` or from ancestors in ownership graph (`retainSelf = false`)
+
+- 它可以被用作监听它所持有的对象开始的路径（it can be used to observe paths starting from descendants in ownership graph (`retainSelf = true`)）
+
+- 这些路径仅仅由强类型引用（strong properties）组成，除此之外你如果在销毁之前不取消监听，就会有把系统弄崩溃的风险。
+
+```
+self.rx_observe("view.frame", retainSelf = false) as Observable<CGRect?>
+```
+
+###`rx_observeWeakly`
+
+`rx_observeWeakly`会比`rx_observe`慢一些，因为他会对弱引用对象进行内存分配。
+
+他可以在所有`rx_observe`使用的地方使用，除此之外还能：
+
+- 因为他不会持有监听者，他可以被用来监听任何一个所有权关系不确定的对象。
+
+- 他可以 用来监弱引用属性（weak properties）
+
+```
+someSuspiciousViewController.rx_observeWeakly(Bool.self, "behavingOk")
+```
+
+##Observing structs
+KVO是一个Objective-C的机制，所以他非常依赖`NSValue`
+
+RxCocoa为`CGRect`, `CGSize`, `CGPoint`结构体提供了KVO的支持
+
+当需要监听其他的结构体的时候，需要手动的从`NSValue`提取这些结构体。
+
+[这里](https://github.com/ReactiveX/RxSwift/blob/master/RxCocoa/Common/Observables/NSObject%2BRx%2BCoreGraphics.swift)有一些例子展示了怎么从`NSValue`提取结构体。
+# UI layer的小建议
+There are certain things that your `Observable`s need to satisfy in the UI layer when binding to UIKit controls.
+
+### 线程
+
+`Observable`s需要在主线程上面传递信息。这也是UIKit/Cocoa
+ 的标准。
+ 
+ 通常你的API在主线程返回结果是一个好想法。假设你想要绑定后台线程到UI上面，在Debug模式下面编译RxCocoa会抛出一个异常通知你。
+ 
+ 为了解决它，你需要添加`observeOn(MainScheduler.sharedInstance)`
+ 
+ **NSURLSession默认不在主线程返回结果**
+ 
+ 
+### 错误
+
+你不能给UIkit控件绑定一个失败因为那是不确定的行为。
+
+如果你不知道`Observable`是否会失败，你可以通过使用`catchErrorJustReturn(valueThatIsReturnedWhenErrorHappens)`来确保他不会失败。但是，在一个错误发生之后底层序列仍会完成。
+
+如果希望的行为时低层序列仍旧继续生产元素，可以使用`retry`操作符。
+
+### 共享订阅 （Sharing subscription）
+
+你通常想要在UI layer上共享订阅。你不想使HTTP请求把相同的数据绑定到不同的UI控件上面。
+
+假设你有这些东西：
+
+```
+let searchResults = searchText
+    .throttle(0.3, $.mainScheduler)
+    .distinctUntilChanged
+    .flatMapLatest { query in
+        API.getSearchResults(query)
+            .retry(3)
+            .startWith([]) // clears results on new search term
+            .catchErrorJustReturn([])
+    }
+    .switchLatest()
+    .shareReplay(1)              // <- notice the `shareReplay` operator
+```
+
+你真正希望的是通过一次计算来共享每一个搜索结果，那就是`shareReplay`的意思。
+
+在转化链的结尾加上`shareReplay`对于在UI层滚动的时候是一个好的用法，因为你在真的想要共享计算结果。你不会想要使HTTP链接分离当绑定`separate`到不同控件的时候。
+
+同时看一下`Driver`单元。它显然的被设计用来包装`shareReply`调用。确保元素在主线程被监听，并且没有错误发送给UI。
+
+# 进行HTTP请求
+
+HTTP请求是人么你第一个想要尝试的事情之一。
+
+你首先要构建一个`NSURLrequest`对象代表需要被完成的工作。
+
+请求决定了这是一个GET请求还是一个POST请求，请求体是什么，参数是什么。
+
+这里告诉你怎么创建一个GET请求
+
+```
+let request = NSURLRequest(URL: NSURL(string: "http://en.wikipedia.org/w/api.php?action=parse&page=Pizza&format=json")!)
+```
+如果你只是想单独的执行一个请求，你可以这样做。
+
+```
+let responseJSON = NSURLSession.sharedSession().rx_JSON(request)
+
+// no requests will be performed up to this point
+// `responseJSON` is just a description how to fetch the response
+
+let cancelRequest = responseJSON
+    // this will fire the request
+    .subscribeNext { json in
+        print(json)
+    }
+
+NSThread.sleepForTimeInterval(3)
+
+// if you want to cancel request after 3 seconds have passed just call
+cancelRequest.dispose()
+```
+
+**NSURLSession默认不在主线程返回结果**
+如果你想要更底层的控制response，你可以使用
+
+```
+NSURLSession.sharedSession().rx_response(myNSURLRequest)
+    .debug("my request") // this will print out information to console
+    .flatMap { (data: NSData!, response: NSURLResponse!) -> Observable<String> in
+        if let response = response as? NSHTTPURLResponse {
+            if 200 ..< 300 ~= response.statusCode {
+                return just(transform(data))
+            }
+            else {
+                return failWith(yourNSError)
+            }
+        }
+        else {
+            rxFatalError("response = nil")
+            return failWith(yourNSError)
+        }
+    }
+    .subscribe { event in
+        print(event) // if error happened, this will also print out error to console
+    }
+```
+
+### 打印HTTP过程
+在调试模式下RxCocoa将会默认打印HTTP请求到控制台。如果你想要改变这个行为，可以设置`Logging.URLRequests`选择器。
+
+```
+// read your own configuration
+public struct Logging {
+    public typealias LogURLRequest = (NSURLRequest) -> Bool
+
+    public static var URLRequests: LogURLRequest =  { _ in
+    #if DEBUG
+        return true
+    #else
+        return false
+    #endif
+    }
+}
+```
+
+# RxDataSourceStarterKit
+`RxDataSourceStarterKit`是一系列为了`UITableView`跟`UICollectionView`完全实现了响应式函数的数据源。
+
+源代码，更多的信息和为什么这些类可以被分离出来的原理可以参考[这里]()
+
+如果要使用他们就要引入所有的文件。
+
+[RxExample](https://github.com/ReactiveX/RxSwift/tree/master/RxExample)包含了完全的函数式编程的示范
+
