@@ -6,6 +6,6 @@ theme = "rx-swift"
 [params]
     mainMenu = [["intro", "introducción"], ["more-info", "Más información"], ["examples", "ejemplos"]]
     description = "Potente - Asincrono - Dirigido por eventos"
-    analytics = "UA-48560610-8"
+    analytics = "UA-72544908-1"
     noCategoryLink = true
 
