@@ -4,7 +4,7 @@ title = "RxSwift (Guía en Español)"
 theme = "rx-swift"
 
 [params]
-    mainMenu = [["intro", "introducción"], ["examples", "ejemplos"]]
+    mainMenu = [["intro", "introducción"], ["more-info", "Más información"], ["examples", "ejemplos"]]
     description = "Potente - Asincrono - Dirigido por eventos"
     analytics = "UA-48560610-8"
     noCategoryLink = true
