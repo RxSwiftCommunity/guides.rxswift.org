@@ -21,9 +21,9 @@ Abrir Rx.xcworkspace, elegir el esquema `RxExample` y ejecutar. Este método con
 # Podfile
 use_frameworks!
 
-pod 'RxSwift', '~> 2.0.0-beta.3'
-pod 'RxCocoa', '~> 2.0.0-beta.3'
-pod 'RxBlocking', '~> 2.0.0-beta.3'
+pod 'RxSwift', '~> 2.1'
+pod 'RxCocoa', '~> 2.1'
+pod 'RxBlocking', '~> 2.1'
 ```
 
 En el directorio del `Podfile` escribe:
@@ -39,7 +39,7 @@ $ pod install
 Agrega esto al `Cartfile`
 
 ```
-github "ReactiveX/RxSwift" "2.0.0-beta.3"
+github "ReactiveX/RxSwift" "2.1"
 ```
 
 En el directorio del `Cartfile` escribe:
