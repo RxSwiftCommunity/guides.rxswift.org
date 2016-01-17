@@ -1,6 +1,6 @@
 +++
 date = "2015-10-23T17:38:08+02:00"
-title = "Getting Started"
+title = "Empezando"
 categories = "Comenzando"
 tags = ["cocoapods", "carthage", "projecto", "xcode"]
 +++
