@@ -5,9 +5,6 @@ categories = "introducción"
 tags = ["Linux", "guide", "operators", "threads", "documentation"]
 +++
 
-Linux
-=====
-
 We've made a proof of concept for Linux.
 
 To test it, create `Package.swift` in your test directory with the following content:

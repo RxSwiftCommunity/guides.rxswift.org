@@ -5,8 +5,6 @@ categories = "introduction"
 tags = ["observables", "observers", "guide", "API", "documentation"]
 +++
 
-# Migration from RxSwift 1.9 to RxSwift 2.0 version
-
 The migration should be pretty straightforward. The changes are mostly cosmetic, so all features are still there.
 
 * Find replace all `>- ` to `.`

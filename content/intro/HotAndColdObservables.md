@@ -5,9 +5,6 @@ categories = "introduction"
 tags = ["observables", "guide", "documentation"]
 +++
 
-Hot and Cold Observables
-========================
-
 IMHO, I would suggest to more think of this as property of sequences and not separate types because they are represented by the same abstraction that fits them perfectly, `Observable` sequence.
 
 This is a definition from ReactiveX.io
