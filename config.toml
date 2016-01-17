@@ -9,3 +9,7 @@ theme = "rx-swift"
     analytics = "UA-48560610-8"
     noCategoryLink = true
 
+[permalinks]
+	"" = /
+	intro = /:section/:filename/
+
