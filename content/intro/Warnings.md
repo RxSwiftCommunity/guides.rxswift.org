@@ -5,7 +5,7 @@ categories = "introducción"
 tags = ["observables", "guia", "operadores", "API", "documentación"]
 +++
 
-### <a name="unused-disposable"></a>Desechable no usado (unused-disposable)
+## <a name="unused-disposable"></a>Desechable no usado (unused-disposable)
 
 Lo siguiente es valido para toda la familia de funciones `subscribe*`, `bind*` y `drive*` que devuelven un `Disposable` (desechable).
 
@@ -88,7 +88,7 @@ _ = xs // <-- observe el guión bajo
     })
 ```
 
-### <a name="unused-observable"></a>Unused observable sequence (unused-observable)
+## <a name="unused-observable"></a>Unused observable sequence (unused-observable)
 
 Probablemente aparecerá una advertencia en un contexto similar a este:
 

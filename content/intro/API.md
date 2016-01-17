@@ -13,7 +13,7 @@ Al carecer de un fuerte consenso de la comunidad, RxSwift suele incluir múltipl
 
 Los operadores no tienen estado de forma predeterminada.
 
-#### Crear Observables
+### Crear Observables
 
  * [`asObservable`](http://reactivex.io/documentation/operators/from.html)
  * [`create`](http://reactivex.io/documentation/operators/create.html)
@@ -29,7 +29,7 @@ Los operadores no tienen estado de forma predeterminada.
  * [`repeatElement`](http://reactivex.io/documentation/operators/repeat.html)
  * [`timer`](http://reactivex.io/documentation/operators/timer.html)
 
-#### Transformar Observables
+### Transformar Observables
   * [`buffer`](http://reactivex.io/documentation/operators/buffer.html)
   * [`flatMap`](http://reactivex.io/documentation/operators/flatmap.html)
   * [`flatMapFirst`](http://reactivex.io/documentation/operators/flatmap.html)
@@ -38,7 +38,7 @@ Los operadores no tienen estado de forma predeterminada.
   * [`scan`](http://reactivex.io/documentation/operators/scan.html)
   * [`window`](http://reactivex.io/documentation/operators/window.html)
 
-#### Filtrar Observables
+### Filtrar Observables
   * [`debounce` / `throttle`](http://reactivex.io/documentation/operators/debounce.html)
   * [`distinctUntilChanged`](http://reactivex.io/documentation/operators/distinct.html)
   * [`elementAt`](http://reactivex.io/documentation/operators/elementat.html)
@@ -49,7 +49,7 @@ Los operadores no tienen estado de forma predeterminada.
   * [`takeLast`](http://reactivex.io/documentation/operators/takelast.html)
   * [`single`](http://reactivex.io/documentation/operators/first.html)
 
-#### Combinar Observables
+### Combinar Observables
 
   * [`merge`](http://reactivex.io/documentation/operators/merge.html)
   * [`startWith`](http://reactivex.io/documentation/operators/startwith.html)
@@ -57,13 +57,13 @@ Los operadores no tienen estado de forma predeterminada.
   * [`combineLatest`](http://reactivex.io/documentation/operators/combinelatest.html)
   * [`zip`](http://reactivex.io/documentation/operators/zip.html)
 
-#### Operadores de manejo de errores
+### Operadores de manejo de errores
 
  * [`catch`](http://reactivex.io/documentation/operators/catch.html)
  * [`retry`](http://reactivex.io/documentation/operators/retry.html)
  * [`retryWhen`](http://reactivex.io/documentation/operators/retry.html)
 
-#### Operadores de utilidad Observable
+### Operadores de utilidad Observable
 
   * [`delaySubscription`](http://reactivex.io/documentation/operators/delay.html)
   * [`do` / `doOnNext`](http://reactivex.io/documentation/operators/do.html)
@@ -74,20 +74,20 @@ Los operadores no tienen estado de forma predeterminada.
   * [`using`](http://reactivex.io/documentation/operators/using.html)
   * debug
 
-#### Operadores condicionales y booleanos
+### Operadores condicionales y booleanos
   * [`amb`](http://reactivex.io/documentation/operators/amb.html)
   * [`skipWhile`](http://reactivex.io/documentation/operators/skipwhile.html)
   * [`skipUntil`](http://reactivex.io/documentation/operators/skipuntil.html)
   * [`takeUntil`](http://reactivex.io/documentation/operators/takeuntil.html)
   * [`takeWhile`](http://reactivex.io/documentation/operators/takewhile.html)
 
-#### Operadores matemáticos y agregados
+### Operadores matemáticos y agregados
 
   * [`concat`](http://reactivex.io/documentation/operators/concat.html)
   * [`reduce` / `aggregate`](http://reactivex.io/documentation/operators/reduce.html)
   * [`toArray`](http://reactivex.io/documentation/operators/to.html)
 
-#### Operadores connectables Observable
+### Operadores connectables Observable
 
   * [`multicast`](http://reactivex.io/documentation/operators/publish.html)
   * [`publish`](http://reactivex.io/documentation/operators/publish.html)
