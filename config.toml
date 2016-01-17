@@ -1,6 +1,6 @@
 baseurl = "http://es.rxswift.org"
 languageCode = "en-us"
-title = "RxSwift"
+title = "RxSwift (Guía en Español)"
 theme = "rx-swift"
 
 [params]
