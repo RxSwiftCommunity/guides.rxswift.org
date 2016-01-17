@@ -2,7 +2,7 @@
 date = "2015-10-23T16:12:42+02:00"
 title = "Advertencias"
 categories = "introducción"
-tags = ["observables", "guia", "operators", "API", "documentación"]
+tags = ["observables", "guia", "operadores", "API", "documentación"]
 +++
 
 ### <a name="unused-disposable"></a>Desechable no usado (unused-disposable)
