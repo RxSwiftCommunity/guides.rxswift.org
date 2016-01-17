@@ -10,7 +10,10 @@ La migración debería ser bastante sencillo. Los cambios son principalmente cos
 * Remplaza cualquier `>- ` por `.`
 * Remplaza cualquier `variable` por `shareReplay(1)`
 * Remplaza cualquier `catch` por `catchErrorJustReturn`
-* Remplaza cualquier `returnElement` por `just`
+* Remplaza cualquier `returnElement` por `Observable.just`
+* Remplaza cualquier `failWith` por `Observable.error`
+* Remplaza cualquier `never` por `Observable.never`
+* Remplaza cualquier `empty` por `Observable.empty`
 * Como nos hemos movido de `>-` a `.`, funciones libres son ahora los métodos, por lo que `.switchLatest()`, `.distinctUntilChanged()`, ... en vez de `>- switchLatest`, `>- distinctUntilChanged`
 * Como nos hemos movido de funciones libres a extensiones por lo que ahora es `[a, b, c].concat()`, `.merge()`, ... donde era `concat([a, b, c])`, `merge(sequences)`
 * Ahora es `subscribe { n in ... }.addDisposableTo(disposeBag)` en vez de `>- disposeBag.addDisposable`
@@ -19,7 +22,7 @@ La migración debería ser bastante sencillo. Los cambios son principalmente cos
 
 ```swift
 viewModel.rows
-            .bindTo(resultsTableView.rx_itemsWithCellIdentifier("WikipediaSearchCell")) { (_, viewModel, cell: WikipediaSearchCell) in
+            .bindTo(resultsTableView.rx_itemsWithCellIdentifier("WikipediaSearchCell", cellType: WikipediaSearchCell.self)) { (_, viewModel, cell) in
                 cell.viewModel = viewModel
             }
             .addDisposableTo(disposeBag)

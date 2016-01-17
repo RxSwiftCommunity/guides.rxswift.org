@@ -35,7 +35,7 @@ Y este no es el comportamiento deseado.
 
 ### Esta es la misma lógica usando RxSwift.
 
-Para integrar el marco RxSwift en su proyecto únicamente debe incluir el marco en su proyecto y escribir `import RxSwit` en cada archivo Swift que lo requiera.
+Para integrar el marco RxSwift en su proyecto únicamente debe incluir el marco en su proyecto y escribir `import RxSwift` en cada archivo Swift que lo requiera.
 
 ```swift
 let a /*: Observable<Int>*/ = Variable(1)   // a = 1
@@ -46,7 +46,7 @@ let b /*: Observable<Int>*/ = Variable(2)   // b = 2
 //      c = "\(a + b) is positive"
 // }
 
-let c = combineLatest(a, b) { $0 + $1 }     // combina los últimos valores de las variables 'a' y 'b' usando `+`
+let c = Observable.combineLatest(a, b) { $0 + $1 }     // combina los últimos valores de las variables 'a' y 'b' usando `+`
     .filter { $0 >= 0 }                     // Si `a + b >= 0` es verdadero, `a + b` es pasado al operador map
     .map { "\($0) es positivo" }            // mapea `a + b` a "\(a + b) es positivo"
 
@@ -119,11 +119,11 @@ self.usernameOutlet.rx_text
     .map { username in
 
         // validación sincrónica, nada especial aquí
-        if count(username) == 0 {
+        if username.isEmpty {
             // Conveniencia para la construcción de resultado síncronos.
             // En caso de que haya código sincrónico y asincrónico mixto dentro del mismo 
             // método, construirá un resultado asíncrono que se resuelve inmediatamente.
-            return just((valid: false, message: "Nombre de usuario no puede estar vacío."))
+            return Observable.just((valid: false, message: "Nombre de usuario no puede estar vacío."))
         }
 
         ...

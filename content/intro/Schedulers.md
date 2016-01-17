@@ -30,7 +30,7 @@ sequence1
   .map { n in
       print("Esto se realizará en un planificador que ejecuta las tareas en segundo plano")
   }
-  .observeOn(MainScheduler.sharedInstance)
+  .observeOn(MainScheduler.instance)
   .map { n in
       print("Esto se realizará en el planificador principal")
   }
@@ -125,8 +125,6 @@ Este programador se utiliza generalmente para realizar un trabajo sobre la inter
 ## SerialDispatchQueueScheduler (Planificador Serie)
 
 Abstrae el trabajo que debe llevarse a cabo en un `dispatch_queue_t` específico. Se asegurará de que, aunque se le pase una cola de despachado concurrente, será transformado en uno serie.
-
-Abstracts the work that needs to be performed on a specific `dispatch_queue_t`. It will make sure that even if concurrent dispatch queue is passed, it's transformed into a serial one.
 
 Los planificadores serie permiten ciertas optimizaciones para `observeOn`.
 

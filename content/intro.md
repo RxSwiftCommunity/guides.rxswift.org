@@ -51,7 +51,7 @@ Estos diagramas se llaman diagramas de canicas (en Marble Diagrams).
 
 Si tuviéramos que especificar la gramática de la secuencia como una expresión regular sería algo como esto
 
-**Next* (Error | Completed)**
+**Next* (Error | Completed)?**
 
 Esto describe lo siguiente:
 
@@ -85,7 +85,7 @@ Si una secuencia termina en tiempo finito, no llamar a `dispose` o no usar `addD
 
 Si una secuencia no termina de alguna manera, los recursos se asignarán de forma permanente a menos que se llame a `dispose` manualmente, automáticamente dentro de un `disposeBag`, `scopedDispose`, `takeUntil` o de alguna otra manera.
 
-**Usar dispose bags, scoped dispose o el operador `takeUntil` son maneras robustas de asegurarse de que los recursos estan limpios y recomendamos su uso en la producción a pesar de que la secuencia terminará en un tiempo finito**
+**Usar dispose bags o `takeUntil` son maneras robustas de asegurarse de que los recursos estan limpios y recomendamos su uso en la producción a pesar de que la secuencia terminará en un tiempo finito**
 
 En caso de que usted es curioso por qué `ErrorType` no es genérico, se puede encontrar una explicación [aquí](DesignRationale#why-error-type-isnt-generic).
 
@@ -96,9 +96,9 @@ Hay una forma adicional de que una secuencia observada pueda terminar. Cuando se
 He aquí un ejemplo con el operador `interval`.
 
 ```swift
-let subscription = interval(0.3, scheduler)
-    .subscribe { (e: Event<Int64>) in
-        print(e)
+let subscription = Observable<Int>.interval(0.3, scheduler: scheduler)
+    .subscribe { event in
+        print(event)
     }
 
 NSThread.sleepForTimeInterval(2)
@@ -118,7 +118,7 @@ Esto imprimirá:
 5
 ```
 
-Una cosa a destacar aquí es que por lo general no se deseará llamar a `dispose` manualmente y esto es únicamente un ejemplo educativo. Llamar a disponer manualmente suele ser código que huele mal, y hay mejores maneras de eliminar las suscripciones. Usted puede usar `DisposeBag`,` ScopedDisposable`, `operador takeUntil` o algún otro mecanismo.
+Una cosa a destacar aquí es que por lo general no se deseará llamar a `dispose` manualmente y esto es únicamente un ejemplo educativo. Llamar a disponer manualmente suele ser código que huele mal, y hay mejores maneras de eliminar las suscripciones. Usted puede usar `DisposeBag`, `operador takeUntil` o algún otro mecanismo.
 
 Entonces, ¿puede el código imprimir algo después de que la llamada a `dispose` se ejecute? La respuesta es, depende.
 
@@ -140,10 +140,10 @@ Algunos ejemplos más para estar seguro (`observeOn` se explica [aquí](Schedule
 En caso de que tenga algo como:
 
 ```swift
-let subscription = interval(0.3, scheduler)
-            .observeOn(MainScheduler.sharedInstance)
-            .subscribe { (e: Event<Int64>) in
-                print(e)
+let subscription = Observable<Int>.interval(0.3, scheduler: scheduler)
+            .observeOn(MainScheduler.instance)
+            .subscribe { event in
+                print(event)
             }
 
 // ....
@@ -157,10 +157,10 @@ subscription.dispose() // llamado desde la tarea principal
 Tambien en este caso:
 
 ```swift
-let subscription = interval(0.3, scheduler)
+let subscription = Observable<Int>.interval(0.3, scheduler: scheduler)
             .observeOn(serialScheduler)
-            .subscribe { (e: Event<Int64>) in
-                print(e)
+            .subscribe { event in
+                print(event)
             }
 
 // ...
@@ -186,20 +186,6 @@ No tiene un método `dispose` y no permite llamar desechar explícitamente a pro
 Eso debería borrar las referencias al viejo y por lo tanto causar la eliminación de los recursos.
 
 Si aun necesita la eliminación manual explícitamente, use `CompositeDisposable`. **Tiene el comportamiento deseado, pero una vez que se llama al metodo `dispose`, se desechara de inmediato cualquier desechable que se le añada.**
-
-### Scoped Dispose
-
-En caso de que la eliminación se quiera inmediatamente después de abandonar el alcance de la ejecución, hay `scopedDispose()`.
-
-```swift
-let autoDispose = sequence
-    .subscribe {
-        print($0)
-    }
-    .scopedDispose()
-```
-
-Esto desechará la suscripción cuando la ejecución deje el ámbito actual.
 
 ### Take until
 
@@ -290,9 +276,9 @@ Vamos a crear una función que crea una secuencia que devuelve un unico elemento
 
 ```swift
 func myJust<E>(element: E) -> Observable<E> {
-    return create { observer in
+    return Observable.create { observer in
         observer.on(.Next(element))
-        obsever.on(.Completed)
+        observer.on(.Completed)
         return NopDisposable.instance
     }
 }
@@ -312,7 +298,7 @@ esto va a imprimir:
 
 No está mal. Entonces, ¿Qué es la función `create`?
 
-Es sólo un método de conveniencia que le permite implementar fácilmente el método `subscribe` usando la función lambda Swift. Al igual que el método `subscribe` toma un argumento, `observer`, y devuelve un desechable.
+Es sólo un método de conveniencia que le permite implementar fácilmente el método `subscribe` usando cierre de Swift. Al igual que el método `subscribe` toma un argumento, `observer`, y devuelve un desechable.
 
 La secuencia implementada de esta manera es en realidad síncrona. Generará elementos y terminará antes de la llamada a `subscribe` devuelva el desechable que representa la suscripción. Debido a que en realidad no importa el desechable que devuelva, el proceso de generación de elementos no puede ser interrumpido.
 
@@ -324,7 +310,7 @@ Vamos ahora a crear un observable que devuelve los elementos de una matriz.
 
 ```swift
 func myFrom<E>(sequence: [E]) -> Observable<E> {
-    return create { observer in
+    return Observable.create { observer in
         for element in sequence {
             observer.on(.Next(element))
         }
@@ -376,7 +362,7 @@ Ok, ahora algo más interesante. Vamos a crear ese operador `interval` que se ut
 
 ```swift
 func myInterval(interval: NSTimeInterval) -> Observable<Int> {
-    return create { observer in
+    return Observable.create { observer in
         print("Subscribed")
         let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
         let timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
@@ -392,7 +378,8 @@ func myInterval(interval: NSTimeInterval) -> Observable<Int> {
             if cancel.disposed {
                 return
             }
-            observer.on(.Next(next++))
+            observer.on(.Next(next))
+            next += 1
         })
         dispatch_resume(timer)
 
@@ -557,16 +544,21 @@ Es así como las peticiones HTTP se envuelven en Rx. Es más o menos el mismo pa
 
 ```swift
 extension NSURLSession {
-    public func rx_response(request: NSURLRequest) -> Observable<(NSData!, NSURLResponse!)> {
-        return create { observer in
+    public func rx_response(request: NSURLRequest) -> Observable<(NSData, NSURLResponse)> {
+        return Observable.create { observer in
             let task = self.dataTaskWithRequest(request) { (data, response, error) in
-                if data == nil || response == nil {
-                    observer.on(.Error(error ?? UnknownError))
+                guard let response = response, data = data else {
+                    observer.on(.Error(error ?? RxCocoaURLError.Unknown))
+                    return
                 }
-                else {
-                    observer.on(.Next(data, response))
-                    observer.on(.Completed)
+
+                guard let httpResponse = response as? NSHTTPURLResponse else {
+                    observer.on(.Error(RxCocoaURLError.NonHTTPResponse(response: response)))
+                    return
                 }
+
+                observer.on(.Next(data, httpResponse))
+                observer.on(.Completed)
             }
 
             task.resume()
@@ -606,22 +598,23 @@ Afortunadamente hay una manera más fácil de crear operadores. Creación de nue
 Vamos a ver cómo un operador map` no optimizado puede ser implementado.
 
 ```swift
-func myMap<E, R>(transform: E -> R)(source: Observable<E>) -> Observable<R> {
-    return create { observer in
-
-        let subscription = source.subscribe { e in
-                switch e {
-                case .Next(let value):
-                    let result = transform(value)
-                    observer.on(.Next(result))
-                case .Error(let error):
-                    observer.on(.Error(error))
-                case .Completed:
-                    observer.on(.Completed)
+extension ObservableType {
+    func myMap<R>(transform: E -> R) -> Observable<R> {
+        return Observable.create { observer in
+            let subscription = self.subscribe { e in
+                    switch e {
+                    case .Next(let value):
+                        let result = transform(value)
+                        observer.on(.Next(result))
+                    case .Error(let error):
+                        observer.on(.Error(error))
+                    case .Completed:
+                        observer.on(.Completed)
+                    }
                 }
-            }
 
-        return subscription
+            return subscription
+        }
     }
 }
 ```
@@ -654,24 +647,6 @@ This is simply 8
 ...
 ```
 
-#### La manera complicada, pero más eficientemente
-
-Puede realizar las mismas optimizaciones como lo hemos hecho y crear operadores más eficientes. Que por lo general no es necesario, pero por supuesto se puede hacer.
-
-Exención de responsabilidad: Al elegir este enfoque esta a su vez tomando mucha más responsabilidad al crear los Operadores. Deberá asegurarse la gramatica de la sequencia es correcta y es responsable de desechar las suscrupciones.
-
-Hay un montón de ejemplos de cómo hacer esto en el proyecto RxSwift. Yo sugeriría echarle un vistazo a `map` o `filter` primero.
-
-La creación de sus propios operadores personalizados es complicado porque hay que manejar manualmente todo el caos de la gestión de errores, la ejecución asíncrona y el desechado, pero no es ciencia de cohetes tampoco.
-
-Cada operador Rx es sólo una fábrica de un observable. Devuelven observables que por lo general contienen información sobre la fuente `Observable` y los parámetros que se necesitan para transformarla.
-
-En el código RxSwift, casi todos los `Observable`s optimizados tienen un padre común que se llama `Producer`. El Observable devuelto sirve como un proxy entre los suscriptores y el observable fuente. Por lo general, realiza estas cosas:
-
-* on new subscription creates a sink that performs transformations
-* registers that sink as observer to source observable
-* on received events proxies transformed events to original observer
-
 ### La vida pasa
 
 ¿Y qué si es demasiado difícil de resolver algunos casos con operadores personalizados? Puede salir de la mónada Rx, realizar acciones en el mundo imperativo, a continuación, los resultados de los túneles a Rx nuevamente utilizando `Subject`s.
@@ -699,11 +674,12 @@ kittens.on(.Next(kitten))   // envia el resultado de nuevo a rx
 //
 // Otro desorden
 //
-let kittens = Variable(firstKitten) // otra vez de vuelta a la mónada Rx
 
-kittens
+let kittens = Variable(firstKitten) // again back in Rx monad
+
+kittens.asObservable()
     .map { kitten in
-        return kitten.purr()
+      return kitten.purr()
     }
 // ....
 ```
@@ -775,7 +751,7 @@ Al escribir código RxSwift/RxCocoa elegante, es probable que la fuerte dependen
 
 ```swift
 images = word
-    .filter { $0.rangeOfString("important") != nil }
+    .filter { $0.containsString("important") }
     .flatMap { word in
         return self.api.loadFlickrFeed("karate")
             .catchError { error in
@@ -788,7 +764,7 @@ Si el compilador informa que hay un error en algún lugar de esta expresión, su
 
 ```swift
 images = word
-    .filter { s -> Bool in s.rangeOfString("important") != nil }
+    .filter { s -> Bool in s.containsString("important") }
     .flatMap { word -> Observable<JSON> in
         return self.api.loadFlickrFeed("karate")
             .catchError { error -> Observable<JSON> in
@@ -801,7 +777,7 @@ Si eso no funciona, puede continuar agregando más anotaciones de tipo hasta que
 
 ```swift
 images = word
-    .filter { (s: String) -> Bool in s.rangeOfString("important") != nil }
+    .filter { (s: String) -> Bool in s.containsString("important") }
     .flatMap { (word: String) -> Observable<JSON> in
         return self.api.loadFlickrFeed("karate")
             .catchError { (error: NSError) -> Observable<JSON> in
@@ -870,44 +846,29 @@ NSURLSession.sharedSession().rx_JSON(request)
 
 En el modo de depuración Rx hace un seguimiento de todos los recursos asignados en una variable global `resourceCount`.
 
-**Impremiendo `Rx.resourceCount` después de empujar a un controlador de vista a la pila de navegación, usarlo, y despues volver saliendo con pop de este es generalmente la mejor manera de detectar y depurar fugas de recursos.**
-
-Como prueba de cordura, sólo puede hacer un `print` en su controlador de vista` deinit` método.
-
-El código sería algo como esto.
-
-Como una comprobación sana, puede hacer un `print` en el método `deinit` de su controlador de vista.
-
-El código sería algo como esto.
+En el caso de que desee tener alguna logica de detección de fugas de recursos, el metodo más simple es imprimir periodicamente `RxSwift.resourceCount` a la salida.
 
 ```swift
-class ViewController: UIViewController {
-#if TRACE_RESOURCES
-    private let startResourceCount = RxSwift.resourceCount
-#endif
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-#if TRACE_RESOURCES
-        print("Number of start resources = \(resourceCount)")
-#endif
+    /* add somewhere in
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool
+    */
+    _ = Observable<Int>.interval(1, scheduler: MainScheduler.instance)
+        .subscribeNext { _ in
+        print("Resource count \(RxSwift.resourceCount)")
     }
-
-    deinit {
-#if TRACE_RESOURCES
-        print("View controller disposed with \(resourceCount) resources")
-
-        var numberOfResourcesThatShouldRemain = startResourceCount
-        let time = dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC)))
-        dispatch_after(time, dispatch_get_main_queue(), { () -> Void in
-            print("Resource count after dealloc \(RxSwift.resourceCount), difference \(RxSwift.resourceCount - numberOfResourcesThatShouldRemain)")
-        })
-#endif
-    }
-}
 ```
 
-La razón por la que debe utilizar un pequeño retraso se debe a que a veces se necesita una pequeña cantidad de tiempo para que las entidades planificadoras para liberar su memoria.
+La manera más eficaz para detectar pérdidas de memoria es:
+* Navegar a la pantalla y utilizarla
+* Navegar de vuelta
+* Observar el recuento inicial de recursos
+* Navegar segundo tiempo de la pantalla y utilizarlo
+* Navegar de vuelta
+* Observar conteo final de los recursos
+
+En caso de que haya una diferencia en el recuento de los recursos entre los recuentos iniciales y finales de recursos, puede haber una pérdida de memoria en alguna parte.
+
+La razón por la que se sugiere 2 navegaciones es porque la primera navegación fuerza la carga de recursos perezosos.
 
 ## Variables
 
@@ -917,15 +878,19 @@ Variable envuelve un [`Subject`](http://reactivex.io/documentation/subject.html)
 
 También emitirá su valor actual de inmediato en todos sus suscriptores.
 
+Después de que una variable sea desasignada (deallocated), se completará la secuencia observable devuelta por `.asObservable()`.
+
 ```swift
 let variable = Variable(0)
 
 print("Before first subscription ---")
 
-variable
-    .subscribeNext { n in
+_ = variable.asObservable()
+    .subscribe(onNext: { n in
         print("First \(n)")
-    }
+    }, onCompleted: {
+        print("Completed 1")
+    })
 
 print("Before send 1")
 
@@ -933,10 +898,12 @@ variable.value = 1
 
 print("Before second subscription ---")
 
-variable
-    .subscribeNext { n in
+_ = variable.asObservable()
+    .subscribe(onNext: { n in
         print("Second \(n)")
-    }
+    }, onCompleted: {
+        print("Completed 2")
+    })
 
 variable.value = 2
 
@@ -955,6 +922,8 @@ Second 1
 First 2
 Second 2
 End ---
+Completed 1
+Completed 2
 ```
 
 ## KVO 
@@ -966,32 +935,37 @@ Hay dos maneras incorporadas para que esta biblioteca sea compatible con KVO.
 ```swift
 // KVO
 extension NSObject {
-    public func rx_observe<Element>(keyPath: String, retainSelf: Bool = true) -> Observable<Element?> {}
+    public func rx_observe<E>(type: E.Type, _ keyPath: String, options: NSKeyValueObservingOptions, retainSelf: Bool = true) -> Observable<E?> {}
 }
 
 #if !DISABLE_SWIZZLING
 // KVO
 extension NSObject {
-    public func rx_observeWeakly<Element>(keyPath: String) -> Observable<Element?> {}
+    public func rx_observeWeakly<E>(type: E.Type, _ keyPath: String, options: NSKeyValueObservingOptions) -> Observable<E?> {}
 }
 #endif
 ```
 
-** Si compilador Swift no tiene una forma de inferir el tipo observado (devolver tipo observable), informará de error acerca de la función no existente. **
+Ejemplo cómo observar el `frame` de un `UIView`.
 
-Aquí hay algunas maneras que usted le puede dar pistas sobre el tipo observado:
+**ADVERTENCIA: UIKit no es compatible con KVO, pero esto va a funcionará**.
 
 ```swift
-view.rx_observe("frame") as Observable<CGRect?>
+view
+  .rx_observe(CGRect.self, "frame")
+  .subscribeNext { frame in
+    ...
+  }
 ```
 
 o
 
 ```swift
-view.rx_observe("frame")
-    .map { (rect: CGRect?) in
-        //
-    }
+view
+  .rx_observeWeakly(CGRect.self, "frame")
+  .subscribeNext { frame in
+    ...
+  }
 ```
 
 ### `rx_observe`
@@ -1005,12 +979,12 @@ view.rx_observe("frame")
 Por ejemplo
 
 ```swift
-self.rx_observe("view.frame", retainSelf = false) as Observable<CGRect?>
+self.rx_observe(CGRect.self, "view.frame", retainSelf: false)
 ```
 
 ### `rx_observeWeakly`
 
-`rx_observeWeakly` tiene algo de peor rendimiento, ya que tiene que manejar la desasignación de objetos de la memoria en el caso de las referencias débiles (`weak`).
+`rx_observeWeakly` tiene peor rendimiento que `rx_observe`, ya que tiene que manejar la desasignación de objetos de la memoria en el caso de las referencias débiles (`weak`).
 
 Se puede utilizar en todos los casos donde `rx_observe` se pueden utilizar y, además:
 
@@ -1020,14 +994,18 @@ Se puede utilizar en todos los casos donde `rx_observe` se pueden utilizar y, ad
 Por ejemplo
 
 ```swift
-someSuspiciousViewController.rx_observeWeakly("behavingOk") as Observable<Bool?>
+someSuspiciousViewController.rx_observeWeakly(Bool.self, "behavingOk")
 ```
 
 ### La observación de estructuras
 
-KVO es un mecanismo de Objective-C por lo que depende en gran medida de `NSValue`. RxCocoa tiene especializaciones adicionales para `CGRect`, `CGPoint` y `CGSize` que hacen que sea conveniente para observar esos tipos.
+KVO es un mecanismo de Objective-C por lo que depende en gran medida de `NSValue`. 
 
-Al observar algunas otras estructuras es necesario extraer las estructuras del `NSValue` manualmente, o crear sus propias especializaciones de secuencia observable.
+**RxCocoa soporta la observación KVO de estructuras `CGRect`, `CGPoint` y `CGSize`**
+
+ que hacen que sea conveniente para observar esos tipos.
+
+Al observar algunas otras estructuras es necesario extraer las estructuras de `NSValue` manualmente.
 
 [Aquí](https://github.com/ReactiveX/RxSwift/blob/master/RxCocoa/Common/Observables/NSObject%2BRx%2BCoreGraphics.swift) son ejemplos de cómo extraer correctamente las estructuras de `NSValue`.
 
@@ -1041,7 +1019,7 @@ Los `Observable`s necesitaran enviar valores en el `MainScheduler`(UIThread). Es
 
 Por lo general, es una buena idea para los APIs devuelvan los resultados en `MainScheduler`. En caso de que intenta enlazar algo al interfaz de usuario desde un hilo de segundo plano, construllendo en modo **debug** RxCocoa suele lanzar una excepción para informarle de ello.
 
-Para solucionar este problema es necesario agregar `observeOn(MainScheduler.sharedInstance)`.
+Para solucionar este problema es necesario agregar `observeOn(MainScheduler.instance)`.
 
 **Las extensiones de NSURLSession no vuelven resultado de `MainScheduler` por defecto.**
 
@@ -1063,19 +1041,20 @@ Digamos que usted tiene algo como esto:
 let searchResults = searchText
     .throttle(0.3, $.mainScheduler)
     .distinctUntilChanged
-    .map { query in
+    .flatMapLatest { query in
         API.getSearchResults(query)
             .retry(3)
             .startWith([]) // limpia los resultados en cada nuevo término de búsqueda
             .catchErrorJustReturn([])
     }
-    .switchLatest()
     .shareReplay(1)        // <- fijese en el operador `shareReplay`
 ```
 
 Lo que normalmente se quiere es compartir los resultados de búsqueda una vez calculados. Eso es lo que significa `shareReplay`.
 
 ** Por lo general, es una buena regla de oro en la capa de interfaz de usuario para añadir `shareReplay` al final de la cadena de transformación porque realmente desea compartir los resultados calculados. Usted no quiere disparar conexiones HTTP separadas al enlazar `searchResults` a varios elementos de la IU.**
+
+** También echa un vistazo a la unidad `Driver`. Está diseñada para envolver de forma transparente las llamadas `shareReply`, asegúrese de que los elementos se observan en el hilo principal del IU y que ningún error se puede enlazar a la IU. **
 
 ## Hacer peticiones HTTP
 
