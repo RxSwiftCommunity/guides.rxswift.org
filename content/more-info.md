@@ -11,7 +11,7 @@ tags = ["cocoapods", "carthage", "projecto", "xcode"]
 * [Las matemáticas detrás de Rx](/intro/MathBehindRx)
 
 
-### Teoria
+### Teoría
 
 * [Observables fríos y calientes](/intro/HotAndColdObservables)
 * [Planificadores (Schedulers)](/intro/Schedulers)
@@ -19,7 +19,7 @@ tags = ["cocoapods", "carthage", "projecto", "xcode"]
 * [Unidades (Units)](/intro/Units)
 
 
-### Documentacion
+### Documentación
 
 * [API](/intro/API)
 
