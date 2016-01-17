@@ -2,7 +2,7 @@
 date = "2015-10-23T16:12:42+02:00"
 title = "Justificación de diseño"
 categories = "introducción"
-tags = ["error type", "Design", "Event", "guide", "API", "documentation"]
+tags = ["error type", "Design", "Event", "guia", "API", "documentación"]
 +++
 
 ## ¿Por qué el tipo de error no es genérico?

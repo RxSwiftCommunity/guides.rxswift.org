@@ -2,7 +2,7 @@
 date = "2015-10-23T16:12:42+02:00"
 title = "Planificadores (Schedulers)"
 categories = "introducción"
-tags = ["Schedulers", "guide", "operators", "threads", "documentation"]
+tags = ["Schedulers", "guia", "operators", "threads", "documentación"]
 +++
 
 1. [Planificadores Serie frente a Concurrentes](#serial-vs-concurrent-schedulers)

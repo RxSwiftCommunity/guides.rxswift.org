@@ -2,7 +2,7 @@
 date = "2015-10-23T16:12:42+02:00"
 title = "Unidades (Units)"
 categories = "introducción"
-tags = ["observables", "guide", "API", "documentation"]
+tags = ["observables", "guia", "API", "documentación"]
 +++
 
 Este documento tratará de describir lo que son las unidades (Units), y porque son un concepto útil, cómo usarlos y cómo crearlos.

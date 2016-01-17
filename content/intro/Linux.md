@@ -2,7 +2,7 @@
 date = "2015-10-23T16:12:42+02:00"
 title = "Linux"
 categories = "introducción"
-tags = ["Linux", "guide", "operators", "threads", "documentation"]
+tags = ["Linux", "guia", "operators", "threads", "documentación"]
 +++
 
 Linux

@@ -2,7 +2,7 @@
 date = "2015-10-23T16:12:42+02:00"
 title = "Las matemáticas detrás de Rx"
 categories = "introducción"
-tags = ["guide", "documentation"]
+tags = ["guia", "documentación"]
 +++
 
 ## La dualidad entre Observador y Iterator / Enumerador / Generador / Secuencias
