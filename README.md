@@ -26,4 +26,4 @@ This command will run a server and watch for changes, the website is then availa
 
 ### Contributing
 
-To contribute please create pull-requests direct on the master branch and I will be happy to check and merge them.
+目前翻译完了Introduction部分的内容，但是里面还有很多不准确的地方。欢迎大家来批评以及继续翻译。
