@@ -7,7 +7,7 @@ tags = ["cocoapods", "carthage", "project", "xcode"]
 
 RxSwift 와 RxCocoa 와 함께 시작하는 절차는 매우 간단합니다. Rx는 어떠한 외부 의존성도 필요하지 않습니다.
 
-RxSwift 와 RxCocoa를 이용하기 위한 방법은 다음과 같습니다. :
+RxSwift 와 RxCocoa를 이용하기 위한 방법은 다음과 같습니다 :
 
 ### 설치방법
 
@@ -66,7 +66,7 @@ $ carthage update
 $ git submodule add git@github.com:ReactiveX/RxSwift.git
 ```
 
-* 프로젝트 네비게이터로 `Rx.xcodeproj`를 드래그합니다.
+* 프로젝트 네비게이터 안으로 `Rx.xcodeproj`를 드래그합니다.
 * `Project > Targets > Build Phases > Link Binary With Libraries`에서 `+`를 클릭하고 `RxSwift-[Platform]`, `RxCocoa-[Platform]` 타겟을 선택합니다.
 
 ### iOS 7
@@ -83,9 +83,9 @@ iOS7 프로젝트에 RxSwift/RxCocoa 프로젝트를 포함시키기 위한 방�
 
 `RxSwift` and `RxCocoa` 디렉토리로부터 파일을 추가한 뒤에는, 특정 플랫폼과 관련된 파일들을 삭제해야 합니다.
 
-`iOS`을 대상으로 개발하는 경우, **`RxCocoa/OSX`** 에 위치한 OSX 관련 파일들을 **삭제(remove reference)합니다.**.
+`iOS`을 대상으로 개발하는 경우, **`RxCocoa/OSX`** 에 위치한 OSX 관련 파일들을 **삭제(remove reference)합니다**.
 
-`OSX`을 대상으로 개발하는 경우, **`RxCocoa/iOS`** 에 위치한 iOS 관련 파일들을 **삭제(remove reference)합니다.**.
+`OSX`을 대상으로 개발하는 경우, **`RxCocoa/iOS`** 에 위치한 iOS 관련 파일들을 **삭제(remove reference)합니다**.
 
 * Swift preprocessor 플래그로 **`RX_NO_MODULE`** 을 추가합니다.
 
