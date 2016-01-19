@@ -5,9 +5,6 @@ categories = "introduction"
 tags = ["Schedulers", "guide", "operators", "threads", "documentation"]
 +++
 
-Schedulers
-==========
-
 1. [Serial vs Concurrent Schedulers](#serial-vs-concurrent-schedulers)
 1. [Custom schedulers](#custom-schedulers)
 1. [Builtin schedulers](#builtin-schedulers)
