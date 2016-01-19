@@ -10,6 +10,5 @@ theme = "rx-swift"
     noCategoryLink = true
 
 [permalinks]
-	"" = /
-	intro = /:section/:filename/
-
+	intro = "/:section/:filename/"
+    home = "/"
