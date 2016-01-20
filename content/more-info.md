@@ -7,13 +7,13 @@ tags = ["observables", "guide", "introduction", "documentation"]
 
 ### Curiosities
 
-* [Design Rationale](/intro/designRationale)
-* [Math Behind Rx](/intro/mathBehindRx)
+* [Design Rationale](/intro/design-rationale)
+* [Math Behind Rx](/intro/th-behind-rx)
 
 
 ### Theory
 
-* [Hot and Cold Observables](/intro/hotAndColdObservables)
+* [Hot and Cold Observables](/intro/hot-and-cold-observables)
 * [Schedulers](/intro/schedulers)
 * [Subjects](/intro/subjects)
 * [Units](/intro/units)
@@ -21,7 +21,7 @@ tags = ["observables", "guide", "introduction", "documentation"]
 
 ### Documentation
 
-* [API](/intro/aPI)
+* [API](/intro/api)
 
 
 ### Use tricks
