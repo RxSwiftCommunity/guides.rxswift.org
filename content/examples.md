@@ -32,7 +32,7 @@ a = 4           // c will still be equal "3 is positive" which is not good
 
 This is not the wanted behavior.
 
-To integrate RxSwift framework into your project just include framework in your project and write `import RxSwit`.
+To integrate RxSwift framework into your project just include framework in your project and write `import RxSwift`.
 
 This is the same logic using RxSwift.
 
@@ -44,9 +44,9 @@ let b /*: Observable<Int>*/ = Variable(2)   // b = 2
 // if a + b >= 0 {
 //      c = "\(a + b) is positive"
 // }
-let c = combineLatest(a, b) { $0 + $1 }     // combines latest values of variables `a` and `b` using `+`
-    .filter { $0 >= 0 }               // if `a + b >= 0` is true, `a + b` is passed to map operator
-    .map { "\($0) is positive" }      // maps `a + b` to "\(a + b) is positive"
+let c = Observable.combineLatest(a, b) { $0 + $1 }     // combines latest values of variables `a` and `b` using `+`
+  .filter { $0 >= 0 }               // if `a + b >= 0` is true, `a + b` is passed to map operator
+  .map { "\($0) is positive" }      // maps `a + b` to "\(a + b) is positive"
 
 // Since initial values are a = 1, b = 2
 // 1 + 2 = 3 which is >= 0, `c` is intially equal to "3 is positive"
@@ -66,7 +66,7 @@ a.value = 4                                   // prints: 6 is positive
 
 // Now let's change the value of `b`
 // b = -8 is in RxSwift
-b.value = -8                                  // doesn't print anything
+b.value = -8                                 // doesn't print anything
 // Sum of latest values is `4 + (-8)`, `-4` is not >= 0, map doesn't
 // get executed.
 // That means that `c` still contains "6 is positive" and that's correct.
@@ -118,7 +118,7 @@ self.usernameOutlet.rx_text
     .map { username in
 
         // synchronous validation, nothing special here
-        if count(username) == 0 {
+        if username.isEmpty {
             // Convenience for constructing synchronous result.
             // In case there is mixed synchronous and asychronous code inside the same
             // method, this will construct an async result that is resolved immediatelly.
