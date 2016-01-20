@@ -7,14 +7,6 @@ tags = ["observables", "guide", "API", "documentation"]
 
 This document will try to describe what units are, why they are a useful concept, how to use and create them.
 
-* [Why](#why)
-* [How do they work](#how-do-they-work)
-* [Why are they named Units](#why-are-they-named-units)
-* [RxCocoa units](#rxcocoa-units)
-* [Driver unit](#driver-unit)
-    * [Why was it named Driver](#why-was-it-named-driver)
-    * [Practical usage example](#practical-usage-example)
-
 ## Why
 
 Swift has a powerful type system that can be used to improve correctness and stability of applications and make using Rx a more intuitive and straightforward experience.
