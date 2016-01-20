@@ -86,7 +86,7 @@ _ = xs // <-- note the underscore
   })
 ```
 
-### Unused observable sequence (unused-observable)
+## Unused observable sequence (unused-observable)
 
 Warning is probably presented in a context similar to this one:
 
