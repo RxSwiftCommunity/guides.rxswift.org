@@ -5,10 +5,7 @@ categories = "introduction"
 tags = ["error type", "Design", "Event", "guide", "API", "documentation"]
 +++
 
-Design Rationale
-================
-
-## Why error type isn't generic
+# Why error type isn't generic
 
 ```Swift
 enum Event<Element>  {

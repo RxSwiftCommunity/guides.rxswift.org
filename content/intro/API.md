@@ -5,10 +5,7 @@ categories = "introduction"
 tags = ["observables", "guide", "operators", "API", "documentation"]
 +++
 
-API
-===
-
-## RxSwift supported operators
+# RxSwift supported operators
 
 In some cases there are multiple aliases for the same operator, because on different platforms / implementations, the same operation is sometimes called differently. Sometimes this is because historical reasons, sometimes because of reserved language keywords.
 
@@ -16,7 +13,7 @@ When lacking a strong community consensus, RxSwift will usually include multiple
 
 Operators are stateless by default.
 
-#### Creating Observables
+## Creating Observables
 
  * [`asObservable`](http://reactivex.io/documentation/operators/from.html)
  * [`create`](http://reactivex.io/documentation/operators/create.html)
@@ -32,7 +29,7 @@ Operators are stateless by default.
  * [`repeatElement`](http://reactivex.io/documentation/operators/repeat.html)
  * [`timer`](http://reactivex.io/documentation/operators/timer.html)
 
-#### Transforming Observables
+## Transforming Observables
   * [`buffer`](http://reactivex.io/documentation/operators/buffer.html)
   * [`flatMap`](http://reactivex.io/documentation/operators/flatmap.html)
   * [`flatMapFirst`](http://reactivex.io/documentation/operators/flatmap.html)
@@ -41,7 +38,7 @@ Operators are stateless by default.
   * [`scan`](http://reactivex.io/documentation/operators/scan.html)
   * [`window`](http://reactivex.io/documentation/operators/window.html)
 
-#### Filtering Observables
+## Filtering Observables
   * [`debounce` / `throttle`](http://reactivex.io/documentation/operators/debounce.html)
   * [`distinctUntilChanged`](http://reactivex.io/documentation/operators/distinct.html)
   * [`elementAt`](http://reactivex.io/documentation/operators/elementat.html)
@@ -52,7 +49,7 @@ Operators are stateless by default.
   * [`takeLast`](http://reactivex.io/documentation/operators/takelast.html)
   * [`single`](http://reactivex.io/documentation/operators/first.html)
 
-#### Combining Observables
+## Combining Observables
 
   * [`merge`](http://reactivex.io/documentation/operators/merge.html)
   * [`startWith`](http://reactivex.io/documentation/operators/startwith.html)
@@ -60,13 +57,13 @@ Operators are stateless by default.
   * [`combineLatest`](http://reactivex.io/documentation/operators/combinelatest.html)
   * [`zip`](http://reactivex.io/documentation/operators/zip.html)
 
-#### Error Handling Operators
+## Error Handling Operators
 
  * [`catch`](http://reactivex.io/documentation/operators/catch.html)
  * [`retry`](http://reactivex.io/documentation/operators/retry.html)
  * [`retryWhen`](http://reactivex.io/documentation/operators/retry.html)
 
-#### Observable Utility Operators
+## Observable Utility Operators
 
   * [`delaySubscription`](http://reactivex.io/documentation/operators/delay.html)
   * [`do` / `doOnNext`](http://reactivex.io/documentation/operators/do.html)
@@ -76,20 +73,20 @@ Operators are stateless by default.
   * [`using`](http://reactivex.io/documentation/operators/using.html)
   * debug
 
-#### Conditional and Boolean Operators
+## Conditional and Boolean Operators
   * [`amb`](http://reactivex.io/documentation/operators/amb.html)
   * [`skipWhile`](http://reactivex.io/documentation/operators/skipwhile.html)
   * [`skipUntil`](http://reactivex.io/documentation/operators/skipuntil.html)
   * [`takeUntil`](http://reactivex.io/documentation/operators/takeuntil.html)
   * [`takeWhile`](http://reactivex.io/documentation/operators/takewhile.html)
 
-#### Mathematical and Aggregate Operators
+## Mathematical and Aggregate Operators
 
   * [`concat`](http://reactivex.io/documentation/operators/concat.html)
   * [`reduce` / `aggregate`](http://reactivex.io/documentation/operators/reduce.html)
   * [`toArray`](http://reactivex.io/documentation/operators/to.html)
 
-#### Connectable Observable Operators
+## Connectable Observable Operators
 
   * [`multicast`](http://reactivex.io/documentation/operators/publish.html)
   * [`publish`](http://reactivex.io/documentation/operators/publish.html)

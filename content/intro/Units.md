@@ -5,9 +5,6 @@ categories = "introduction"
 tags = ["observables", "guide", "API", "documentation"]
 +++
 
-Units
-=====
-
 This document will try to describe what are units, why are they a useful concept, how to use them and how to create them.
 
 * [Why](#why)

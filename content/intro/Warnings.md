@@ -5,10 +5,7 @@ categories = "introduction"
 tags = ["observables", "guide", "operators", "API", "documentation"]
 +++
 
-Warnings
-========
-
-### <a name="unused-disposable"></a>Unused disposable (unused-disposable)
+# <a name="unused-disposable"></a>Unused disposable (unused-disposable)
 
 The same is valid for `subscribe*`, `bind*` and `drive*` family of functions that return `Disposable`.
 
@@ -89,7 +86,7 @@ _ = xs // <-- note the underscore
   })
 ```
 
-### <a name="unused-observable"></a>Unused observable sequence (unused-observable)
+# <a name="unused-observable"></a>Unused observable sequence (unused-observable)
 
 Warning is probably presented in a context similar to this one:
 
