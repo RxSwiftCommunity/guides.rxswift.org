@@ -8,7 +8,7 @@ tags = ["observables", "guide", "introduction", "documentation"]
 ### Curiosities
 
 * [Design Rationale](/intro/design-rationale)
-* [Math Behind Rx](/intro/th-behind-rx)
+* [Math Behind Rx](/intro/math-behind-rx)
 
 
 ### Theory
