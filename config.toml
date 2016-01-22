@@ -1,5 +1,5 @@
 baseurl = "http://guides.rxswift.org"
-languageCode = "en-us"
+languageCode = "ko"
 title = "RxSwift"
 theme = "rx-swift"
 
@@ -10,5 +10,5 @@ theme = "rx-swift"
     noCategoryLink = true
 
 [permalinks]
-	intro = "/:section/:filename/"
+    intro = "/:section/:filename/"
     home = "/"
