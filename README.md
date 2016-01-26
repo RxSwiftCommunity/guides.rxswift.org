@@ -22,3 +22,4 @@ This command will run a server and watch for changes, the website is then availa
 ### Contributing
 
 To contribute please create pull-requests direct on the master branch and I will be happy to check and merge them.
+
