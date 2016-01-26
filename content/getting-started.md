@@ -1,21 +1,21 @@
 +++
 date = "2015-10-23T17:38:08+02:00"
-title = "Getting Started"
+title = "시작하기"
 categories = "Introduction"
 tags = ["cocoapods", "carthage", "project", "xcode"]
 +++
 
-To get started with RxSwift and RxCocoa the process is very simple, Rx doesn't contain any external dependencies.
+RxSwift 와 RxCocoa 와 함께 시작하는 절차는 매우 간단합니다. Rx는 어떠한 외부 의존성도 필요하지 않습니다.
 
-These are currently supported options:
+RxSwift 와 RxCocoa를 이용하기 위한 방법은 다음과 같습니다 :
 
-### Manual
+### 설치방법
 
-Open Rx.xcworkspace, choose `RxExample` and hit run. This method will build everything and run sample app
+[RxSwift 프로젝트](https://github.com/ReactiveX/RxSwift)에서 제공하는 예제 파일을 다운받은 후, Rx.xcworkspace 을 실행하세요. 타겟에서 `RxExample` 을 선택한 후 프로그램을 실행하면 예제 앱을 확인할 수 있습니다.
 
 ### [CocoaPods](https://guides.cocoapods.org/using/using-cocoapods.html)
 
-**IMPORTANT! For tvOS support CocoaPods `0.39` is required.**
+**주의사항! tvOS를 지원하기 위해서는 CocoaPods `0.39` 버전 이상이 필요합니다.**
 
 ```
 # Podfile
@@ -26,7 +26,7 @@ pod 'RxCocoa', '~> 2.0.0-beta'
 pod 'RxBlocking', '~> 2.0.0-beta'
 ```
 
-type in `Podfile` directory
+`Podfile` 파일을 위와 같이 작성한 다음, 아래 명령어를 이용해 pod를 설치하세요.
 
 ```
 $ pod install
@@ -34,9 +34,9 @@ $ pod install
 
 ### [Carthage](https://github.com/Carthage/Carthage)
 
-**For Xcode 7.0**
+**Xcode 7.0인 경우**
 
-Add this to `Cartfile`
+`Cartfile` 파일에 아래의 구문을 추가하세요.
 
 ```
 git "git@github.com:ReactiveX/RxSwift.git" "2.0.0-beta.1"
@@ -46,9 +46,9 @@ git "git@github.com:ReactiveX/RxSwift.git" "2.0.0-beta.1"
 $ carthage update
 ```
 
-**For Xcode 7.1 and tvOS support**
+**Xcode 7.1 이상 및 tvOS 지원**
 
-Add this to `Cartfile`
+`Cartfile` 파일에 아래의 구문을 추가하세요.
 
 ```
 git "git@github.com:ReactiveX/RxSwift.git" "master-7.1"
@@ -58,41 +58,41 @@ git "git@github.com:ReactiveX/RxSwift.git" "master-7.1"
 $ carthage update
 ```
 
-### Manually using git submodules
+### git 서브모듈을 이용한 설치
 
-* Add RxSwift as a submodule
+* RxSwift를 submodule로 추가하세요.
 
 ```
 $ git submodule add git@github.com:ReactiveX/RxSwift.git
 ```
 
-* Drag `Rx.xcodeproj` into Project Navigator
-* Go to `Project > Targets > Build Phases > Link Binary With Libraries`, click `+` and select `RxSwift-[Platform]` and `RxCocoa-[Platform]` targets
+* 프로젝트 네비게이터 안으로 `Rx.xcodeproj`를 드래그합니다.
+* `Project > Targets > Build Phases > Link Binary With Libraries`에서 `+`를 클릭하고 `RxSwift-[Platform]`, `RxCocoa-[Platform]` 타겟을 선택합니다.
 
 ### iOS 7
 
-iOS 7 is little tricky, but it can be done. The main problem is that iOS 7 doesn't support dynamic frameworks.
+iOS 7의 경우 조금 까다롭습니다. iOS7의 가장 큰 문제점은 dynamic frameworks를 지원하지 않는다는 점입니다.
 
-These are the steps to include RxSwift/RxCocoa projects in an iOS7 project
+iOS7 프로젝트에 RxSwift/RxCocoa 프로젝트를 포함시키기 위한 방법은 다음과 같습니다.
 
-* RxSwift/RxCocoa projects have no external dependencies so just manually **including all of the `.swift`, `.m`, `.h` files** in build target should import all of the necessary source code.
+* RxSwift/RxCocoa 프로젝트는 외부 의존성이 없기 때문에 build target 에 **모든 `.swift`, `.m`, `.h` 파일들** 을 포함시키면 필요한 소스 코드는 모두 import 됩니다.
 
-You can either do that by copying the files manually or using git submodules.
+이를 위해 직접 파일들을 복사하거나 git 서브모듈을 이용할 수 있습니다.
 
 `git submodule add git@github.com:ReactiveX/RxSwift.git`
 
-After you've included files from `RxSwift` and `RxCocoa` directories, you'll need to remove files that are platform specific.
+`RxSwift` and `RxCocoa` 디렉토리로부터 파일을 추가한 뒤에는, 특정 플랫폼과 관련된 파일들을 삭제해야 합니다.
 
-If you are compiling for `iOS`, please **remove references** to OSX specific files located in **`RxCocoa/OSX`**.
+`iOS`을 대상으로 개발하는 경우, **`RxCocoa/OSX`** 에 위치한 OSX 관련 파일들을 **삭제(remove reference)합니다**.
 
-If you are compiling for `OSX`, please **remove references** to iOS specific files located in **`RxCocoa/iOS`**.
+`OSX`을 대상으로 개발하는 경우, **`RxCocoa/iOS`** 에 위치한 iOS 관련 파일들을 **삭제(remove reference)합니다**.
 
-* Add **`RX_NO_MODULE`** as a custom Swift preprocessor flag
+* Swift preprocessor 플래그로 **`RX_NO_MODULE`** 을 추가합니다.
 
-Go to your target's `Build Settings > Swift Compiler - Custom Flags` and add `-D RX_NO_MODULE`
+target의 `Build Settings > Swift Compiler - Custom Flags` 로 이동하여 `-D RX_NO_MODULE`를 추가합니다.
 
-* Include **`RxCocoa.h`** in your bridging header
+* bridging header에 **`RxCocoa.h`** 를 추가합니다.
 
-If you already have a bridging header, adding `#import "RxCocoa.h"` should be sufficient.
+이미 bridging header를 가지고 있는 경우, `#import "RxCocoa.h"` 를 추가하는 것만으로도 충분합니다.
 
-If you don't have a bridging header, you can go to your target's `Build Settings > Swift Compiler - Code Generation > Objective-C Bridging Header` and point it to `[path to RxCocoa.h parent directory]/RxCocoa.h`.
+만약 bridging header가 없는 경우, target의 `Build Settings > Swift Compiler - Code Generation > Objective-C Bridging Header` 로 이동하여  `[RxCocoa.h 부모 디렉토리 경로]/RxCocoa.h` 와 같이 경로를 추가합니다.
