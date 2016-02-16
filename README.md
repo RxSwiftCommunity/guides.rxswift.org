@@ -22,3 +22,7 @@ This command will run a server and watch for changes, the website is then availa
 ### Contributing
 
 To contribute please create pull-requests direct on the master branch and I will be happy to check and merge them.
+
+### Deployment
+
+Every single branch is deployed automatically to the correct website version, example 'cn.rxswift.org' will re-generate the content for the Chinese version.

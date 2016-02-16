@@ -7,25 +7,25 @@ tags = ["observables", "guide", "introduction", "documentation"]
 
 ### Curiosities
 
-* [Design Rationale](/intro/DesignRationale)
-* [Math Behind Rx](/intro/MathBehindRx)
+* [Design Rationale](/intro/design-rationale)
+* [Math Behind Rx](/intro/math-behind-rx)
 
 
 ### Theory
 
-* [Hot and Cold Observables](/intro/HotAndColdObservables)
-* [Schedulers](/intro/Schedulers)
-* [Subjects](/intro/Subjects)
-* [Units](/intro/Units)
+* [Hot and Cold Observables](/intro/hot-and-cold-observables)
+* [Schedulers](/intro/schedulers)
+* [Subjects](/intro/subjects)
+* [Units](/intro/units)
 
 
 ### Documentation
 
-* [API](/intro/API)
+* [API](/intro/api)
 
 
 ### Use tricks
 
-* [Warnings](/intro/Warnings)
-* [Migration from RxSwift 1.9 to RxSwift 2.0 version](/intro/Migration)
-* [Linux](/intro/Linux)
+* [Warnings](/intro/warnings)
+* [Migration from RxSwift 1.9 to RxSwift 2.0 version](/intro/migration)
+* [Linux](/intro/linux)
