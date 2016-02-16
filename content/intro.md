@@ -10,7 +10,7 @@ tags = ["observables", "guide", "introduction", "documentation"]
 # 시퀀스(Sequence)라고도 알려진 Observables
 
 ## 기 초
-옵저버(observer) 패턴(`Observable<Element>`)과 시퀀스(`Generator`)의 [동질성](MathBehindRx)은 Rx를 이해하는데 가장 중요한 개념 중 하나입니다.
+옵저버 패턴(`Observable<Element>`)과 시퀀스(`Generator`)의 [동질성](/intro/math-behind-rx)은 Rx를 이해하는데 가장 중요한 개념 중 하나입니다.
 
 비동기적인 행동(asynchronous behavior)이 요구되는 곳에 옵저버 패턴이 필요하며, 시퀀스와의 동질성은 `Observable`의 연산자(operators)로써 고차원적인 시퀀스 연산들을 구현할 수 있게 해줍니다.
 
@@ -84,7 +84,7 @@ protocol ObserverType {
 
 **dispose bags, scoped dispose 또는 `takeUntil` 을 사용하는 것은 리소스를 깔끔하게 해제하기 위해 매우 유용한 방법이며, 시퀀스가 유한한 시간(finite time)안에 종료되는 경우라도 이들을 사용할 것을 추천합니다.**
 
-`ErrorType`이 왜 generic이 아닌지 궁굼하다면, [이곳](DesignRationale#why-error-type-isnt-generic)을 참조하세요.
+`ErrorType`이 왜 generic이 아닌지 궁굼하다면, [이곳](/intro/design-rationale/#why-error-type-isnt-generic)을 참조하세요.
 
 ## Disposing
 
@@ -123,7 +123,7 @@ So can this code print something after `dispose` call executed? The answer is, i
 
 * otherwise **yes**.
 
-You can find out more about schedulers [here](Schedulers).
+You can find out more about schedulers [here](/intro/schedulers).
 
 You simply have two processes happening in parallel.
 
@@ -132,7 +132,7 @@ You simply have two processes happening in parallel.
 
 When you think about it, the question `can something be printed after` doesn't even make sense in case those processes are on different schedulers.
 
-A few more examples just to be sure (`observeOn` is explained [here](Schedulers)).
+A few more examples just to be sure (`observeOn` is explained [here](/intro/schedulers)).
 
 In case you have something like:
 
@@ -372,7 +372,8 @@ func myInterval(interval: NSTimeInterval) -> Observable<Int> {
             if cancel.disposed {
                 return
             }
-            observer.on(.Next(next++))
+            observer.on(.Next(next))
+            next += 1
         })
         dispatch_resume(timer)
 
@@ -565,7 +566,7 @@ extension NSURLSession {
 
 ## Operators
 
-There are numerous operators implemented in RxSwift. The complete list can be found [here](API).
+There are numerous operators implemented in RxSwift. The complete list can be found [here](/intro/api).
 
 Marble diagrams for all operators can be found on [ReactiveX.io](http://reactivex.io/)
 
@@ -575,7 +576,7 @@ To use playgrounds please open `Rx.xcworkspace`, build `RxSwift-OSX` scheme and 
 
 In case you need an operator, and don't know how to find it there a [decision tree of operators]() http://reactivex.io/documentation/operators.html#tree).
 
-[Supported RxSwift operators](API#rxswift-supported-operators) are also grouped by function they perform, so that can also help.
+[Supported RxSwift operators](/intro/api#rxswift-supported-operators) are also grouped by function they perform, so that can also help.
 
 ### Custom operators
 
@@ -968,7 +969,7 @@ KVO is an Objective-C mechanism so it relies heavily on `NSValue`.
 
 When observing some other structures it is necessary to extract those structures from `NSValue` manually.
 
-[Here](../RxCocoa/Common/KVORepresentable+CoreGraphics.swift) are examples how to extend KVO observing mechanism and `rx_observe*` methods for other structs by implementing `KVORepresentable` protocol.
+[Here](https://github.com/ReactiveX/RxSwift/tree/master/RxCocoa/Common/KVORepresentable+CoreGraphics.swift) are examples how to extend KVO observing mechanism and `rx_observe*` methods for other structs by implementing `KVORepresentable` protocol.
 
 ## UI layer tips
 
@@ -1100,8 +1101,8 @@ public struct Logging {
 
 ... is a set of classes that implement fully functional reactive data sources for `UITableView`s and `UICollectionView`s.
 
-Source code, more information and rationale why these classes are separated into their directory can be found [here](../RxDataSourceStarterKit).
+Source code, more information and rationale why these classes are separated into their directory can be found [here](https://github.com/ReactiveX/RxSwift/tree/master/RxExample/RxDataSourceStarterKit).
 
 Using them should come down to just importing all of the files into your project.
 
-Fully functional demonstration how to use them is included in the [RxExample](../RxExample) project.
+Fully functional demonstration how to use them is included in the [RxExample](https://github.com/ReactiveX/RxSwift/tree/master/RxExample) project.
