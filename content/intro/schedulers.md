@@ -5,10 +5,6 @@ categories = "introduction"
 tags = ["Schedulers", "guide", "operators", "threads", "documentation"]
 +++
 
-1. [Serial vs Concurrent Schedulers](#serial-vs-concurrent-schedulers)
-1. [Custom schedulers](#custom-schedulers)
-1. [Builtin schedulers](#builtin-schedulers)
-
 Schedulers abstract away mechanism for performing work.
 
 Different mechanisms for performing work include, current thread, dispatch queues, operation queues, new threads, thread pools, run loops ...
@@ -29,7 +25,7 @@ sequence1
   .map { n in
       print("This is performed on background scheduler")
   }
-  .observeOn(MainScheduler.sharedInstance)
+  .observeOn(MainScheduler.instance)
   .map { n in
       print("This is performed on main scheduler")
   }

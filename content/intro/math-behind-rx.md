@@ -5,7 +5,7 @@ categories = "introduction"
 tags = ["guide", "documentation"]
 +++
 
-# Duality between Observer and Iterator / Enumerator / Generator / Sequences
+## Duality between Observer and Iterator / Enumerator / Generator / Sequences
 
 There is a duality between observer and generator pattern. That's what enables transition from async callback world to synchronous world of sequence transformations.
 
