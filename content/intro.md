@@ -1,69 +1,68 @@
 +++
 date = "2015-10-23T16:12:42+02:00"
-title = "Introduction"
+title = "소 개"
 categories = "Introduction"
 tags = ["observables", "guide", "introduction", "documentation"]
 +++
 
-This project tries to be consistent with [ReactiveX.io](http://reactivex.io/). The general cross platform documentation and tutorials should also be valid in case of `RxSwift`.
+이 프로젝트는 [ReactiveX.io](http://reactivex.io/)와의 일관성을 유지하기 위해 노력하고 있습니다. 일반적인 크로스 플랫폼 관련 문서, 자습서들을 RxSwift에서도 활용할 수 있습니다.
 
-# Observables aka Sequences
+# 시퀀스(Sequence)라고도 알려진 Observables
 
-## Basics
-[Equivalence](/intro/math-behind-rx) of observer pattern(`Observable<Element>`) and sequences (`Generator`s) is one of the most important things to understand about Rx.
+## 기 초
+옵저버 패턴(`Observable<Element>`)과 시퀀스(`Generator`)의 [동질성](/intro/math-behind-rx)은 Rx를 이해하는데 가장 중요한 개념 중 하나입니다.
 
-Observer pattern is needed because you want to model asynchronous behavior and
-that equivalence enables implementation of high level sequence operations as operators on `Observable`s.
+비동기적인 행동(asynchronous behavior)이 요구되는 곳에 옵저버 패턴이 필요하며, 시퀀스와의 동질성은 `Observable`의 연산자(operators)로써 고차원적인 시퀀스 연산들을 구현할 수 있게 해줍니다.
 
-Sequences are a simple, familiar concept that is **easy to visualize**.
+시퀀스는 **쉽게 시각화할 수 있는** 간단하고도, 익숙한 개념입니다.
 
-People are creatures with huge visual cortexes. When you can visualize something easily, it's a lot easier to reason about.
+인간은 많은 시각 피질(visual cortexes)을 가지고 있습니다. 따라서, 특정 대상에 대해 쉽게 시각화할 수 있다면, 좀 더 쉽게 이해할 수 있게 됩니다.
 
-In that way you can lift a lot of the cognitive load from trying to simulate event state machines inside every Rx operator to high level operations over sequences.
+이 방식을 통해, 모든 Rx 연산자(operator) 내부에서 이벤트 상태 머신(event state machines)을 시뮬레이션하는 시도들을 시퀀스를 통한 고차원적인 연산들로 표현할 수 있습니다.
 
-If you don't use Rx and you model async systems, that probably means that your code is full of those state machines and transient states that you need to simulate instead of abstracting them away.
+만약, 여러분이 Rx 를 사용하지 않고 비동기적인 시스템을 만들고자 한다면, 당신의 코드는 상태(state)들을 저장하고 이들을 처리하는 코드들로 가득차게 될 것입니다.
 
-Lists/sequences are probably one of the first concepts mathematicians/programmers learn.
+아마도 리스트와 시퀀스는 수학자, 프로그래머들이 첫번째로 배우는 개념 중의 하나일 것입니다.
 
-Here is a sequence of numbers
+아래는 숫자들의 시퀀스를 나타낸 것입니다.
 
-
-```
---1--2--3--4--5--6--| // it terminates normally
-```
-
-Here is another one with characters
 
 ```
---a--b--a--a--a---d---X // it terminates with error
+--1--2--3--4--5--6--| // 정상적으로 종료됨
 ```
 
-Some sequences are finite, and some are infinite, like sequence of button taps
+다음은 문자들의 시퀀스를 나타내고 있습니다.
+
+```
+--a--b--a--a--a---d---X // 에러와 함께 종료됨
+```
+
+버튼 탭(tap)의 시퀀스처럼, 시퀀스는 유한하기도 하고 무한하기도 합니다.
 
 ```
 ---tap-tap-------tap--->
 ```
 
-These diagrams are called marble diagrams.
+이러한 다이어그램을 마블 다이어그램(marble diagrams)이라고 부릅니다.
 
 [http://rxmarbles.com/](http://rxmarbles.com/)
 
-If we were to specify sequence grammar as regular expression it would look something like this
+만약 시퀀스를 정규표현식으로 표현한다면 아래와 같은 모습일 것입니다.
 
 **Next* (Error | Completed)?**
 
-This describes the following:
+위의 정규표현식은 다음과 같은 내용을 담고 있습니다. :
 
-* **sequences can have 0 or more elements**
-* **once an `Error` or `Completed` event is received, the sequence can't produce any other element**
+* **시퀀스는 0 개 또는 그 이상의 요소들(elements)을 가질 수 있다.**
+* **`Error` 또는 `Completed` 이벤트를 수신하게 되면, 시퀀스는 더이상 다른 요소들을 생산하지 않는다.**
 
-Sequences in Rx are described by a push interface (aka callback).
+Rx에서 시퀀스는 push 인터페이스(=callback)로 묘사됩니다. Sequences in Rx are described by a push interface (aka callback).
 
 ```swift
 enum Event<Element>  {
-    case Next(Element)      // next element of a sequence
-    case Error(ErrorType)   // sequence failed with error
-    case Completed          // sequence terminated successfully
+    case Next(Element)      // 시퀀스의 다음 요소
+    case Error(ErrorType)   // 에러의 상태값과 갖고 있는 실패한 시퀀스
+    case Completed          // 성공적으로 종료된 시퀀스
 }
 
 class Observable<Element> {
@@ -75,17 +74,17 @@ protocol ObserverType {
 }
 ```
 
-**When sequence sends `Complete` or `Error` event all internal resources that compute sequence elements will be freed.**
+**시퀀스가 `Complete` 또는 `Error` 이벤트를 보내면, 모든 시퀀스 요소들을 처리하는(compute) 내부 리소스들은 해제됩니다.(be freed).**
 
-**To cancel production of sequence elements and free resources immediately, call `dispose` on returned subscription.**
+**시퀀스 요소들의 생산을 취소하거나 리소스들을 즉시 해제하고 싶다면, 반환되는(returned) subscription에서 `dispose`를 호출하면 됩니다.**
 
-If a sequence terminates in finite time, not calling `dispose` or not using `addDisposableTo(disposeBag)` won't cause any permanent resource leaks, but those resources will be used until sequence completes in some way (finishes producing elements or error happens).
+만약 유한한 시간(finite time) 안에 시퀀스가 종료될 때, `dispose`를 호출하지 않거나 `addDisposableTo(disposeBag)`를 사용하지 않더라도 영구적인(permanent) 리소스 누수(resource leaks)가 발생하지는 않지만, 해당 리소스들은 시퀀스가 완료될 때(요소 생산 완료 또는 에러 발생)까지 사용될 것입니다.
 
-If a sequence doesn't terminate in some way, resources will be allocated permanently unless `dispose` is being called manually, automatically inside of a `disposeBag`, `takeUntil` or some other way.
+만약 시퀀스가 어떻게든 종료되지 않는다면, `dispose`를 직접 호출하거나 `disposeBag`, `takeUntil` 처럼 내부에서 자동적으로 `dispose`가 호출하기 전까지는 리소스들이 영구적으로 할당되어 있을 것입니다.
 
-**Using dispose bags or `takeUntil` operator is a robust way of making sure resources are cleaned up and we recommend using them in production even though sequence will terminate in finite time.**
+**dispose bags, scoped dispose 또는 `takeUntil` 을 사용하는 것은 리소스를 깔끔하게 해제하기 위해 매우 유용한 방법이며, 시퀀스가 유한한 시간(finite time)안에 종료되는 경우라도 이들을 사용할 것을 추천합니다.**
 
-In case you are curious why `ErrorType` isn't generic, you can find explanation [here](/intro/design-rationale/#why-error-type-isnt-generic).
+`ErrorType`이 왜 generic이 아닌지 궁굼하다면, [이곳](/intro/design-rationale/#why-error-type-isnt-generic)을 참조하세요.
 
 ## Disposing
 

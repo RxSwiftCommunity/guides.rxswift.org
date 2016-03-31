@@ -5,31 +5,30 @@ title = "_index"
 
 <div class="row">
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/getting-started">Getting Started</a></h3>
-      <p>Are you new to Rx? Do you want to try RxSwift? This is the section where you can find all what you need to do to include RxSwift in a project.</p>
+      <h3><a href="/getting-started">시작하기</a></h3>
+      <p>Rx는 처음이신가요? RxSwift를 사용하고 싶으신가요? 이 섹션에서는 RxSwift를 프로젝트에서 사용하기 위한 방법에 대해 설명하고 있습니다.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/intro">Introduction</a></h3>
-      <p>Here you can find some more info about Rx and RxSwft.</p>
+      <h3><a href="/intro">소 개</a></h3>
+      <p>Rx 와 RxSwift에 관해 좀 더 알고 싶은신가요?</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/examples">Examples</a></h3>
-      <p>Time to get hands dirty, check out the examples explained in details and start playing with RxSwift.</p>
+      <h3><a href="/examples">예 제</a></h3>
+      <p>예제를 통해 RxSwift 사용법을 살펴보겠습니다.</p>
     </div>
 </div>
 
 <div class="row">
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="#">Resources</a></h3>
-      <p>Rx is a big world, in this section you can find a list of useful resources to better understand it.</p>
+      <h3><a href="#">리소스</a></h3>
+      <p>Rx는 매우 광범위합니다. 이 섹션에서는 Rx를 좀 더 이해할 수 있는 유용한 리소스들을 제공합니다.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="https://github.com/ReactiveX/RxSwift/blob/master/CONTRIBUTING.md">Contributing</a></h3>
-      <p>Do you want to contribute? Just follow the link and get on board.</p>
+      <h3><a href="https://github.com/ReactiveX/RxSwift/blob/master/CONTRIBUTING.md">기여하기</a></h3>
+      <p>프로젝트에 기여하고 싶으신가요? 링크된 페이지를 참조하여 프로젝트에 참여해보세요.</p>
     </div>
     <div class="col-lg-4 col-sm-4 col-xs-12">
-      <h3><a href="/about">About</a></h3>
-      <p>Who we are, if you might want to know it.</p>
+      <h3><a href="/about">프로젝트에 관하여</a></h3>
+      <p>우리가 누구인지 궁금하신가요?</p>
     </div>
 </div>
-
