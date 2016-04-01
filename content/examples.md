@@ -5,139 +5,139 @@ categories = "Examples"
 tags = ["examples", "guide"]
 +++
 
-## Calculated variable
+## 계산된 변수(Calculated variable)
 
-Let's first start with some imperative swift code.
-The purpose of example is to bind identifier `c` to a value calculated from `a` and `b` if some condition is satisfied.
+RxSwift 에 대해 알아보기 전에, 우선 명령형(imperative) 방식의 Swift 코드에서 시작해보겠습니다.
+이 예제의 목적은 특정 조건이 만족했을 때 `a` 와 `b` 로부터 계산된 값을 `c`에 반영(bind)하는 것입니다.
 
-Here is the imperative swift code that calculates the value of `c`:
+다음은 `c`의 값을 계산하는 명령형 swift 코드입니다.:
 
 ```swift
-// this is usual imperative code
+// 일반적인 명령형 코드입니다.
 var c: String
-var a = 1       // this will only assign value `1` to `a` once
-var b = 2       // this will only assign value `2` to `b` once
+var a = 1       // 이 구문은 `a`에 `1`을 단 한번 할당할 것입니다.
+var b = 2       // 이 구문은 `b`에 `2`를 단 한번 할당할 것입니다.
 
 if a + b >= 0 {
-    c = "\(a + b) is positive" // this will only assign value to `c` once
+    c = "\(a + b) is positive" // 이 구문은 `c`에 값을 단 한번만 할당할 것입니다.
 }
 ```
 
-The value of `c` is now `3 is positive`. But if we change the value of `a` to `4`, `c` will still contain the old value.
+현재 `c`의 값은 `3 is positive`입니다. `a` 를 `4`로 변경해도, `c`의 값은 변하지 않을 것입니다.
 
 ```swift
-a = 4           // c will still be equal "3 is positive" which is not good
-                // c should be equal to "6 is positive" because 4 + 2 = 6
+a = 4           // c 가 여전히 이전 값인 "3 is positive"가 되는 것은 우리가 원하는 동작 방식이 아닐 것입니다.
+                // 4 + 2 = 6 이므로 c 는 "6 is positive" 가 되어야 합니다.
 ```
 
-This is not the wanted behavior.
+이것은 우리가 원하는 동작 방식이 아닙니다.
 
-To integrate RxSwift framework into your project just include framework in your project and write `import RxSwift`.
+프로젝트에서 RxSwift 프레임워크를 사용하고 싶다면 RxSwift 프레임워크를 프로젝트안에 포함시킨 다음, `import RxSwift` 를 선언하면 됩니다.
 
-This is the same logic using RxSwift.
+위의 예제를 RxSwift 로 작성하면 다음과 같습니다.
 
 ```swift
 let a /*: Observable<Int>*/ = Variable(1)   // a = 1
 let b /*: Observable<Int>*/ = Variable(2)   // b = 2
 
-// This will "bind" rx variable `c` to definition
+// RxSwift 코드는 rx 변수 `c` 에 아래의 주석처리된 로직을 반영할 것입니다.
 // if a + b >= 0 {
 //      c = "\(a + b) is positive"
 // }
-let c = Observable.combineLatest(a, b) { $0 + $1 }     // combines latest values of variables `a` and `b` using `+`
-  .filter { $0 >= 0 }               // if `a + b >= 0` is true, `a + b` is passed to map operator
-  .map { "\($0) is positive" }      // maps `a + b` to "\(a + b) is positive"
+// `a`, `b` 변수의 최근 값을 `+`을 사용하여 더합니다.
+let c = Observable.combineLatest(a.asObservable(), b.asObservable()) { $0 + $1 }     
+  .filter { $0 >= 0 }               // 만약 `a + b >= 0` 가 `참`이라면, `a + b` 는 map 연산자에게 전달됩니다.
+  .map { "\($0) is positive" }      // `a + b` 는 "\(a + b) is positive" 로 변환(mapping) 됩니다.
 
-// Since initial values are a = 1, b = 2
-// 1 + 2 = 3 which is >= 0, `c` is intially equal to "3 is positive"
+// 초기값이 a = 1, b = 2 이기 때문에,
+// 1 + 2 = 3 은 >= 0 이며, `c` 는 "3 is positive" 라는 값을 갖게 됩니다.
 
-// To pull values out of rx variable `c`, subscribe to values from  `c`.
-// `subscribeNext` means subscribe to next (fresh) values of variable `c`.
-// That also includes the inital value "3 is positive".
+// rx 변수인 `c` 에서 값을 얻기 위해, `c` 로부터 값을 subscribe 합니다.
+// `subscribeNext` 는 `c` 변수에 새롭게 설정되는 값(next value)을 subscribe 합니다.
+// 여기에는 초기값인 "3 is positive" 역시 포함됩니다.
 c.subscribeNext { print($0) }          // prints: "3 is positive"
 
-// Now let's increase the value of `a`
-// a = 4 is in RxSwift
+// `a` 의 값을 증가시켜 보겠습니다.
+// RxSwift 에서는 a = 4 를 아래와 같이 표현합니다.
 a.value = 4                                   // prints: 6 is positive
-// Sum of latest values is now `4 + 2`, `6` is >= 0, map operator
-// produces "6 is positive" and that result is "assigned" to `c`.
-// Since the value of `c` changed, `{ print($0) }` will get called,
-// and "6 is positive" is printed.
+// 최근 값들의 합은 `4 + 2` 이며, `6` 은 >= 0 이기 때문에,
+// map 연산자는 "6 is positive" 를 결과값으로 생성합니다.
+// 그리고 그 결과값은 `c` 에 "할당됩니다".
+// `c` 의 값이 변했기 때문에, `{ print($0) }` 이 호출될 것이며,
+// "6 is positive" 가 화면에 출력될 것입니다.
 
-// Now let's change the value of `b`
-// b = -8 is in RxSwift
-b.value = -8                                 // doesn't print anything
-// Sum of latest values is `4 + (-8)`, `-4` is not >= 0, map doesn't
-// get executed.
-// That means that `c` still contains "6 is positive" and that's correct.
-// Since `c` hasn't been updated, that means next value hasn't been produced,
-// and `{ print($0) }` won't be called.
+// 이제 `b`의 값을 변경해보겠습니다.
+// RxSwift 에서 b = -8 은 아래와 같이 나타낼 수 있습니다.
+b.value = -8                                 // 화면에 아무 것도 출력되지 않습니다.
+// 최근 값의 합인 `4 + (-8)` 은 `-4` 이며, 이것은 >= 0 가 아니므로,
+// map 연산자가 실행되지 않습니다.
+// 이는 `c` 는 여전히 "6 is positive" 라는 것을 의미합니다.
+// `c` 가 변하지 않았기 때문에 다음 값(next value) 이 생성되지 않았으며,
+// `{ print($0) }` 은 호출되지 않습니다.
 
 // ...
 ```
 
-## Simple UI bindings
+## 간단한 UI 바인딩(bindings)
 
-* instead of binding to variables, let's bind to text field values (rx_text)
-* next, parse that into an int and calculate if the number is prime using an async API (map)
-* if text field value is changed before async call completes, new async call will be enqueued (concat)
-* bind results to label (bindTo(resultLabel.rx_text))
+* 변수와 바인딩하는 대신 text field 값 (rx_text)과 바인딩합니다.
+* 그 다음, 입력값을 int 로 파싱하여 그 숫자가 prime number 인지 아닌지를 비동기 API 를 사용하여 계산합니다.(map)
+* 만약 text field 값이 비동기 호출이 완료되기 전에 변한다면, 다음 비동기 호출은 큐에 쌓습니다. (concat)
+* 결과값을 label 에 바인딩합니다 (bindTo(resultLabel.rx_text))
 
 ```swift
 let subscription/*: Disposable */ = primeTextField.rx_text      // type is Observable<String>
-            .map { WolframAlphaIsPrime($0.toInt() ?? 0) }       // type is Observable<Observable<Prime>>
+            .map { WolframAlphaIsPrime(Int($0) ?? 0) }       // type is Observable<Observable<Prime>>
             .concat()                                           // type is Observable<Prime>
             .map { "number \($0.n) is prime? \($0.isPrime)" }   // type is Observable<String>
-            .bindTo(resultLabel.rx_text)                        // return Disposable that can be used to unbind everything
+            .bindTo(resultLabel.rx_text)                        
 
-// This will set resultLabel.text to "number 43 is prime? true" after
-// server call completes.
+// 서버 호출이 완료된 후 resultLabel.text 는 "number 43 is prime? true" 으로 설정될 것입니다.
 primeTextField.text = "43"
 
 // ...
 
-// to unbind everything, just call
+// 모든 것을 unbind 하기 위해 아래 코드를 호출합니다.
 subscription.dispose()
 ```
 
-All of the operators used in this example are the same operators used in the first example with variables. Nothing special about it.
+특별할 것이 없습니다. 이번 예제에 사용된 모든 연산자들은 첫 번째 예제에서 사용된 것과 동일한 연산자들입니다.
 
-## Autocomplete
+## 자동 완성
 
-If you are new to Rx, next example will probably be a little overwhelming, but it's here to demonstrate how RxSwift code looks like in real world examples.
+만약 Rx 를 처음 접하는 것이라면, 다음 예제는 약간 놀라울 수 있습니다. 이번 예제는 RxSwift 코드가 실제로 어떻게 사용되는지 잘 보여주고 있습니다.
 
-The third example is a real world, complex UI async validation logic, with progress notifications.
-All operations are cancelled the moment `disposeBag` is deallocated.
+세번째 예제는 실제 개발에서 자주 경험하게 되는 비동기 적합성 확인(validation) 로직을 처리하는 복잡한 UI 를 다루고 있습니다. UI 는 진행상황을 알려주는 기능이 포함되어 있습니다.
+모든 연산은 `disposeBag` 이 deallocate 되는 순간 취소됩니다.
 
-Let's give it a shot.
+예제를 살펴보겠습니다.
 
 ```swift
-// bind UI control values directly
-// use username from `usernameOutlet` as username values source
+// UI control 값을 직접 바인딩합니다.
+// `usernameOutlet` 으로부터 username 을 얻습니다.
 self.usernameOutlet.rx_text
     .map { username in
 
-        // synchronous validation, nothing special here
+        // 동기적인 확인(synchronous validation)을 진행합니다. 이곳에서는 특별한 것이 없습니다.
         if username.isEmpty {
-            // Convenience for constructing synchronous result.
-            // In case there is mixed synchronous and asychronous code inside the same
-            // method, this will construct an async result that is resolved immediatelly.
-            return just((valid: false, message: "Username can't be empty."))
+            // 여기서는 동기, 비동기 코드가 같은 method 안에 혼합되어 있으며,
+            // 이것은 바로 resolve 되는 비동기 결과값을 생성할 것입니다.
+            return Observable.just((valid: false, message: "Username can't be empty."))
         }
 
         ...
 
-        // Every user interface probably shows some state while async operation
-        // is executing.
-        // Let's assume that we want to show "Checking availability" while waiting for result.
-        // valid parameter can be
-        //  * true  - is valid
-        //  * false - not valid
-        //  * nil   - validation pending
-        let loadingValue = (valid: nil, message: "Checking availability ...")
+        // 비동기 연산이 처리되는 동안, 모든 사용자 인터페이스는 현재의 진행 상황을 사용자에게 알려줍니다.
+        // 결과를 기다리는 동안 사용자에게 "Checking availability" 라는 메시지를 보여준다고 가정해봅시다.
+        // 적합성 판단에 사용되는 인자들은 다음과 같을 것입니다.
+        //  * true  - 적합
+        //  * false - 부적함
+        //  * nil   - 적합성 판정 대기
+        typealias LoadingInfo = (valid : String?, message: String?)
+        let loadingValue : LoadingInfo = (valid: nil, message: "Checking availability ...")
 
-        // This will fire a server call to check if the username already exists.
-        // Guess what, its type is `Observable<ValidationResult>`
+        // 이것은 username 이 이미 존재하는지 확인하는 서버 요청을 실행할 것입니다.
+        // 타입은 `Observable<ValidationResult>` 과 같은 형태일 것입니다.
         return API.usernameAvailable(username)
           .map { available in
               if available {
@@ -147,30 +147,28 @@ self.usernameOutlet.rx_text
                   return (false, "Username already taken")
               }
           }
-          // use `loadingValue` until server responds
+          // 서버 반응이 도착할 때까지는 `loadingValue` 를 사용합니다.
           .startWith(loadingValue)
     }
-// Since we now have `Observable<Observable<ValidationResult>>`
-// we somehow need to return to normal `Observable` world.
-// We could use `concat` operator from second example, but we really
-// want to cancel pending asynchronous operation if new username is
-// provided.
-// That's what `switchLatest` does
+// 현재 `Observable<Observable<ValidationResult>>` 을 가지고 있기 때문에
+// `Observable` 세상으로 돌아갈 필요가 있습니다.
+// 우리는 두번째 예제에서처럼 `concat` 연산자를 사용할 수 있지만,
+// 그 대신, 새로운 username 이 제공된다면 대기 중인(pending) 비동기 연산을 취소하도록 만들려고 합니다.
+// 이러한 역할은 `switchLatest` 가 담당합니다.
     .switchLatest()
-// Now we need to bind that to the user interface somehow.
-// Good old `subscribeNext` can do that
-// That's the end of `Observable` chain.
-// This will produce a `Disposable` object that can unbind everything and cancel
-// pending async operations.
+// 이제 우리는 사용자 인터페이스와 바인딩할 필요가 있습니다.
+// `Observable` 체인의 마지막에서 `subscribeNext` 가 바인딩을 처리할 수 있습니다.
+// 이것은 모든 것을 unbind 하고 대기 중인(pending) 비동기 연산을 취소할 수 있는
+// `Disposable` 객체를 생성할 것입니다.
     .subscribeNext { valid in
         errorLabel.textColor = validationColor(valid)
         errorLabel.text = valid.message
     }
-// Why would we do it manually, that's tedious,
-// let's dispose everything automagically on view controller dealloc.
+// 수동으로 처리하는 대신
+// 아래 코드를 추가하여 view controller dealloc 에서 모든 것을 자동적으로 dispose 할 수 있게 합니다.
     .addDisposableTo(disposeBag)
 ```
 
-Can't get any simpler than this. There are [more examples](../RxExample) in the repository, so feel free to check them out.
+이보다 더 간단할 수 있을까요? [추가 예제들이](../RxExample) 저장소에 있으니 확인해보시길 바랍니다.
 
-They include examples on how to use it in the context of MVVM pattern or without it.
+추가 예제들은 MVVM 패턴을 이용하거나 MVVM 패턴을 사용하지 않고 RxSwift를 어떻게 사용하는지 잘 보여주고 있습니다.
